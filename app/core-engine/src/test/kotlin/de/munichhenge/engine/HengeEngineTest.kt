@@ -131,6 +131,19 @@ class HengeEngineTest {
     }
 
     @Test
+    fun `obstruction offset shifts every henge moment`() {
+        val sl = Synthetic.street("w", 270.0, obstruction = 1.0)
+        val date = LocalDate.of(year, 3, 19)
+        val base = HengeEngine(Synthetic.data(sl)).eventsFor(date, setOf(Mode.SUNSET)).single()
+        val raised = HengeEngine(Synthetic.data(sl), EngineConfig(obstructionOffsetDeg = 1.0)).eventsFor(date, setOf(Mode.SUNSET)).single()
+        assertEquals(2.2665, SunPosition.at(raised.tFull, sl.a).apparentAltitudeDeg, 0.01)
+        assertTrue(raised.tFull < base.tFull)
+        // negative offsets never push the obstruction below the horizon
+        val floor = HengeEngine(Synthetic.data(sl), EngineConfig(obstructionOffsetDeg = -5.0)).eventsFor(date, setOf(Mode.SUNSET)).single()
+        assertEquals(0.2665, SunPosition.at(floor.tFull, sl.a).apparentAltitudeDeg, 0.01)
+    }
+
+    @Test
     fun `events carry the pois looking down the sightline in that direction`() {
         val sl = Synthetic.street("w", 270.0)
         val pois = listOf(

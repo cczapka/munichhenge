@@ -1,0 +1,49 @@
+# Builds the debug APK (sideload it from the run's artifacts) and runs the :app unit tests.
+name: android-build
+
+on:
+  push:
+    paths:
+      - "app/**"
+      - "data/sightlines.json"
+      - "data/pois.json"
+      - ".github/workflows/android-build.yml"
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platforms;android-35 build-tools;35.0.0 platform-tools"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Unit tests (:app)
+        run: ./gradlew :app:testDebugUnitTest --no-daemon
+      - name: Assemble debug APK
+        run: ./gradlew :app:assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: munichhenge-debug-apk
+          path: app/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+      - name: Test report
+        if: always()
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import glob, xml.etree.ElementTree as ET
+          print("## :app unit tests\n\n| suite | tests | failures | errors |\n|---|---|---|---|")
+          for f in sorted(glob.glob("app/build/test-results/testDebugUnitTest/*.xml")):
+              r = ET.parse(f).getroot()
+              print(f"| {r.get('name')} | {r.get('tests')} | {r.get('failures')} | {r.get('errors')} |")
+          print("\nAPK: see the run's artifacts (munichhenge-debug-apk).")
+          PY

@@ -89,7 +89,7 @@ class HengeEngine(val data: HengeData, val config: EngineConfig = EngineConfig()
             }
             for (viewFrom in Endpoint.entries) {
                 val bearing = sl.bearing(viewFrom) ?: continue
-                val obstruction = sl.obstruction(viewFrom)
+                val obstruction = (sl.obstruction(viewFrom) + config.obstructionOffsetDeg).coerceAtLeast(0.0)
                 val standing = sl.standingPoint(viewFrom)
                 // cheap closed-form prefilter: azimuth at the target altitude for today's declination
                 val approxAz = azimuthAtAltitude(standing.lat, day.declinationDeg, obstruction + config.sunRadiusDeg, mode)
@@ -125,7 +125,7 @@ class HengeEngine(val data: HengeData, val config: EngineConfig = EngineConfig()
 
     private fun openHorizonEvent(sl: Sightline, mode: Mode, date: LocalDate, anchor: Instant): HengeEvent? {
         val (from, to) = bracket(mode, anchor)
-        val obstruction = sl.obstructionTowardBDeg
+        val obstruction = (sl.obstructionTowardBDeg + config.obstructionOffsetDeg).coerceAtLeast(0.0)
         val full = AltitudeSolver.solve(sl.a, obstruction + config.sunRadiusDeg, from, to, config.solverToleranceSeconds) ?: return null
         val half = AltitudeSolver.solve(sl.a, obstruction, from, to, config.solverToleranceSeconds) ?: return null
         val az = SunPosition.at(full.time, sl.a).azimuthDeg

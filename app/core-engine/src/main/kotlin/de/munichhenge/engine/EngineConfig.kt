@@ -21,6 +21,10 @@ data class EngineConfig(
      * the sun better, but boosting hides the pure alignment ranking. */
     val canyonBonus: Double = 0.0,
 
+    /** Added to every sightline's obstruction angle (may be negative). The pipeline's
+     * building-height estimates are coarse; this shifts all henge moments at once. */
+    val obstructionOffsetDeg: Double = 0.0,
+
     /** Sun disk radius, degrees. */
     val sunRadiusDeg: Double = 0.2665,
 

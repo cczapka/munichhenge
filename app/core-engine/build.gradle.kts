@@ -1,7 +1,7 @@
 // Pure Kotlin/JVM: data models, JSON loading and the HengeEngine. No Android dependencies.
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
     application
 }
 

@@ -1,7 +1,7 @@
 // Pure Kotlin/JVM: sun position, refraction, rise/set events and the altitude root-finder.
 // No Android dependencies (CLAUDE.md), so `./gradlew :core-solar:test` runs in seconds.
 plugins {
-    kotlin("jvm")
+    id("org.jetbrains.kotlin.jvm")
 }
 
 // Target JVM 17 bytecode (Android-compatible) with whatever JDK >= 17 runs the build;
