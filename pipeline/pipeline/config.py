@@ -15,19 +15,25 @@ class PipelineConfig:
     """Shortest chord that still counts as a sightline. Lower finds more canyon streets
     but also more junk; PLAN.md suggests tuning between 300 and 400 m from the GeoJSON."""
 
-    merge_tol_deg: float = 2.0
-    """Max difference between a segment bearing and the run's chord bearing. Larger
-    tolerates gentle curves (longer runs) at the cost of runs that are not really straight."""
-
     max_offset_m: float = 8.0
-    """Max perpendicular offset of any node from the run chord. Together with
-    merge_tol_deg this is what "straight" means. 8 m is about one lane."""
+    """Max perpendicular offset of any node from the run chord: the physical criterion for
+    "you can see down the street" (the far end stays within a lane of the line of sight).
+    Larger tolerates gentler curves and longer runs; 8 m is about one lane."""
 
-    min_seg_for_bearing_m: float = 5.0
+    merge_tol_deg: float = 8.0
+    """Max difference between a segment bearing and the run's chord bearing, tested only for
+    segments >= min_seg_for_bearing_m. A coarse kink detector on top of max_offset_m, not
+    the main criterion: on real Munich data nodes sit every 10-30 m and a 1 m survey
+    error on a 20 m segment is already 3°, so PLAN.md's 2° cut Leopoldstraße into 765 m
+    fragments where the offset test allows 1470 m (tests/test_real_streets.py). Tightening
+    below ~6° starts cutting straight streets again; loosening further changes nothing
+    because the offset test governs."""
+
+    min_seg_for_bearing_m: float = 30.0
     """Segments shorter than this are exempt from the bearing test (offset test still
-    applies). OSM has many 1-3 m jogs at junctions/crossings whose bearing is noise;
-    without this exemption they would cut long runs in two. Raising it lets small kinks
-    through; they are still bounded by max_offset_m."""
+    applies). OSM junctions, crossings and lane splits produce 1-15 m segments whose bearing
+    is noise; without this exemption they cut long runs in two. Kinks they could hide are
+    still bounded by max_offset_m."""
 
     dedupe_dist_m: float = 25.0
     """Parallel runs closer than this (perpendicular distance) and within

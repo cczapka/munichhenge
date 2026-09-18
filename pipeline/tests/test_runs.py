@@ -51,6 +51,22 @@ def test_gentle_curve_splits_into_straight_pieces(cfg):
         assert r.max_offset_m < cfg.max_offset_m
 
 
+def test_short_noisy_segments_do_not_fragment_a_street(cfg):
+    """Real OSM: nodes every few tens of metres with ~1 m lateral survey noise (3-4° of
+    bearing noise per segment). Physically one straight street; must be one run."""
+    pts = [(x, [0.0, 1.2, -0.8, 0.5, -1.1, 0.9][i % 6]) for i, x in enumerate(range(0, 801, 40))]
+    runs = extract_runs([make_way(pts)], cfg)
+    assert lengths(runs) == [800]
+
+
+def test_real_kink_still_splits(cfg):
+    # two 300 m legs meeting at 5°: the corner is 13 m off the joint chord -> two runs
+    import math
+    pts = [(0, 0), (300, 0), (300 + 300 * math.cos(math.radians(5)), 300 * math.sin(math.radians(5)))]
+    c = dataclasses.replace(cfg, min_length_m=250)
+    assert lengths(extract_runs([make_way(pts)], c)) == [300, 300]
+
+
 def test_split_points_covers_all_nodes(cfg):
     pts = [xy(0, 0), xy(100, 0), xy(100, 100), xy(200, 100), xy(200, 0)]
     segs = split_points(pts, cfg)
