@@ -45,6 +45,7 @@ fun TodayScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
     val date by vm.selectedDate.collectAsStateWithLifecycle()
     val modes by vm.modes.collectAsStateWithLifecycle()
     val events by vm.dayEvents.collectAsStateWithLifecycle()
+    val showNear by vm.showNear.collectAsStateWithLifecycle()
     var showPicker by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -64,19 +65,38 @@ fun TodayScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
         ) {
             FilterChip(selected = Mode.SUNRISE in modes, onClick = { vm.toggleMode(Mode.SUNRISE) }, label = { Text("Sunrise") })
             FilterChip(selected = Mode.SUNSET in modes, onClick = { vm.toggleMode(Mode.SUNSET) }, label = { Text("Sunset") })
+            FilterChip(selected = showNear, onClick = { vm.toggleNear() }, label = { Text("Near") })
             TextButton(onClick = { vm.setDate(LocalDate.now(Presentation.zone)) }) { Text("Today") }
         }
         HorizontalDivider(modifier = Modifier.padding(top = 4.dp))
-        val list = events
-        when {
-            list == null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-            list.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No aligned sightlines on this day.", style = MaterialTheme.typography.bodyLarge)
+        val all = events
+        if (all == null) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            return@Column
+        }
+        val list = Presentation.dayList(all, showNear)
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            if (list.events.isEmpty()) {
+                item("empty") {
+                    Text(
+                        if (showNear) "No aligned sightlines on this day." else "No perfect or good alignment on this day. Try \"Near\".",
+                        modifier = Modifier.fillMaxWidth().padding(24.dp),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
             }
-            else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(list, key = { it.sightlineId + it.viewFrom + it.mode }) { e ->
-                    EventRow(e, vm.data.sightline(e.sightlineId), onClick = { onOpenSightline(e.sightlineId) })
-                    HorizontalDivider()
+            items(list.events, key = { it.sightlineId + it.viewFrom + it.mode }) { e ->
+                EventRow(e, vm.data.sightline(e.sightlineId), onClick = { onOpenSightline(e.sightlineId) })
+                HorizontalDivider()
+            }
+            if (list.openHorizon.isNotEmpty()) {
+                item("open") {
+                    Text(
+                        "Open horizon · " + Presentation.openHorizonLine(list.openHorizon) { vm.data.sightline(it)?.name },
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
         }

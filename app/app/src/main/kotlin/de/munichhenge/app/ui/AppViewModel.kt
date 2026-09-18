@@ -30,6 +30,10 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     val selectedDate = MutableStateFlow(LocalDate.now(Presentation.zone))
     val modes = MutableStateFlow(setOf(Mode.SUNRISE, Mode.SUNSET))
 
+    /** Include "near" (1.5-3°) events in the Today list. Off by default: at the equinoxes
+     * dozens of east-west streets are within 3°. */
+    val showNear = MutableStateFlow(false)
+
     val settings: StateFlow<Settings?> = graph.settings.flow
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
@@ -47,6 +51,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setDate(d: LocalDate) { selectedDate.value = d }
     fun shiftDate(days: Long) { selectedDate.value = selectedDate.value.plusDays(days) }
+
+    fun toggleNear() { showNear.value = !showNear.value }
 
     fun toggleMode(m: Mode) {
         val cur = modes.value

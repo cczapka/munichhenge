@@ -67,6 +67,23 @@ object Presentation {
             d to es.sortedWith(compareByDescending<HengeEvent> { it.quality }.thenBy { it.tFull })
         }
 
+    /** What the Today list shows: real events (near ones only on request) and, separately,
+     * the open-horizon spots, which "align" every day and would otherwise clutter the list. */
+    data class DayList(val events: List<HengeEvent>, val openHorizon: List<HengeEvent>)
+
+    fun dayList(events: List<HengeEvent>, showNear: Boolean): DayList {
+        val (open, real) = events.partition { it.openHorizon }
+        return DayList(real.filter { showNear || it.grade != Grade.NEAR }, open.sortedBy { it.tFull })
+    }
+
+    /** "Olympiaberg: sunrise 07:02 (88°), sunset 19:11 (272°)". */
+    fun openHorizonLine(events: List<HengeEvent>, nameOf: (String) -> String?): String =
+        events.groupBy { it.sightlineId }.entries.joinToString("\n") { (id, es) ->
+            (nameOf(id) ?: id) + ": " + es.sortedBy { it.tFull }.joinToString(", ") {
+                "${modeWord(it.mode)} ${localTime(it.tFull)} (${Math.round(it.bearing)}°)"
+            }
+        }
+
     /** Map stroke width for a sightline on the selected date: thin when it has no event. */
     fun strokeWidthPx(quality: Double?, densityScale: Float): Float =
         if (quality == null) 2f * densityScale else (3f + 9f * quality.toFloat()) * densityScale

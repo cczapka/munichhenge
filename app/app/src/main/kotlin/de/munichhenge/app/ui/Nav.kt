@@ -90,7 +90,15 @@ fun AppRoot() {
     }
 }
 
+private val TAB_ROUTES = TABS.map { it.route }.toSet()
+
 private fun navigateToTab(nav: NavHostController, route: String) {
+    // Leave detail screens first: otherwise they are saved with the tab's state and come
+    // back on top of it, so the tab tap seems to do nothing.
+    while (nav.currentDestination?.route?.let { it !in TAB_ROUTES } == true) {
+        if (!nav.popBackStack()) break
+    }
+    if (nav.currentDestination?.route == route) return
     nav.navigate(route) {
         popUpTo(nav.graph.findStartDestination().id) { saveState = true }
         launchSingleTop = true

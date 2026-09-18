@@ -69,6 +69,21 @@ class PresentationTest {
     }
 
     @Test
+    fun `day list hides near events unless asked and separates open horizon spots`() {
+        val d = LocalDate.of(2026, 9, 20)
+        val near = event(d, 0.2).copy(grade = Grade.NEAR, sightlineId = "near")
+        val good = event(d, 0.7).copy(sightlineId = "good")
+        val open = event(d, 1.0, open = true).copy(sightlineId = "sl_open_hill", grade = Grade.PERFECT)
+        val hidden = Presentation.dayList(listOf(open, near, good), showNear = false)
+        assertEquals(listOf("good"), hidden.events.map { it.sightlineId })
+        assertEquals(listOf("sl_open_hill"), hidden.openHorizon.map { it.sightlineId })
+        assertEquals(listOf("near", "good"), Presentation.dayList(listOf(near, good), showNear = true).events.map { it.sightlineId })
+        val sunrise = open.copy(mode = Mode.SUNRISE, bearing = 88.0, tFull = Instant.parse("2026-09-20T05:02:00Z"))
+        assertEquals("Hill: sunrise 07:02 (88°), sunset 19:05 (270°)",
+            Presentation.openHorizonLine(listOf(open, sunrise)) { "Hill" })
+    }
+
+    @Test
     fun `labels`() {
         assertEquals("no spots", Presentation.spotsLabel(0))
         assertEquals("1 spot", Presentation.spotsLabel(1))

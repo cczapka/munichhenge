@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.munichhenge.app.R
 import de.munichhenge.app.model.Presentation
+import de.munichhenge.engine.Geo
 import de.munichhenge.engine.Grade
 import de.munichhenge.engine.HengeData
 import de.munichhenge.engine.HengeEvent
@@ -110,13 +111,21 @@ private fun drawOverlays(
         if (e == null) map.overlays.add(line) else map.overlays.add(map.overlays.size, line)
     }
 
-    // sun-direction arrows at the viewing end
+    // sun direction at the viewing end: a short ray along the bearing (unambiguous) plus an arrow head
     val arrow = ContextCompat.getDrawable(map.context, R.drawable.ic_sun_arrow)
     for (e in best.values) {
         val sl = data.sightline(e.sightlineId) ?: continue
         val stand = sl.standingPoint(e.viewFrom)
+        val rayEnd = Geo.destination(stand, e.bearing, (sl.lengthM * 0.35).coerceIn(80.0, 400.0))
+        map.overlays.add(Polyline(map).apply {
+            setPoints(listOf(GeoPoint(stand.lat, stand.lon), GeoPoint(rayEnd.lat, rayEnd.lon)))
+            outlinePaint.strokeWidth = 5f * density
+            outlinePaint.color = AColor.rgb(242, 177, 52)
+            outlinePaint.strokeCap = android.graphics.Paint.Cap.ROUND
+            setOnClickListener { _, _, _ -> onOpenSightline(sl.id); true }
+        })
         map.overlays.add(Marker(map).apply {
-            position = GeoPoint(stand.lat, stand.lon)
+            position = GeoPoint(rayEnd.lat, rayEnd.lon)
             icon = arrow
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
             rotation = -e.bearing.toFloat()   // osmdroid rotates counter-clockwise; bearings are clockwise
