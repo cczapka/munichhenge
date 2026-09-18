@@ -25,7 +25,7 @@ class PipelineConfig:
     segments >= min_seg_for_bearing_m. A coarse kink detector on top of max_offset_m, not
     the main criterion: on real Munich data nodes sit every 10-30 m and a 1 m survey
     error on a 20 m segment is already 3°, so PLAN.md's 2° cut Leopoldstraße into 765 m
-    fragments where the offset test allows 1470 m (tests/test_real_streets.py). Tightening
+    fragments where the offset test allows 1524 m (tests/test_real_streets.py). Tightening
     below ~6° starts cutting straight streets again; loosening further changes nothing
     because the offset test governs."""
 

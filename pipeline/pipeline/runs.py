@@ -139,25 +139,37 @@ def _stitch_group(chains: dict[int, Chain], ids: list[int]) -> None:
 
 # --------------------------------------------------------------------------- splitting
 
-def split_points(points: Sequence[Pt], cfg: PipelineConfig) -> list[tuple[int, int]]:
-    """Greedy maximal straight runs as (start_index, end_index) pairs over ``points``.
+def _maximal_end(points: Sequence[Pt], i: int, cfg: PipelineConfig) -> int:
+    """Largest j such that points[i..j] is straight (at least i + 1)."""
+    best = i + 1
+    j = i + 2
+    while j < len(points) and is_straight(points[i:j + 1], cfg.merge_tol_deg, cfg.max_offset_m,
+                                          cfg.min_seg_for_bearing_m):
+        best = j
+        j += 1
+    return best
 
-    Consecutive runs share their boundary node. A run of a single segment is always
-    "straight", so every node index is covered.
+
+def split_points(points: Sequence[Pt], cfg: PipelineConfig) -> list[tuple[int, int]]:
+    """Maximal straight runs as (start_index, end_index) pairs over ``points``, longest
+    chord first.
+
+    For every node the maximal straight run starting there is computed; runs are then
+    accepted longest-first as long as they do not overlap an accepted one (sharing an end
+    node is fine). A plain greedy walk from the chain start is sensitive to where it
+    happens to restart after a bend and can miss the one long chord in a street; taking
+    the longest chords first is what "the best sightline in this street" means.
     """
     n = len(points)
-    runs: list[tuple[int, int]] = []
-    i = 0
-    while i < n - 1:
-        best = i + 1
-        j = i + 2
-        while j < n and is_straight(points[i:j + 1], cfg.merge_tol_deg, cfg.max_offset_m,
-                                    cfg.min_seg_for_bearing_m):
-            best = j
-            j += 1
-        runs.append((i, best))
-        i = best
-    return runs
+    if n < 2:
+        return []
+    cands = [(i, _maximal_end(points, i, cfg)) for i in range(n - 1)]
+    cands.sort(key=lambda ij: (-dist(points[ij[0]], points[ij[1]]), ij[0]))
+    accepted: list[tuple[int, int]] = []
+    for i, j in cands:
+        if all(j <= a or i >= b for a, b in accepted):
+            accepted.append((i, j))
+    return sorted(accepted)
 
 
 def split_chain(chain: Chain, cfg: PipelineConfig) -> list[Run]:

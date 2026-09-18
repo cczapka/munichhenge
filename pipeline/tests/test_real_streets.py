@@ -32,7 +32,7 @@ def test_leopoldstrasse_is_one_long_run(cfg):
     # (true bearing ~177°, i.e. looking south toward the Siegestor).
     runs = runs_for("leopoldstra_e", cfg)
     length, bearing, offset = runs[0]
-    assert length == pytest.approx(1470, abs=15)
+    assert length == pytest.approx(1524, abs=15)
     assert bearing == pytest.approx(177, abs=1)
     assert offset < cfg.max_offset_m
 
@@ -52,7 +52,8 @@ def test_brienner_strasse_is_found(cfg):
 
 def test_plan_default_2deg_would_fragment_leopoldstrasse():
     """Documents why merge_tol_deg is not 2°: with PLAN.md's original value the same ways
-    give at best a 765 m fragment."""
+    give at best a 765 m fragment (greedy) or a bit more with longest-first selection,
+    still far below the real 1.5 km."""
     cfg = PipelineConfig(merge_tol_deg=2.0, min_seg_for_bearing_m=5.0)
     runs = runs_for("leopoldstra_e", cfg)
-    assert runs[0][0] < 800
+    assert runs[0][0] < 1000
