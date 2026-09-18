@@ -123,6 +123,16 @@ def test_footway_min_length_rule(cfg):
     assert extract_runs([short], c) == []
 
 
+def test_tracks_only_inside_parks(cfg):
+    park = [xy(-50, -50), xy(2000, -50), xy(2000, 300), xy(-50, 300), xy(-50, -50)]
+    inside = make_way([(0, 100), (800, 100)], name="Parkweg", highway="track")
+    outside = make_way([(0, 1000), (800, 1000)], name="Forstweg", highway="track")
+    assert [r.name for r in extract_runs([inside, outside], cfg, parks=[park])] == ["Parkweg"]
+    assert extract_runs([inside, outside], cfg) == []                 # no parks known -> no tracks
+    street = make_way([(0, 1000), (800, 1000)], name="Straße")
+    assert [r.name for r in extract_runs([street], cfg)] == ["Straße"]
+
+
 def test_duplicate_consecutive_nodes_are_ignored(cfg):
     w = make_way([(0, 0), (200, 0), (200, 0), (500, 0)])
     runs = extract_runs([w], cfg)
@@ -171,11 +181,13 @@ def test_unnamed_duplicate_gives_its_name_to_nothing_but_named_gives_name(cfg):
     assert len(kept) == 1 and kept[0].name == "Radweg"
 
 
-def test_featured_runs_are_never_deduped(cfg):
+def test_featured_run_absorbs_its_auto_duplicate_whatever_the_length(cfg):
     a = run_from([(0, 0), (1000, 0)], way_ids=[1])
     f = run_from([(0, 5), (900, 5)], featured=True)
     kept = dedupe_runs([a, f], cfg)
-    assert len(kept) == 2
+    assert len(kept) == 1 and kept[0].featured
+    far = run_from([(0, 40), (1000, 40)])
+    assert len(dedupe_runs([far, f], cfg)) == 2
 
 
 def test_bridge_run_is_not_deduped_into_the_river(cfg):

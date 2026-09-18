@@ -11,6 +11,10 @@ on:
         description: "override min_length_m (default from pipeline/config.py)"
         required: false
         default: ""
+      dump_names:
+        description: "comma-separated street names to dump raw ways/chains/runs for (data/debug/dump/)"
+        required: false
+        default: ""
       clip:
         description: "clip mode"
         required: false
@@ -71,11 +75,17 @@ jobs:
 
       - name: Build data
         run: |
-          EXTRA=""
-          if [ -n "${{ github.event.inputs.min_length }}" ]; then EXTRA="$EXTRA --min-length ${{ github.event.inputs.min_length }}"; fi
-          CLIP="${{ github.event.inputs.clip }}"; CLIP="${CLIP:-admin}"
+          EXTRA=()
+          if [ -n "$MIN_LENGTH" ]; then EXTRA+=(--min-length "$MIN_LENGTH"); fi
+          if [ -n "$DUMP_NAMES" ]; then EXTRA+=(--dump-names "$DUMP_NAMES"); fi
+          rm -rf ../data/debug/dump
           python -m pipeline.run --pbf ../raw/oberbayern-latest.osm.pbf --out ../data \
-            --debug-geojson ../data/debug --clip "$CLIP" $EXTRA 2>&1 | tee ../build.log
+            --debug-geojson ../data/debug --clip "${CLIP:-admin}" "${EXTRA[@]}" 2>&1 | tee ../build.log
+        env:
+          MIN_LENGTH: ${{ github.event.inputs.min_length }}
+          DUMP_NAMES: ${{ github.event.inputs.dump_names }}
+          CLIP: ${{ github.event.inputs.clip }}
+        shell: bash -e -o pipefail {0}
 
       - name: Summary
         run: |

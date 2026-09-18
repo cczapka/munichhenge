@@ -63,7 +63,7 @@ def _copy_tags(tags, keys) -> dict[str, str]:
 def read_pbf(path: str | os.PathLike, cfg: PipelineConfig) -> Extract:
     """Single pass over the file (pyosmium does its own relation pre-pass for areas)."""
     ex = Extract()
-    keys = ofilter.KeyFilter("highway", "waterway", "amenity", "tourism", "building", "boundary")
+    keys = ofilter.KeyFilter("highway", "waterway", "amenity", "tourism", "building", "boundary", "leisure")
     fp = (osmium.FileProcessor(path)
           .with_areas()
           .with_filter(ofilter.EmptyTagFilter())
@@ -77,8 +77,8 @@ def read_pbf(path: str | os.PathLike, cfg: PipelineConfig) -> Extract:
             _take_way(obj, ex, cfg)
         elif obj.is_area():
             _take_area(obj, ex, cfg)
-    log.info("read %s: %d tagged objects, %d candidate ways, %d buildings, %d pois, admin polygon %s",
-             path, n_seen, len(ex.ways), len(ex.buildings), len(ex.pois),
+    log.info("read %s: %d tagged objects, %d candidate ways, %d buildings, %d pois, %d parks, admin polygon %s",
+             path, n_seen, len(ex.ways), len(ex.buildings), len(ex.pois), len(ex.parks),
              "found" if ex.admin_polygon else "NOT found")
     return ex
 
@@ -125,8 +125,9 @@ def _take_area(obj, ex: Extract, cfg: PipelineConfig) -> None:
     osm_id = f"{osm_type}/{obj.orig_id()}"
     is_admin = (tags.get("boundary") == "administrative" and tags.get("admin_level") == cfg.admin_level
                 and tags.get("name") == cfg.admin_name)
+    is_park = tags.get("leisure") == "park"
     if not is_admin:
-        if _poi_kind(tags, cfg) is None and tags.get("building") in (None, "no"):
+        if _poi_kind(tags, cfg) is None and tags.get("building") in (None, "no") and not is_park:
             return
         # cheap bbox prefilter on the first vertex before touching the rings
         first = next((n for ring in obj.outer_rings() for n in ring if n.location.valid()), None)
@@ -141,6 +142,9 @@ def _take_area(obj, ex: Extract, cfg: PipelineConfig) -> None:
     if is_admin:
         ex.admin_polygon = rings
         return
+    if is_park:
+        for r in rings:
+            ex.parks.append([project(pt) for pt in r])
     poi_kind = _poi_kind(tags, cfg)
     if poi_kind is not None:
         lat = sum(p[0] for p in rings[0]) / len(rings[0])

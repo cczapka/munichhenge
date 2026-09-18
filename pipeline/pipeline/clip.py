@@ -28,7 +28,7 @@ def clip_extract(ex: Extract, cfg: PipelineConfig, mode: str = "admin") -> Extra
         min_lat, min_lon, max_lat, max_lon = cfg.bbox
         inside = lambda ll: min_lat <= ll[0] <= max_lat and min_lon <= ll[1] <= max_lon  # noqa: E731
         inside_xy = None
-    out = Extract(admin_polygon=ex.admin_polygon)
+    out = Extract(admin_polygon=ex.admin_polygon, parks=list(ex.parks))
     out.ways = [w for w in ex.ways if any(inside(c) for c in w.coords)]
     out.pois = [p for p in ex.pois if inside(p.at)]
     if inside_xy is not None:

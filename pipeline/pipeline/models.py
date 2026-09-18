@@ -42,6 +42,7 @@ class Extract:
     buildings: list[Building] = field(default_factory=list)
     pois: list[RawPoi] = field(default_factory=list)
     admin_polygon: list[list[LatLon]] | None = None   # outer rings of the München relation
+    parks: list[list[Pt]] = field(default_factory=list)   # leisure=park outer rings, projected
 
 
 @dataclass

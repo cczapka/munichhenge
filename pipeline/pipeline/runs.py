@@ -14,7 +14,7 @@ import logging
 from collections import defaultdict
 from typing import Sequence
 
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Point, Polygon
 from shapely.strtree import STRtree
 
 from .config import PipelineConfig
@@ -175,15 +175,34 @@ def chord_length(run: Run) -> float:
     return dist(run.a_xy, run.b_xy)
 
 
-def extract_runs(ways: Sequence[Way], cfg: PipelineConfig) -> list[Run]:
-    """ways -> stitched chains -> straight runs >= min_length_m (footway rule applied first)."""
-    kept_ways = []
+def filter_candidate_ways(ways: Sequence[Way], cfg: PipelineConfig,
+                          parks: Sequence[Sequence[Pt]] = ()) -> list[Way]:
+    """Tag-level rules from PLAN.md 3.2 that need geometry: footways only from
+    footway_min_length_m, tracks only inside a leisure=park polygon (forest lanes are not
+    city sightlines)."""
+    park_polys = [Polygon(r) for r in parks if len(r) >= 4]
+    park_tree = STRtree(park_polys) if park_polys else None
+    kept: list[Way] = []
+    n_tracks_dropped = 0
     for w in ways:
-        if w.tags.get("highway") == "footway":
-            pts = [project(c) for c in w.coords]
-            if polyline_length(pts) < cfg.footway_min_length_m:
+        hw = w.tags.get("highway")
+        if hw == "footway":
+            if polyline_length([project(c) for c in w.coords]) < cfg.footway_min_length_m:
                 continue
-        kept_ways.append(w)
+        elif hw == "track":
+            mid = Point(project(w.coords[len(w.coords) // 2]))
+            if park_tree is None or not any(park_polys[int(i)].contains(mid)
+                                            for i in park_tree.query(mid, predicate="intersects")):
+                n_tracks_dropped += 1
+                continue
+        kept.append(w)
+    log.info("candidate ways: %d -> %d (%d tracks outside parks dropped)", len(ways), len(kept), n_tracks_dropped)
+    return kept
+
+
+def extract_runs(ways: Sequence[Way], cfg: PipelineConfig, parks: Sequence[Sequence[Pt]] = ()) -> list[Run]:
+    """ways -> stitched chains -> straight runs >= min_length_m."""
+    kept_ways = filter_candidate_ways(ways, cfg, parks)
     chains = stitch_ways(kept_ways, cfg)
     runs: list[Run] = []
     for c in chains:
@@ -220,9 +239,10 @@ def _is_duplicate(short: Run, long: Run, cfg: PipelineConfig) -> bool:
 def dedupe_runs(runs: Sequence[Run], cfg: PipelineConfig) -> list[Run]:
     """Longest-first: a run is dropped when a kept, longer run is parallel (within
     dedupe_bearing_deg), within dedupe_dist_m and overlaps it along its length. Its way ids
-    are folded into the kept run so nothing is lost for debugging. Featured runs are never
-    dropped and never absorb others."""
-    ordered = sorted(runs, key=lambda r: (-chord_length(r), r.name or "", r.a, r.b))
+    are folded into the kept run so nothing is lost for debugging. Featured runs come first
+    whatever their length: they are never dropped, and an auto run duplicating one is
+    dropped in its favour (the featured entry carries hand-set obstruction angles)."""
+    ordered = sorted(runs, key=lambda r: (not r.featured, -chord_length(r), r.name or "", r.a, r.b))
     if not ordered:
         return []
     tree = STRtree([LineString([r.a_xy, r.b_xy]) for r in ordered])
@@ -233,7 +253,7 @@ def dedupe_runs(runs: Sequence[Run], cfg: PipelineConfig) -> list[Run]:
         if not r.featured:
             probe = LineString([r.a_xy, r.b_xy]).buffer(cfg.dedupe_dist_m)
             for j in sorted(int(x) for x in tree.query(probe, predicate="intersects")):
-                if j in kept_idx and not ordered[j].featured and _is_duplicate(r, ordered[j], cfg):
+                if j in kept_idx and _is_duplicate(r, ordered[j], cfg):
                     dup_of = ordered[j]
                     break
         if dup_of is not None:

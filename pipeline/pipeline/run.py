@@ -38,7 +38,7 @@ def build(ex: Extract, featured: Featured, cfg: PipelineConfig) -> tuple[list[Ru
     """The whole pipeline after reading: pure function of the extract + featured + config."""
     t0 = time.time()
     validate_endpoints(featured, ex.ways, cfg)
-    runs = extract_runs(ex.ways, cfg)
+    runs = extract_runs(ex.ways, cfg, ex.parks)
     runs.extend(bridge_runs(ex.ways, cfg))
     runs = dedupe_runs(runs, cfg)
     runs = merge_featured_sightlines(runs, featured)
@@ -64,6 +64,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--min-length", type=float, default=None, help="override min_length_m")
     ap.add_argument("--merge-tol", type=float, default=None, help="override merge_tol_deg")
     ap.add_argument("--max-offset", type=float, default=None, help="override max_offset_m")
+    ap.add_argument("--dump-names", default=None, metavar="NAMES",
+                    help="comma-separated way names; writes raw ways, stitched chains and runs for each "
+                         "to <debug-geojson>/dump/ (for debugging missing sightlines)")
     ap.add_argument("-v", "--verbose", action="store_true")
     args = ap.parse_args(argv)
 
@@ -93,6 +96,10 @@ def main(argv: list[str] | None = None) -> int:
     s, p = write_json(runs, pois, args.out, cfg)
     if args.debug_geojson:
         write_debug_geojson(runs, pois, args.debug_geojson, cfg)
+        if args.dump_names:
+            from .dump import dump_names
+            dump_names([n.strip() for n in args.dump_names.split(",") if n.strip()], ex, cfg,
+                       os.path.join(args.debug_geojson, "dump"))
     total = s + p
     log.info("total JSON %.0f kB (limit %.0f kB)", total / 1024, MAX_TOTAL_BYTES / 1024)
     if total > MAX_TOTAL_BYTES:

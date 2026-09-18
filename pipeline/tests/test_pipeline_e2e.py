@@ -43,6 +43,10 @@ def pbf(tmp_path):
     b.node(ll(0, 2000), {"amenity": "bar", "name": "Nowhere Bar"})
     b.polygon([ll(1400, 14), ll(1420, 14), ll(1420, 30), ll(1400, 30)],
               {"building": "yes", "amenity": "restaurant", "name": "Restaurant B", "website": "https://b.example"})
+    # a park with a long track inside, and a forest track outside any park
+    b.polygon([ll(-100, 1400), ll(1200, 1400), ll(1200, 1800), ll(-100, 1800)], {"leisure": "park", "name": "Park"})
+    b.way([ll(0, 1600), ll(1000, 1600)], {"highway": "track", "name": "Parkallee"})
+    b.way([ll(0, -800), ll(1000, -800)], {"highway": "track", "name": "Forstweg"})
     # admin polygon: covers everything except Außenstraße
     ring = [ll(-500, -3000), ll(6000, -3000), ll(6000, 3000), ll(-500, 3000)]
     ids = [b.node(c) for c in ring]
@@ -78,8 +82,10 @@ spots:
 def test_extract_reads_everything(pbf, cfg):
     ex = read_pbf(pbf, cfg)
     names = sorted(w.name or "" for w in ex.ways)
-    assert names == ["", "Außenstraße", "Brücke", "Isar", "Knickstraße", "Teststraße", "Teststraße", "Teststraße"]
+    assert names == ["", "Außenstraße", "Brücke", "Forstweg", "Isar", "Knickstraße", "Parkallee",
+                     "Teststraße", "Teststraße", "Teststraße"]
     assert ex.admin_polygon is not None
+    assert len(ex.parks) == 1
     assert len(ex.buildings) == 100 + 1
     kinds = sorted(p.kind for p in ex.pois)
     assert kinds == ["bar", "cafe", "restaurant"]
@@ -97,8 +103,14 @@ def test_clip_to_admin_polygon_drops_outside_street(pbf, cfg):
 def test_cli_end_to_end(pbf, featured_yaml, tmp_path, cfg):
     out = tmp_path / "data"
     dbg = tmp_path / "debug"
-    rc = runmod.main(["--pbf", pbf, "--out", str(out), "--featured", featured_yaml, "--debug-geojson", str(dbg)])
+    rc = runmod.main(["--pbf", pbf, "--out", str(out), "--featured", featured_yaml, "--debug-geojson", str(dbg),
+                      "--dump-names", "Teststraße,Knickstraße"])
     assert rc == 0
+    dump = json.loads((dbg / "dump" / "teststra_e.geojson").read_text(encoding="utf-8"))
+    groups = [f["properties"]["group"] for f in dump["features"]]
+    assert groups.count("way") == 3 and groups.count("chain") == 1 and groups.count("run") == 1
+    dump2 = json.loads((dbg / "dump" / "knickstra_e.geojson").read_text(encoding="utf-8"))
+    assert [f["properties"]["kept"] for f in dump2["features"] if f["properties"]["group"] == "run"] == [False, False]
     sl = json.loads((out / "sightlines.json").read_text(encoding="utf-8"))
     po = json.loads((out / "pois.json").read_text(encoding="utf-8"))
     assert sl["version"] == 1 and po["version"] == 1
@@ -107,8 +119,8 @@ def test_cli_end_to_end(pbf, featured_yaml, tmp_path, cfg):
     ids = [s["id"] for s in sl["sightlines"]]
     assert ids == sorted(ids)
     by_name = {s["name"]: s for s in sl["sightlines"]}
-    assert set(by_name) == {"Teststraße", "Test Axis", "Hill", "Isar",
-                            "Brücke (Isar downstream)", "Brücke (Isar upstream)"}
+    assert set(by_name) == {"Teststraße", "Test Axis", "Hill", "Isar", "Parkallee",
+                            "Brücke (Isar downstream)", "Brücke (Isar upstream)"}   # Forstweg: track outside park
     assert by_name["Isar"]["kind"] == "river"
 
     t = by_name["Teststraße"]

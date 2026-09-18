@@ -15,16 +15,16 @@ sightlines:
   - id: f_nymphenburg_canal
     name: Nymphenburg Kanal (Schloss ↔ Hubertusbrunnen)
     kind: canal
-    a: [48.1584, 11.5182]   # verify
-    b: [48.1584, 11.5416]   # verify
+    a: [48.15840, 11.50766]   # west end of the OSM canal centerline, in front of the palace
+    b: [48.15914, 11.52890]   # east end at the Hubertusbrunnen
     obstruction_toward_a_deg: 1.0   # palace façade
     obstruction_toward_b_deg: 0.6
     notes: Classic axis. Sunset behind the palace when the bearing matches.
   - id: f_theresienwiese_bavaria
     name: Theresienwiese → Bavaria
     kind: axis
-    a: [48.1316, 11.5540]   # verify
-    b: [48.1313, 11.5473]   # verify
+    a: [48.1316, 11.5540]   # verify: east edge of the Theresienwiese on the statue's axis
+    b: [48.1308, 11.5486]   # Bavaria statue
     obstruction_toward_b_deg: 3.0   # Bavaria statue + Ruhmeshalle on the terrace
 
 spots:
