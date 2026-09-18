@@ -40,8 +40,8 @@ def build(ex: Extract, featured: Featured, cfg: PipelineConfig) -> tuple[list[Ru
     validate_endpoints(featured, ex.ways, cfg)
     runs = extract_runs(ex.ways, cfg, ex.parks)
     runs.extend(bridge_runs(ex.ways, cfg))
+    runs = merge_featured_sightlines(runs, featured)   # before dedupe: featured absorbs its auto twin
     runs = dedupe_runs(runs, cfg)
-    runs = merge_featured_sightlines(runs, featured)
     runs.extend(open_horizon_run(s, cfg) for s in featured.spots if s.open_horizon)
     assign_sightline_ids(runs)
     index = BuildingIndex(ex.buildings) if ex.buildings else None

@@ -150,8 +150,8 @@ def resolve_spot_sightlines(spot: FeaturedSpot, runs: Sequence[Run], cfg: Pipeli
 
 
 def featured_pois(featured: Featured, runs: Sequence[Run], cfg: PipelineConfig) -> list[Poi]:
-    """Build Poi records for featured spots: explicit/auto: sightlines (no min-view rule),
-    plus normal snapping, plus the open-horizon virtual sightline when flagged."""
+    """Build Poi records for featured spots: explicit/auto: sightlines (no snap-distance
+    rule), plus normal snapping, plus the open-horizon virtual sightline when flagged."""
     index = SightlineIndex(runs)
     out: list[Poi] = []
     for s in featured.spots:
@@ -159,7 +159,9 @@ def featured_pois(featured: Featured, runs: Sequence[Run], cfg: PipelineConfig) 
         views: dict[tuple[str, str], View] = {}
         for r in resolve_spot_sightlines(s, runs, cfg):
             d = LineString([r.a_xy, r.b_xy]).distance(Point(xy))
-            for v in views_for(xy, r, d, cfg, min_view_m=0.0):
+            # explicit references skip the poi_snap_m distance rule, not the view-length one:
+            # a spot beyond an endpoint only looks back along the sightline
+            for v in views_for(xy, r, d, cfg):
                 views[(v.sightline_id, v.toward)] = v
         for r, d in index.within(xy, cfg.poi_snap_m):
             for v in views_for(xy, r, d, cfg):

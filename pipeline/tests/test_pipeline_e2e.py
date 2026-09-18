@@ -59,6 +59,7 @@ def pbf(tmp_path):
 @pytest.fixture
 def featured_yaml(tmp_path):
     a, bb, s = E(0, 1000), E(700, 1000), E(50, 40)
+    ia, ib = E(2000, -1500), E(4000, -1500)      # same axis as the auto-detected Isar run
     p = tmp_path / "featured.yaml"
     p.write_text(f"""
 sightlines:
@@ -68,6 +69,13 @@ sightlines:
     a: [{a[0]}, {a[1]}]
     b: [{bb[0]}, {bb[1]}]
     obstruction_toward_b_deg: 3.0
+  - id: f_isar
+    name: Isar Axis
+    kind: river
+    a: [{ia[0]}, {ia[1]}]
+    b: [{ib[0]}, {ib[1]}]
+    obstruction_toward_a_deg: 0.3
+    obstruction_toward_b_deg: 0.3
 spots:
   - id: s_hill
     name: Hill
@@ -119,9 +127,10 @@ def test_cli_end_to_end(pbf, featured_yaml, tmp_path, cfg):
     ids = [s["id"] for s in sl["sightlines"]]
     assert ids == sorted(ids)
     by_name = {s["name"]: s for s in sl["sightlines"]}
-    assert set(by_name) == {"Teststraße", "Test Axis", "Hill", "Isar", "Parkallee",
+    assert set(by_name) == {"Teststraße", "Test Axis", "Hill", "Isar Axis", "Parkallee",
                             "Brücke (Isar downstream)", "Brücke (Isar upstream)"}   # Forstweg: track outside park
-    assert by_name["Isar"]["kind"] == "river"
+    # the auto "Isar" river run is absorbed by the featured axis on the same line
+    assert by_name["Isar Axis"]["featured"] and by_name["Isar Axis"]["obstruction_toward_a_deg"] == 0.3
 
     t = by_name["Teststraße"]
     assert t["length_m"] == pytest.approx(1500, abs=2)

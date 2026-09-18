@@ -116,5 +116,21 @@ def test_spot_resolves_auto_name_and_open_horizon(tmp_path, cfg):
     assert p.id == "s_v" and p.featured and p.open_horizon
     ids = {(v.sightline_id, v.toward) for v in p.views}
     assert (street.id, "b") in ids            # 20 m from end a -> looks toward b
+    assert (street.id, "a") not in ids
     assert (oh.id, "b") in ids
     assert not any(v.sightline_id == far_same_name.id for v in p.views)
+
+
+def test_spot_beyond_the_end_only_looks_back(tmp_path, cfg):
+    s = ll(1500, 0)                            # 300 m past end b of a 1200 m street
+    f = load_featured(write_yaml(tmp_path, f"""
+        spots:
+          - id: s_t
+            name: T
+            at: [{s[0]}, {s[1]}]
+            sightline_ids: ["auto:X"]
+        """), cfg)
+    street = Run(name="X", kind="street", a=ll(0, 0), b=ll(1200, 0), points=[xy(0, 0), xy(1200, 0)], osm_way_ids=[1])
+    assign_sightline_ids([street])
+    p = featured_pois(f, [street], cfg)[0]
+    assert [(v.sightline_id, v.toward) for v in p.views] == [(street.id, "a")]
