@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.munichhenge.app.MunichHengeApp
 import de.munichhenge.app.model.Presentation
+import de.munichhenge.app.notify.ReminderWorker
+import de.munichhenge.app.weather.CloudCover
 import de.munichhenge.app.settings.Settings
 import de.munichhenge.engine.HengeData
 import de.munichhenge.engine.HengeEngine
@@ -57,6 +59,18 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun toggleMode(m: Mode) {
         val cur = modes.value
         modes.value = if (m in cur) (if (cur.size > 1) cur - m else cur) else cur + m
+    }
+
+    /** Cloud cover at the event's viewing end and t_full; null offline or out of forecast range. */
+    suspend fun cloudCover(e: HengeEvent): CloudCover? {
+        val sl = data.sightline(e.sightlineId) ?: return null
+        return graph.weather.cloudCover(sl.standingPoint(e.viewFrom), e.tFull)
+    }
+
+    /** @return false when the reminder would already be in the past. */
+    fun addReminder(e: HengeEvent): Boolean {
+        val lead = settings.value?.leadMinutes ?: Settings().leadMinutes
+        return ReminderWorker.schedule(getApplication(), e, data.sightline(e.sightlineId)?.name, lead)
     }
 
     fun updateSettings(transform: (Settings) -> Settings) {

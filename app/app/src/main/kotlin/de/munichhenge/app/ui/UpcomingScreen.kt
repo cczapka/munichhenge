@@ -41,7 +41,8 @@ fun UpcomingScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
                     }
                 }
                 items(events, key = { "$date" + it.sightlineId + it.viewFrom + it.mode }) { e ->
-                    EventRow(e, vm.data.sightline(e.sightlineId), onClick = { onOpenSightline(e.sightlineId) })
+                    EventRow(e, vm.data.sightline(e.sightlineId), cloudHint = rememberCloudHint(vm, e),
+                        onClick = { onOpenSightline(e.sightlineId) })
                     HorizontalDivider()
                 }
             }

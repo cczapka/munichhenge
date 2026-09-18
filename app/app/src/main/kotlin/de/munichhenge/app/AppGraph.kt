@@ -3,6 +3,7 @@ package de.munichhenge.app
 import android.content.Context
 import de.munichhenge.app.settings.Settings
 import de.munichhenge.app.settings.SettingsRepository
+import de.munichhenge.app.weather.WeatherRepository
 import de.munichhenge.engine.HengeData
 import de.munichhenge.engine.HengeEngine
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,7 @@ class AppGraph(private val context: Context) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val settings = SettingsRepository(context)
+    val weather = WeatherRepository(context)
 
     val data: HengeData by lazy {
         val assets = context.assets

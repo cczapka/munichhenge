@@ -17,9 +17,22 @@ android {
         versionName = "0.1"
     }
 
+    // Release signing from the environment (CI decodes the keystore from repository secrets;
+    // see .github/workflows/create-keystore.yml). Unset -> unsigned release, debug unaffected.
+    val keystorePath = System.getenv("MUNICHHENGE_KEYSTORE")
+    if (keystorePath != null) {
+        signingConfigs.create("release") {
+            storeFile = file(keystorePath)
+            storePassword = System.getenv("MUNICHHENGE_KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("MUNICHHENGE_KEY_ALIAS")
+            keyPassword = System.getenv("MUNICHHENGE_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            if (keystorePath != null) signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -68,6 +81,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
     implementation("org.osmdroid:osmdroid-android:6.1.20")
+    implementation("androidx.work:work-runtime-ktx:2.10.2")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")

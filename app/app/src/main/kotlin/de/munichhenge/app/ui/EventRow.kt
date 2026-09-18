@@ -43,7 +43,8 @@ fun GradeBadge(grade: Grade) {
 
 /** One event: name, t_full local time, grade badge, standing instruction, spot count. */
 @Composable
-fun EventRow(event: HengeEvent, sightline: Sightline?, showDate: Boolean = false, onClick: () -> Unit) {
+fun EventRow(event: HengeEvent, sightline: Sightline?, showDate: Boolean = false, cloudHint: String? = null,
+             onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +60,8 @@ fun EventRow(event: HengeEvent, sightline: Sightline?, showDate: Boolean = false
         Column(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
             Text(Presentation.title(event, sightline), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             val time = (if (showDate) Presentation.dateLabel(event.date) + " · " else "") +
-                Presentation.localTime(event.tFull) + " " + Presentation.modeWord(event.mode)
+                Presentation.localTime(event.tFull) + " " + Presentation.modeWord(event.mode) +
+                (cloudHint?.let { "  $it" } ?: "")
             Text(time, style = MaterialTheme.typography.bodyMedium)
             Text(
                 Presentation.instruction(event) + " · " + Presentation.spotsLabel(event.poiIds.size) +

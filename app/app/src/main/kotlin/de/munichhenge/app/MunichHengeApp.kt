@@ -1,6 +1,8 @@
 package de.munichhenge.app
 
 import android.app.Application
+import de.munichhenge.app.notify.DailyDigestWorker
+import de.munichhenge.app.notify.Notifications
 import org.osmdroid.config.Configuration
 import java.io.File
 
@@ -17,5 +19,7 @@ class MunichHengeApp : Application() {
             osmdroidTileCache = File(cacheDir, "osmdroid/tiles")
         }
         graph = AppGraph(this)
+        Notifications.ensureChannels(this)
+        DailyDigestWorker.schedule(this)
     }
 }

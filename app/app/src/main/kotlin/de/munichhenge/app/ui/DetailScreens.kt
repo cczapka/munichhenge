@@ -1,5 +1,6 @@
 package de.munichhenge.app.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -19,7 +20,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -52,20 +56,32 @@ private fun SectionTitle(text: String) {
 }
 
 @Composable
-private fun NextEvents(engine: HengeEngine?, load: suspend (HengeEngine) -> List<HengeEvent>,
+private fun NextEvents(vm: AppViewModel, engine: HengeEngine?, load: suspend (HengeEngine) -> List<HengeEvent>,
                        sightlineOf: (HengeEvent) -> Sightline?, onOpen: (HengeEvent) -> Unit) {
     val next by produceState<List<HengeEvent>?>(initialValue = null, key1 = engine) {
         value = engine?.let { e -> withContext(Dispatchers.Default) { load(e) } }
     }
+    var message by remember { mutableStateOf<String?>(null) }
     SectionTitle("Next events")
     when (val list = next) {
         null -> CircularProgressIndicator(modifier = Modifier.padding(16.dp))
         else -> if (list.isEmpty()) Text("No alignment in the next year.", modifier = Modifier.padding(16.dp))
         else for (e in list) {
-            EventRow(e, sightlineOf(e), showDate = true, onClick = { onOpen(e) })
+            EventRow(e, sightlineOf(e), showDate = true, cloudHint = rememberCloudHint(vm, e), onClick = { onOpen(e) })
+            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.End) {
+                TextButton(onClick = {
+                    val lead = vm.settings.value?.leadMinutes ?: 60
+                    message = if (vm.addReminder(e)) {
+                        "Reminder set for $lead min before ${Presentation.localTime(e.tFull)} on ${Presentation.dateLabel(e.date)}"
+                    } else {
+                        "That moment has already passed."
+                    }
+                }) { Text("Add reminder") }
+            }
             HorizontalDivider()
         }
     }
+    message?.let { Text(it, modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.tertiary) }
 }
 
 @Composable
@@ -79,7 +95,7 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, onOpenPoi: (String) -> U
             return@Column
         }
         Facts(sl)
-        NextEvents(engine, load = { it.nextEventsFor(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
+        NextEvents(vm, engine, load = { it.nextEventsFor(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
             sightlineOf = { sl }, onOpen = { vm.setDate(it.date) })
         SectionTitle("Spots")
         val spots = vm.data.pois.filter { p -> p.views.any { it.sightlineId == id } }.sortedBy { it.name ?: it.id }
@@ -96,10 +112,10 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, onOpenPoi: (String) -> U
             )
             HorizontalDivider()
         }
-        SectionTitle("Weather and reminders")
-        Text("Cloud-cover hint and reminders arrive in milestone M4.", modifier = Modifier.padding(16.dp),
+        Text("Cloud cover (Open-Meteo) is shown next to events within the 16-day forecast; reminders fire " +
+            "the lead time from Settings before the full-disk moment.",
+            modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Button(onClick = {}, enabled = false, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) { Text("Add reminder") }
     }
 }
 
@@ -151,7 +167,7 @@ fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String) -> U
             )
             HorizontalDivider()
         }
-        NextEvents(engine, load = { it.nextEventsForPoi(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
+        NextEvents(vm, engine, load = { it.nextEventsForPoi(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
             sightlineOf = { vm.data.sightline(it.sightlineId) }, onOpen = { vm.setDate(it.date); onOpenSightline(it.sightlineId) })
     }
 }
