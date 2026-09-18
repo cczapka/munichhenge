@@ -5,7 +5,7 @@ __pycache__/
 .pytest_cache/
 raw/*.pbf
 raw/*.pbf.md5
-data/debug/
+# data/debug/*.geojson is committed on purpose: GitHub renders it as a map
 
 # app (Android) — added in M3
 app/.gradle/

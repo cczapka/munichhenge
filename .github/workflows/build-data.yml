@@ -1,0 +1,123 @@
+# Builds data/sightlines.json, data/pois.json and data/debug/*.geojson from the Geofabrik
+# Oberbayern extract and commits them back to the branch. Runs on demand and whenever the
+# pipeline or featured.yaml changes. View the result on GitHub: it renders .geojson files
+# as an interactive map (data/debug/sightlines.geojson).
+name: build-data
+
+on:
+  workflow_dispatch:
+    inputs:
+      min_length:
+        description: "override min_length_m (default from pipeline/config.py)"
+        required: false
+        default: ""
+      clip:
+        description: "clip mode"
+        required: false
+        default: "admin"
+        type: choice
+        options: [admin, bbox]
+  push:
+    paths:
+      - "pipeline/**"
+      - "featured/**"
+      - ".github/workflows/build-data.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-data-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: pipeline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pipeline/requirements.txt
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Unit tests
+        run: python -m pytest
+
+      - name: Cache key (one extract per ISO week)
+        id: week
+        run: echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Oberbayern extract
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: raw/oberbayern-latest.osm.pbf
+          key: pbf-oberbayern-${{ steps.week.outputs.week }}
+
+      - name: Download Oberbayern extract
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: make download RAW_DIR=../raw
+
+      - name: Build data
+        run: |
+          EXTRA=""
+          if [ -n "${{ github.event.inputs.min_length }}" ]; then EXTRA="$EXTRA --min-length ${{ github.event.inputs.min_length }}"; fi
+          CLIP="${{ github.event.inputs.clip }}"; CLIP="${CLIP:-admin}"
+          python -m pipeline.run --pbf ../raw/oberbayern-latest.osm.pbf --out ../data \
+            --debug-geojson ../data/debug --clip "$CLIP" $EXTRA 2>&1 | tee ../build.log
+
+      - name: Summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os, collections
+          sl = json.load(open("../data/sightlines.json"))["sightlines"]
+          po = json.load(open("../data/pois.json"))["pois"]
+          kinds = collections.Counter(s["kind"] for s in sl)
+          print("## build-data\n")
+          print(f"| | count |\n|---|---|")
+          print(f"| sightlines | {len(sl)} |")
+          for k, v in sorted(kinds.items()): print(f"| &nbsp;&nbsp;{k} | {v} |")
+          print(f"| canyon | {sum(s['canyon'] for s in sl)} |")
+          print(f"| featured | {sum(s['featured'] for s in sl)} |")
+          print(f"| pois | {len(po)} |")
+          for f in ("sightlines.json", "pois.json", "debug/sightlines.geojson", "debug/pois.geojson"):
+              print(f"| {f} | {os.path.getsize('../data/' + f) // 1024} kB |")
+          repo, ref = os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_REF_NAME"]
+          print(f"\n[sightlines map](https://github.com/{repo}/blob/{ref}/data/debug/sightlines.geojson) · "
+                f"[pois map](https://github.com/{repo}/blob/{ref}/data/debug/pois.geojson)\n")
+          print("\n### Longest 25 sightlines\n\n| name | kind | length m | bearing ab | obstr a | obstr b | canyon |\n|---|---|---|---|---|---|---|")
+          for s in sorted(sl, key=lambda s: -s["length_m"])[:25]:
+              print(f"| {s['name']} | {s['kind']} | {s['length_m']} | {s['bearing_ab']} | {s['obstruction_toward_a_deg']} | {s['obstruction_toward_b_deg']} | {s['canyon']} |")
+          print("\n### Warnings\n```")
+          print("".join(l for l in open("../build.log", encoding="utf-8") if "WARNING" in l or "ERROR" in l) or "none")
+          print("```")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data
+          path: |
+            data/
+            build.log
+          if-no-files-found: error
+
+      - name: Commit data back to the branch
+        run: |
+          cd ..
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then echo "data unchanged"; exit 0; fi
+          git commit -m "data: rebuild from Oberbayern extract (${{ github.sha }}) [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
