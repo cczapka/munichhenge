@@ -16,3 +16,4 @@ app/.idea/
 *.iml
 *.keystore
 *.jks
+app/.kotlin/
