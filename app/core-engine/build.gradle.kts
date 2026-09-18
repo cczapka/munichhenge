@@ -2,6 +2,7 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
+    application
 }
 
 java {
@@ -26,4 +27,14 @@ tasks.test {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
+}
+
+// Small command-line front end for checking real events without a phone:
+//   ./gradlew :core-engine:run --args="upcoming 2026-09-18 14 0.7"
+//   ./gradlew :core-engine:run --args="date 2026-09-20"
+//   ./gradlew :core-engine:run --args="next sl_04c46e16 2026-09-18 5"
+application { mainClass.set("de.munichhenge.engine.CliKt") }
+tasks.named<JavaExec>("run") {
+    workingDir = rootProject.projectDir.parentFile
+    jvmArgs("-Dstdout.encoding=UTF-8", "-Dfile.encoding=UTF-8")
 }
