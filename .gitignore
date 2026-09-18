@@ -1,0 +1,18 @@
+# pipeline
+pipeline/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+raw/*.pbf
+raw/*.pbf.md5
+data/debug/
+
+# app (Android) — added in M3
+app/.gradle/
+app/build/
+app/*/build/
+app/local.properties
+app/.idea/
+*.iml
+*.keystore
+*.jks

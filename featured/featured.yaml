@@ -1,0 +1,40 @@
+# Hand-curated sightlines and spots. See PLAN.md §3.5.
+#
+# Coordinates are (lat, lon), WGS84. The pipeline warns when a sightline endpoint is
+# more than featured_snap_warn_m (default 30 m) from any extracted candidate way, so
+# every entry below marked "verify" should be checked against the debug GeoJSON and
+# tightened up before it is trusted.
+#
+# sightlines[].id must start with "f_"; spots[].id must start with "s_".
+# A featured sightline with the same id as an auto-detected one replaces it.
+# Unset obstruction_toward_?_deg fields fall back to the default building formula.
+# spots[].sightline_ids may contain "auto:<street name>" to attach the spot to the
+# nearest auto-detected sightline of that name.
+
+sightlines:
+  - id: f_nymphenburg_canal
+    name: Nymphenburg Kanal (Schloss ↔ Hubertusbrunnen)
+    kind: canal
+    a: [48.1584, 11.5182]   # verify
+    b: [48.1584, 11.5416]   # verify
+    obstruction_toward_a_deg: 1.0   # palace façade
+    obstruction_toward_b_deg: 0.6
+    notes: Classic axis. Sunset behind the palace when the bearing matches.
+  - id: f_theresienwiese_bavaria
+    name: Theresienwiese → Bavaria
+    kind: axis
+    a: [48.1316, 11.5540]   # verify
+    b: [48.1313, 11.5473]   # verify
+    obstruction_toward_b_deg: 3.0   # Bavaria statue + Ruhmeshalle on the terrace
+
+spots:
+  - id: s_olympiaberg
+    name: Olympiaberg
+    kind: viewpoint
+    at: [48.1710, 11.5520]
+    open_horizon: true
+  - id: s_friedensengel
+    name: Friedensengel terrace
+    kind: viewpoint
+    at: [48.1436, 11.5991]
+    sightline_ids: [auto:Prinzregentenstraße]   # resolved by name after extraction

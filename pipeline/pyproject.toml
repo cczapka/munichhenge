@@ -1,0 +1,27 @@
+[project]
+name = "munichhenge-pipeline"
+version = "0.1.0"
+description = "Turns an OSM extract into data/sightlines.json and data/pois.json for munichhenge."
+requires-python = ">=3.11"
+dependencies = [
+  "osmium>=4.0,<5",
+  "shapely>=2.0,<3",
+  "pyproj>=3.6,<4",
+  "PyYAML>=6.0,<7",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools]
+packages = ["pipeline"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
