@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.Instant
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 /** Cloud cover at one hour, percent. */
 data class CloudCover(val totalPct: Int, val lowPct: Int?)
@@ -34,12 +33,13 @@ class Forecast(private val times: LongArray, private val total: IntArray, privat
 object OpenMeteo {
     const val FORECAST_DAYS = 16
 
-    /** Grid cell size in degrees. Open-Meteo's models are 1-11 km; 0.1° (~7 x 11 km) shares one
-     * forecast between all sightlines of a district and keeps requests to a handful per day. */
-    const val CELL_DEG = 0.1
+    /** Grid cells per degree: 0.1° cells (~7 x 11 km). Open-Meteo's models are 1-11 km, so one
+     * forecast serves all sightlines of a district and requests stay at a handful per day. */
+    const val CELLS_PER_DEG = 10
 
+    /** Cell centre; divide (not multiply) so 48.1 comes out as the same double as the literal. */
     fun cell(p: GeoPoint): Pair<Double, Double> =
-        (p.lat / CELL_DEG).roundToInt() * CELL_DEG to (p.lon / CELL_DEG).roundToInt() * CELL_DEG
+        Math.round(p.lat * CELLS_PER_DEG) / CELLS_PER_DEG.toDouble() to Math.round(p.lon * CELLS_PER_DEG) / CELLS_PER_DEG.toDouble()
 
     fun cellKey(p: GeoPoint): String {
         val (lat, lon) = cell(p)
