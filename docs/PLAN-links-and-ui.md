@@ -1,8 +1,12 @@
-# munichhenge — Proposal: M5 "Take me there" and M6 UI overhaul
+# munichhenge — Detailed design: "Take me there" links and the UI overhaul
 
 Status: **proposal, not approved**. Nothing here is implemented. It follows the review of
 2026-11-16 (astronomy verified; visibility model, ranking and UI found weak). Vocabulary is
 the one fixed in `CLAUDE.md`. Each milestone lists its tests and "done when", as `PLAN.md` does.
+
+**Numbering:** `docs/IMPROVEMENT-PLAN.md` is the master plan and sets the order. Section 1
+below is its milestone M5. Section 2 (written as "M6") is scheduled there in two blocks:
+steps 0–4 as **M7**, steps 5–9 as **M9**. Where this file says "M6", read "M7 and M9".
 
 Out of scope here, but both milestones are designed to absorb them later:
 
