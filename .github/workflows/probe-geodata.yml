@@ -1,0 +1,114 @@
+# Diagnostic, manual only: can the Bavarian open geodata portal be downloaded from without
+# an account, and what does it offer for Munich (LoD2 buildings, surface model)?
+# Prints findings to the job log and step summary. Changes nothing in the repo.
+name: probe-geodata
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Probe
+        run: |
+          python3 - <<'PY'
+          import re, urllib.request, urllib.error, os, io, zipfile, gzip
+          UA = {"User-Agent": "geodata-probe/0.1"}
+          out = []
+          def say(s=""):
+              print(s); out.append(s)
+          def get(url, n=None):
+              req = urllib.request.Request(url, headers=UA)
+              try:
+                  with urllib.request.urlopen(req, timeout=60) as r:
+                      body = r.read(n) if n else r.read()
+                      return r.status, dict(r.headers), body, r.geturl()
+              except urllib.error.HTTPError as e:
+                  return e.code, dict(e.headers), e.read(2000), url
+              except Exception as e:
+                  return None, {}, str(e).encode(), url
+          def show(label, url, n=400000):
+              st, h, b, final = get(url, n)
+              txt = b.decode("utf-8", "replace")
+              say(f"- {label}: HTTP {st}, {h.get('Content-Type','?')}, {len(b)} bytes" + (f", redirected to {final}" if final != url else ""))
+              return st, h, txt
+
+          say("## 1. Portal pages")
+          st, h, portal = show("portal start", "https://geodaten.bayern.de/opengeodata/")
+          login_words = sorted(set(re.findall(r"(?i)\b(login|anmeld\w*|registrier\w*|passwort|benutzerkonto)\b", portal)))
+          say(f"  login-related words on start page: {login_words or 'none'}")
+          pns = sorted(set(re.findall(r"pn=([A-Za-z0-9_\-]+)", portal)))
+          say(f"  product ids linked (pn=): {pns}")
+          scripts = sorted(set(re.findall(r'src="([^"]+\.js[^"]*)"', portal)))
+          say(f"  scripts: {scripts[:12]}")
+
+          st, h, lod2 = show("LoD2 detail page", "https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2")
+          say(f"  login-related words: {sorted(set(re.findall(r'(?i)(login|anmeld[a-z]*|registrier[a-z]*|passwort)', lod2))) or 'none'}")
+          say(f"  licence mentions: {sorted(set(re.findall(r'(?i)(CC BY(?:-ND)? ?4\.0|creativecommons\.org/licenses/[a-z\-]+/[0-9.]+)', lod2))) or 'none'}")
+          links = sorted(set(re.findall(r'https?://[^\s"\'<>]+', lod2)))
+          say(f"  links with lod2/meta4/download: {[l for l in links if re.search(r'(?i)lod2|meta4|download|bayernwolke', l)][:15]}")
+          more_js = sorted(set(re.findall(r'src="([^"]+\.js[^"]*)"', lod2)))
+          for js in more_js[:8]:
+              u = js if js.startswith("http") else "https://geodaten.bayern.de/opengeodata/" + js.lstrip("./")
+              s2, h2, t2 = show(f"script {js}", u)
+              hits = sorted(set(re.findall(r'https?://[^\s"\'<>\\]+', t2)))
+              hits = [x for x in hits if re.search(r"(?i)meta4|metalink|bayernwolke|/odd/|download", x)]
+              if hits: say(f"    urls in script: {hits[:20]}")
+              rel = sorted(set(re.findall(r'["\'](/?odd/[^"\']+|[^"\']*meta4[^"\']*|[^"\']*\.json)["\']', t2)))
+              if rel: say(f"    relative data paths: {rel[:20]}")
+
+          say("\n## 2. LoD2 metalink for Munich (AGS 09162000) without any credentials")
+          tile_url = None
+          for cand in ["https://geodaten.bayern.de/odd/a/lod2/citygml/meta/metalink/09162000.meta4",
+                       "https://geodaten.bayern.de/odd/a/lod2/citygml/meta/metalink/09162.meta4",
+                       "https://geodaten.bayern.de/odd/a/lod2/citygml/meta/metalink/09.meta4"]:
+              st, h, meta = show("metalink " + cand.rsplit('/',1)[1], cand, 3_000_000)
+              if st == 200 and "<file" in meta:
+                  files = re.findall(r'<file name="([^"]+)"', meta)
+                  urls = re.findall(r"<url[^>]*>([^<]+)</url>", meta)
+                  say(f"  files listed: {len(files)}, e.g. {files[:3]}")
+                  say(f"  first urls: {urls[:3]}")
+                  lic = re.findall(r"(?i)<license>.*?</license>|CC BY[^<]{0,20}", meta)
+                  if lic: say(f"  licence in metalink: {lic[:2]}")
+                  pick = [u for u in urls if re.search(r"69[01]_533[45]", u)] or urls
+                  tile_url = pick[0] if pick else None
+                  break
+
+          say("\n## 3. Download one LoD2 tile anonymously")
+          if tile_url:
+              st, h, b, final = get(tile_url)
+              say(f"- {tile_url}: HTTP {st}, {h.get('Content-Type','?')}, {len(b)/1e6:.1f} MB")
+              data = b
+              if b[:2] == b"PK":
+                  z = zipfile.ZipFile(io.BytesIO(b)); name = z.namelist()[0]; data = z.read(name); say(f"  zip member {name}, {len(data)/1e6:.1f} MB")
+              elif b[:2] == b"\x1f\x8b":
+                  data = gzip.decompress(b)
+              txt = data.decode("utf-8", "replace")
+              say(f"  looks like CityGML: {'CityModel' in txt[:2000]}")
+              say(f"  buildings: {len(re.findall(r'<bldg:Building[ >]', txt))}")
+              hs = [float(x) for x in re.findall(r"<bldg:measuredHeight[^>]*>([0-9.]+)<", txt)]
+              if hs: say(f"  measuredHeight: n={len(hs)}, median {sorted(hs)[len(hs)//2]:.1f} m, max {max(hs):.1f} m")
+              srs = sorted(set(re.findall(r'srsName="([^"]+)"', txt[:200000])))
+              say(f"  srsName: {srs[:3]}")
+              say(f"  envelope: {re.findall(r'<gml:lowerCorner[^>]*>([^<]+)<', txt)[:1]} .. {re.findall(r'<gml:upperCorner[^>]*>([^<]+)<', txt)[:1]}")
+          else:
+              say("- no tile url found from the metalink candidates")
+
+          say("\n## 4. Surface / terrain model product pages")
+          for pn in ["dom20", "dom40", "dom1", "dom", "dgm1", "dgm5", "dop20", "dop40", "laser", "dom_mesh", "dommesh"]:
+              st, h, t = show(f"pn={pn}", f"https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn={pn}", 200000)
+              title = re.findall(r"<title>([^<]*)</title>", t)[:1]
+              h1 = re.findall(r"<h1[^>]*>([^<]*)</h1>", t)[:2]
+              say(f"    title {title} h1 {h1}")
+          for cand in ["https://geodaten.bayern.de/odd/a/dom20/DOM/meta/metalink/09162000.meta4",
+                       "https://geodaten.bayern.de/odd/a/dom20/meta/metalink/09162000.meta4",
+                       "https://geodaten.bayern.de/odd/a/dom40/meta/metalink/09162000.meta4",
+                       "https://geodaten.bayern.de/odd/a/dgm/dgm1/meta/metalink/09162000.meta4"]:
+              st, h, t = show("metalink " + cand.split("/odd/a/")[1], cand, 400000)
+              if st == 200: say(f"    files: {len(re.findall('<file ', t))}, first urls {re.findall(r'<url[^>]*>([^<]+)</url>', t)[:2]}")
+
+          with open(os.environ.get("GITHUB_STEP_SUMMARY", "/dev/null"), "a") as f:
+              f.write("\n".join(out) + "\n")
+          PY
