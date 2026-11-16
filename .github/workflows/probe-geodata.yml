@@ -14,100 +14,70 @@ jobs:
       - name: Probe
         run: |
           python3 - <<'PY'
-          import re, urllib.request, urllib.error, os, io, zipfile, gzip
-          UA = {"User-Agent": "geodata-probe/0.1"}
+          import re, json, urllib.request, urllib.error, os
+          UA = {"User-Agent": "geodata-probe/0.2"}
           out = []
           def say(s=""):
               print(s); out.append(s)
           def get(url, n=None):
-              req = urllib.request.Request(url, headers=UA)
               try:
-                  with urllib.request.urlopen(req, timeout=60) as r:
-                      body = r.read(n) if n else r.read()
-                      return r.status, dict(r.headers), body, r.geturl()
+                  with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
+                      return r.status, (r.read(n) if n else r.read())
               except urllib.error.HTTPError as e:
-                  return e.code, dict(e.headers), e.read(2000), url
+                  return e.code, e.read(500)
               except Exception as e:
-                  return None, {}, str(e).encode(), url
-          def show(label, url, n=400000):
-              st, h, b, final = get(url, n)
-              txt = b.decode("utf-8", "replace")
-              say(f"- {label}: HTTP {st}, {h.get('Content-Type','?')}, {len(b)} bytes" + (f", redirected to {final}" if final != url else ""))
-              return st, h, txt
+                  return None, str(e).encode()
+          BASE = "https://geodaten.bayern.de/opengeodata/"
 
-          say("## 1. Portal pages")
-          st, h, portal = show("portal start", "https://geodaten.bayern.de/opengeodata/")
-          login_words = sorted(set(re.findall(r"(?i)\b(login|anmeld\w*|registrier\w*|passwort|benutzerkonto)\b", portal)))
-          say(f"  login-related words on start page: {login_words or 'none'}")
-          pns = sorted(set(re.findall(r"pn=([A-Za-z0-9_\-]+)", portal)))
-          say(f"  product ids linked (pn=): {pns}")
-          scripts = sorted(set(re.findall(r'src="([^"]+\.js[^"]*)"', portal)))
-          say(f"  scripts: {scripts[:12]}")
+          say("## 1. Where the start page says 'Anmeldung'")
+          st, b = get(BASE)
+          t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", b.decode("utf-8", "replace")))
+          for m in re.finditer(r"(?i)anmeld\w*|registrier\w*|login", t):
+              say("- ..." + t[max(0, m.start() - 140): m.end() + 140] + "...")
 
-          st, h, lod2 = show("LoD2 detail page", "https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2")
-          say(f"  login-related words: {sorted(set(re.findall(r'(?i)(login|anmeld[a-z]*|registrier[a-z]*|passwort)', lod2))) or 'none'}")
-          say(f"  licence mentions: {sorted(set(re.findall(r'(?i)(CC BY(?:-ND)? ?4\.0|creativecommons\.org/licenses/[a-z\-]+/[0-9.]+)', lod2))) or 'none'}")
-          links = sorted(set(re.findall(r'https?://[^\s"\'<>]+', lod2)))
-          say(f"  links with lod2/meta4/download: {[l for l in links if re.search(r'(?i)lod2|meta4|download|bayernwolke', l)][:15]}")
-          more_js = sorted(set(re.findall(r'src="([^"]+\.js[^"]*)"', lod2)))
-          for js in more_js[:8]:
-              u = js if js.startswith("http") else "https://geodaten.bayern.de/opengeodata/" + js.lstrip("./")
-              s2, h2, t2 = show(f"script {js}", u)
-              hits = sorted(set(re.findall(r'https?://[^\s"\'<>\\]+', t2)))
-              hits = [x for x in hits if re.search(r"(?i)meta4|metalink|bayernwolke|/odd/|download", x)]
-              if hits: say(f"    urls in script: {hits[:20]}")
-              rel = sorted(set(re.findall(r'["\'](/?odd/[^"\']+|[^"\']*meta4[^"\']*|[^"\']*\.json)["\']', t2)))
-              if rel: say(f"    relative data paths: {rel[:20]}")
+          say("\n## 2. Product catalogue (json/opengeodata_datensaetze.json)")
+          st, b = get(BASE + "json/opengeodata_datensaetze.json")
+          say(f"- HTTP {st}, {len(b)} bytes")
+          cat = json.loads(b.decode("utf-8", "replace"))
+          items = cat if isinstance(cat, list) else next((v for v in cat.values() if isinstance(v, list)), [cat])
+          say(f"- top level: {type(cat).__name__}, entries: {len(items)}")
+          if items and isinstance(items[0], dict):
+              say(f"- keys of an entry: {sorted(items[0].keys())}")
+          def flat(d):
+              return json.dumps(d, ensure_ascii=False)
+          say("- all products (id | name):")
+          for it in items:
+              if not isinstance(it, dict): continue
+              ident = next((str(it[k]) for k in ("pn", "id", "kuerzel", "key", "produkt") if k in it), "?")
+              name = next((str(it[k]) for k in ("titel", "title", "name", "bezeichnung") if k in it), "?")
+              say(f"  - {ident} | {name}")
+          lic = sorted(set(re.findall(r"(?i)CC[ -]BY[A-Z\- ]{0,6}4\.0|creativecommons\.org/licenses/[a-z\-]+/[0-9.]+|Datenlizenz[^\"<]{0,60}", flat(cat))))
+          say(f"- licence strings in catalogue: {lic}")
+          say("\n### Entries about buildings, surface and terrain models")
+          for it in items:
+              s = flat(it)
+              if re.search(r"(?i)lod2|oberfl|\bdom|dgm|gel.ndemodell|laser", s):
+                  for k, v in (it.items() if isinstance(it, dict) else []):
+                      vs = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", flat(v)))
+                      say(f"  {k}: {vs[:420]}")
+                  say("  ---")
 
-          say("\n## 2. LoD2 metalink for Munich (AGS 09162000) without any credentials")
-          tile_url = None
-          for cand in ["https://geodaten.bayern.de/odd/a/lod2/citygml/meta/metalink/09162000.meta4",
-                       "https://geodaten.bayern.de/odd/a/lod2/citygml/meta/metalink/09162.meta4",
-                       "https://geodaten.bayern.de/odd/a/lod2/citygml/meta/metalink/09.meta4"]:
-              st, h, meta = show("metalink " + cand.rsplit('/',1)[1], cand, 3_000_000)
-              if st == 200 and "<file" in meta:
-                  files = re.findall(r'<file name="([^"]+)"', meta)
-                  urls = re.findall(r"<url[^>]*>([^<]+)</url>", meta)
-                  say(f"  files listed: {len(files)}, e.g. {files[:3]}")
-                  say(f"  first urls: {urls[:3]}")
-                  lic = re.findall(r"(?i)<license>.*?</license>|CC BY[^<]{0,20}", meta)
-                  if lic: say(f"  licence in metalink: {lic[:2]}")
-                  pick = [u for u in urls if re.search(r"69[01]_533[45]", u)] or urls
-                  tile_url = pick[0] if pick else None
-                  break
-
-          say("\n## 3. Download one LoD2 tile anonymously")
-          if tile_url:
-              st, h, b, final = get(tile_url)
-              say(f"- {tile_url}: HTTP {st}, {h.get('Content-Type','?')}, {len(b)/1e6:.1f} MB")
-              data = b
-              if b[:2] == b"PK":
-                  z = zipfile.ZipFile(io.BytesIO(b)); name = z.namelist()[0]; data = z.read(name); say(f"  zip member {name}, {len(data)/1e6:.1f} MB")
-              elif b[:2] == b"\x1f\x8b":
-                  data = gzip.decompress(b)
-              txt = data.decode("utf-8", "replace")
-              say(f"  looks like CityGML: {'CityModel' in txt[:2000]}")
-              say(f"  buildings: {len(re.findall(r'<bldg:Building[ >]', txt))}")
-              hs = [float(x) for x in re.findall(r"<bldg:measuredHeight[^>]*>([0-9.]+)<", txt)]
-              if hs: say(f"  measuredHeight: n={len(hs)}, median {sorted(hs)[len(hs)//2]:.1f} m, max {max(hs):.1f} m")
-              srs = sorted(set(re.findall(r'srsName="([^"]+)"', txt[:200000])))
-              say(f"  srsName: {srs[:3]}")
-              say(f"  envelope: {re.findall(r'<gml:lowerCorner[^>]*>([^<]+)<', txt)[:1]} .. {re.findall(r'<gml:upperCorner[^>]*>([^<]+)<', txt)[:1]}")
-          else:
-              say("- no tile url found from the metalink candidates")
-
-          say("\n## 4. Surface / terrain model product pages")
-          for pn in ["dom20", "dom40", "dom1", "dom", "dgm1", "dgm5", "dop20", "dop40", "laser", "dom_mesh", "dommesh"]:
-              st, h, t = show(f"pn={pn}", f"https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn={pn}", 200000)
-              title = re.findall(r"<title>([^<]*)</title>", t)[:1]
-              h1 = re.findall(r"<h1[^>]*>([^<]*)</h1>", t)[:2]
-              say(f"    title {title} h1 {h1}")
-          for cand in ["https://geodaten.bayern.de/odd/a/dom20/DOM/meta/metalink/09162000.meta4",
-                       "https://geodaten.bayern.de/odd/a/dom20/meta/metalink/09162000.meta4",
-                       "https://geodaten.bayern.de/odd/a/dom40/meta/metalink/09162000.meta4",
-                       "https://geodaten.bayern.de/odd/a/dgm/dgm1/meta/metalink/09162000.meta4"]:
-              st, h, t = show("metalink " + cand.split("/odd/a/")[1], cand, 400000)
-              if st == 200: say(f"    files: {len(re.findall('<file ', t))}, first urls {re.findall(r'<url[^>]*>([^<]+)</url>', t)[:2]}")
+          say("\n## 3. Size of the Munich downloads (from the metalinks, AGS 09162000)")
+          def metalink(path):
+              st, b = get(f"https://geodaten.bayern.de/odd/a/{path}/meta/metalink/09162000.meta4")
+              if st != 200: return st, 0, 0, []
+              x = b.decode("utf-8", "replace")
+              sizes = [int(s) for s in re.findall(r"<size>(\d+)</size>", x)]
+              return st, len(re.findall(r"<file ", x)), sum(sizes), re.findall(r"<url[^>]*>([^<]+)</url>", x)[:1]
+          cands = ["lod2/citygml", "dgm/dgm1", "dgm/dgm5", "dom20/DOM", "dom/dom20", "dom/dom1", "dom20", "dom40/DOM", "dom40", "bdom20", "dom/bdom20", "laser/las", "laser"]
+          # also try every path that the catalogue itself mentions
+          cands += sorted(set(re.findall(r"odd/a/([A-Za-z0-9_/]+?)/meta/metalink", flat(cat))))
+          seen = set()
+          for c in cands:
+              if c in seen: continue
+              seen.add(c)
+              st, n, total, first = metalink(c)
+              say(f"- {c}: HTTP {st}" + (f", {n} files, {total/1e9:.1f} GB, e.g. {first}" if st == 200 else ""))
 
           with open(os.environ.get("GITHUB_STEP_SUMMARY", "/dev/null"), "a") as f:
               f.write("\n".join(out) + "\n")
