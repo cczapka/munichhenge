@@ -4,10 +4,13 @@ import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.Grade
 import de.munichhenge.engine.HengeEvent
 import de.munichhenge.engine.Mode
+import de.munichhenge.engine.Sightline
+import de.munichhenge.solar.GeoPoint
 import java.time.Instant
 import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class PresentationTest {
     private fun event(date: LocalDate, quality: Double, bearing: Double = 270.0, t: String = "2026-09-20T17:05:00Z",
@@ -81,6 +84,23 @@ class PresentationTest {
         val sunrise = open.copy(mode = Mode.SUNRISE, bearing = 88.0, tFull = Instant.parse("2026-09-20T05:02:00Z"))
         assertEquals("Hill: sunrise 07:02 (88°), sunset 19:05 (270°)",
             Presentation.openHorizonLine(listOf(open, sunrise)) { "Hill" })
+    }
+
+    private val street = Sightline(
+        id = "sl_x", name = "Teststraße", kind = "street", a = GeoPoint(48.15, 11.55), b = GeoPoint(48.1505, 11.57),
+        lengthM = 1486.0, maxOffsetM = 0.0, bearingAb = 287.0, bearingBa = 107.0,
+        obstructionTowardADeg = 0.62, obstructionTowardBDeg = 1.13, canyon = true, featured = false, notes = null,
+        osmWayIds = emptyList(),
+    )
+
+    @Test
+    fun `direction card text for both ends`() {
+        assertEquals("Stand at the east end, look WNW (287°)", Presentation.directionTitle(street, Endpoint.A))
+        assertEquals("Stand at the west end, look ESE (107°)", Presentation.directionTitle(street, Endpoint.B))
+        assertEquals("Far end 1486 m away, skyline there 1.1° up", Presentation.directionDetail(street, Endpoint.A, false))
+        assertEquals("Far end 1486 m away, skyline there 0.6° up", Presentation.directionDetail(street, Endpoint.B, false))
+        assertTrue(Presentation.directionDetail(street, Endpoint.A, true).endsWith("Street View shows the nearest bank or bridge."))
+        assertEquals("Open horizon", Presentation.directionTitle(street.copy(bearingAb = null, bearingBa = null), Endpoint.A))
     }
 
     @Test

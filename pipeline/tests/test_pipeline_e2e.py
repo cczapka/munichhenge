@@ -173,6 +173,15 @@ def test_cli_end_to_end(pbf, featured_yaml, tmp_path, cfg):
     line = next(ft for ft in gj["features"] if ft["properties"]["name"] == "Teststraße")
     assert line["geometry"]["type"] == "LineString" and line["properties"]["bearing_bucket"] == "090-120"
     assert "stroke" in line["properties"]
+    # Street View from each end, looking down the sightline (M5)
+    from pipeline.links import streetview_url
+    props = line["properties"]
+    sv_ab = streetview_url(t["a"][0], t["a"][1], t["bearing_ab"], t["obstruction_toward_b_deg"])
+    sv_ba = streetview_url(t["b"][0], t["b"][1], t["bearing_ba"], t["obstruction_toward_a_deg"])
+    assert props["streetview_ab"] == sv_ab and props["streetview_ba"] == sv_ba
+    assert "&heading=90&" in props["streetview_ab"] and "&heading=270&" in props["streetview_ba"]
+    hill = next(ft for ft in gj["features"] if ft["properties"]["name"] == "Hill")
+    assert "streetview_ab" not in hill["properties"] and "streetview_ba" not in hill["properties"]
     pj = json.loads((dbg / "pois.geojson").read_text(encoding="utf-8"))
     assert len(pj["features"]) == len(po["pois"])
 

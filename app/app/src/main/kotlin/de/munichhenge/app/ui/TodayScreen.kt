@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.munichhenge.app.model.Presentation
+import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.Mode
 import java.time.Instant
 import java.time.LocalDate
@@ -41,7 +42,7 @@ import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
+fun TodayScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit) {
     val date by vm.selectedDate.collectAsStateWithLifecycle()
     val modes by vm.modes.collectAsStateWithLifecycle()
     val events by vm.dayEvents.collectAsStateWithLifecycle()
@@ -87,7 +88,7 @@ fun TodayScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
             }
             items(list.events, key = { it.sightlineId + it.viewFrom + it.mode }) { e ->
                 EventRow(e, vm.data.sightline(e.sightlineId), cloudHint = rememberCloudHint(vm, e),
-                    onClick = { onOpenSightline(e.sightlineId) })
+                    onClick = { onOpenSightline(e.sightlineId, e.viewFrom) })
                 HorizontalDivider()
             }
             if (list.openHorizon.isNotEmpty()) {

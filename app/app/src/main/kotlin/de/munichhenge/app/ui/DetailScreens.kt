@@ -31,9 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.clickable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.munichhenge.app.model.Presentation
+import androidx.compose.ui.platform.LocalContext
 import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.HengeEngine
 import de.munichhenge.engine.HengeEvent
+import de.munichhenge.engine.LinkTarget
+import de.munichhenge.engine.Links
+import de.munichhenge.engine.Mode
 import de.munichhenge.engine.Poi
 import de.munichhenge.engine.Sightline
 import kotlinx.coroutines.Dispatchers
@@ -85,7 +89,7 @@ private fun NextEvents(vm: AppViewModel, engine: HengeEngine?, load: suspend (He
 }
 
 @Composable
-fun SightlineDetailScreen(vm: AppViewModel, id: String, onOpenPoi: (String) -> Unit, onBack: () -> Unit) {
+fun SightlineDetailScreen(vm: AppViewModel, id: String, from: Endpoint?, onOpenPoi: (String) -> Unit, onBack: () -> Unit) {
     val engine by vm.engine.collectAsStateWithLifecycle()
     val sl = vm.data.sightline(id)
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -95,6 +99,36 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, onOpenPoi: (String) -> U
             return@Column
         }
         Facts(sl)
+        SectionTitle("Where to stand")
+        if (sl.openHorizon) {
+            // look toward the next sunset; west until the engine has answered
+            val nextSunsetAz by produceState<Double?>(initialValue = null, key1 = engine) {
+                value = engine?.let { e ->
+                    withContext(Dispatchers.Default) {
+                        e.nextEventsFor(id, LocalDate.now(Presentation.zone), 1, setOf(Mode.SUNSET)).firstOrNull()?.bearing
+                    }
+                }
+            }
+            val az = nextSunsetAz ?: 270.0
+            DirectionCard(
+                title = "Open horizon",
+                detail = "Street View faces the next sunset (${Links.heading(az)}°).",
+                target = LinkTarget.forOpenHorizon(sl, az),
+                highlighted = false,
+            )
+        } else {
+            // the direction of the event the user came from first, and outlined
+            for (end in Endpoint.entries.sortedBy { it != from }) {
+                val target = LinkTarget.forDirection(sl, end)
+                DirectionCard(
+                    title = Presentation.directionTitle(sl, end),
+                    detail = Presentation.directionDetail(sl, end, target.onWater),
+                    target = target,
+                    highlighted = end == from,
+                )
+            }
+        }
+        StreetViewHint()
         NextEvents(vm, engine, load = { it.nextEventsFor(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
             sightlineOf = { sl }, onOpen = { vm.setDate(it.date) })
         SectionTitle("Spots")
@@ -123,25 +157,16 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, onOpenPoi: (String) -> U
 private fun Facts(sl: Sightline) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text("${sl.kind} · ${sl.lengthM.toInt()} m" + if (sl.canyon) " · canyon" else "", style = MaterialTheme.typography.bodyMedium)
-        if (!sl.openHorizon) {
-            Text("From the ${Presentation.endpointWord(sl, Endpoint.A)} end look ${Presentation.compass16(sl.bearingAb!!)} " +
-                "(${"%.1f".format(sl.bearingAb)}°), obstruction ${"%.1f".format(sl.obstructionTowardBDeg)}°",
-                style = MaterialTheme.typography.bodyMedium)
-            Text("From the ${Presentation.endpointWord(sl, Endpoint.B)} end look ${Presentation.compass16(sl.bearingBa!!)} " +
-                "(${"%.1f".format(sl.bearingBa)}°), obstruction ${"%.1f".format(sl.obstructionTowardADeg)}°",
-                style = MaterialTheme.typography.bodyMedium)
-        } else {
-            Text("Open horizon, obstruction ${"%.1f".format(sl.obstructionTowardBDeg)}°", style = MaterialTheme.typography.bodyMedium)
-        }
         sl.notes?.let { Text(it, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp)) }
         if (sl.featured) Text("featured", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.tertiary)
     }
 }
 
 @Composable
-fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String) -> Unit, onBack: () -> Unit) {
+fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String, Endpoint?) -> Unit, onBack: () -> Unit) {
     val engine by vm.engine.collectAsStateWithLifecycle()
     val poi: Poi? = vm.data.poi(id)
+    val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Header(poi?.name ?: id, onBack)
         if (poi == null) {
@@ -154,6 +179,12 @@ fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String) -> U
             poi.tags["website"]?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
             poi.notes?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
         }
+        Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+            TextButton(onClick = { LinkLauncher.open(context, Links.walk(poi.at)) }) { Text("Walk there") }
+            TextButton(onClick = {
+                LinkLauncher.open(context, Links.geo(poi.at, poi.name ?: poi.id), chooserTitle = "Open in")
+            }) { Text("Open in maps") }
+        }
         SectionTitle("Sightlines")
         for (v in poi.views) {
             val sl = vm.data.sightline(v.sightlineId) ?: continue
@@ -163,11 +194,20 @@ fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String) -> U
                     val b = sl.bearing(v.toward.other)
                     Text(if (b == null) "open horizon" else "looks ${Presentation.compass16(b)} (${"%.0f".format(b)}°) · ${v.distanceM.toInt()} m from the line")
                 },
-                modifier = Modifier.clickable { onOpenSightline(sl.id) },
+                trailingContent = if (sl.openHorizon) null else {
+                    {
+                        TextButton(onClick = {
+                            LinkLauncher.open(context, Links.streetView(LinkTarget.forPoiView(poi, v, sl)))
+                        }) { Text("Street View") }
+                    }
+                },
+                modifier = Modifier.clickable { onOpenSightline(sl.id, v.toward.other) },
             )
             HorizontalDivider()
         }
+        StreetViewHint()
         NextEvents(vm, engine, load = { it.nextEventsForPoi(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
-            sightlineOf = { vm.data.sightline(it.sightlineId) }, onOpen = { vm.setDate(it.date); onOpenSightline(it.sightlineId) })
+            sightlineOf = { vm.data.sightline(it.sightlineId) },
+            onOpen = { vm.setDate(it.date); onOpenSightline(it.sightlineId, it.viewFrom) })
     }
 }

@@ -1,0 +1,40 @@
+{
+  "_comment": "Shared vectors for the external-link builders in pipeline/pipeline/links.py and app/core-engine Links.kt. Both test suites must reproduce every output exactly. Rules: coordinates with 6 decimals and a dot; heading = bearing rounded half-up to whole degrees, 360 -> 0; pitch = obstruction rounded up, clamped to 0..10; fov 60; label percent-encoded as UTF-8, only A-Z a-z 0-9 - . _ ~ left as is.",
+  "cases": [
+    {
+      "name": "street, typical",
+      "lat": 48.14305, "lon": 11.59506, "bearing": 287.0, "obstruction": 1.13, "label": "Prinzregentenstraße",
+      "streetview": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.143050,11.595060&heading=287&pitch=2&fov=60",
+      "walk": "https://www.google.com/maps/dir/?api=1&destination=48.143050,11.595060&travelmode=walking",
+      "geo": "geo:48.143050,11.595060?q=48.143050,11.595060(Prinzregentenstra%C3%9Fe)"
+    },
+    {
+      "name": "heading wraps 359.6 to 0, small obstruction rounds up to 1",
+      "lat": 48.1, "lon": 11.5, "bearing": 359.6, "obstruction": 0.4, "label": "A",
+      "streetview": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.100000,11.500000&heading=0&pitch=1&fov=60",
+      "walk": "https://www.google.com/maps/dir/?api=1&destination=48.100000,11.500000&travelmode=walking",
+      "geo": "geo:48.100000,11.500000?q=48.100000,11.500000(A)"
+    },
+    {
+      "name": "half-up ties and pitch clamped high",
+      "lat": 48.15899, "lon": 11.55, "bearing": 12.5, "obstruction": 14.0, "label": "B",
+      "streetview": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.158990,11.550000&heading=13&pitch=10&fov=60",
+      "walk": "https://www.google.com/maps/dir/?api=1&destination=48.158990,11.550000&travelmode=walking",
+      "geo": "geo:48.158990,11.550000?q=48.158990,11.550000(B)"
+    },
+    {
+      "name": "tie at .5 below 90, negative obstruction clamps to 0",
+      "lat": 48.13652, "lon": 11.60372, "bearing": 89.5, "obstruction": -0.3, "label": "C",
+      "streetview": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.136520,11.603720&heading=90&pitch=0&fov=60",
+      "walk": "https://www.google.com/maps/dir/?api=1&destination=48.136520,11.603720&travelmode=walking",
+      "geo": "geo:48.136520,11.603720?q=48.136520,11.603720(C)"
+    },
+    {
+      "name": "label with accents, umlaut, space, parentheses and reserved characters",
+      "lat": 48.1436, "lon": 11.5991, "bearing": 0.0, "obstruction": 0.0, "label": "Café (Glockenbach) Ü & Co*~-._",
+      "streetview": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.143600,11.599100&heading=0&pitch=0&fov=60",
+      "walk": "https://www.google.com/maps/dir/?api=1&destination=48.143600,11.599100&travelmode=walking",
+      "geo": "geo:48.143600,11.599100?q=48.143600,11.599100(Caf%C3%A9%20%28Glockenbach%29%20%C3%9C%20%26%20Co%2A~-._)"
+    }
+  ]
+}

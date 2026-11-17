@@ -9,6 +9,7 @@ from typing import Sequence
 
 from .config import PipelineConfig
 from .geom import bearing_bucket, true_bearings
+from .links import streetview_url
 from .models import Poi, Run
 
 log = logging.getLogger(__name__)
@@ -133,6 +134,12 @@ def sightlines_geojson(runs: Sequence[Run], cfg: PipelineConfig) -> dict:
         props = dict(rec)
         props.update({"bearing_bucket": bucket, "stroke": colour, "stroke-width": 4 if r.featured else 2,
                       "stroke-opacity": 0.9})
+        if not r.open_horizon:
+            # one tap from GitHub's map view to the real far end of each direction
+            props["streetview_ab"] = streetview_url(rec["a"][0], rec["a"][1], rec["bearing_ab"],
+                                                    rec["obstruction_toward_b_deg"])
+            props["streetview_ba"] = streetview_url(rec["b"][0], rec["b"][1], rec["bearing_ba"],
+                                                    rec["obstruction_toward_a_deg"])
         feats.append({"type": "Feature", "geometry": geom, "properties": props})
     return {"type": "FeatureCollection", "features": feats}
 

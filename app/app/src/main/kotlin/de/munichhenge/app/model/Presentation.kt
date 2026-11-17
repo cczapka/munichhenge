@@ -3,6 +3,7 @@ package de.munichhenge.app.model
 import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.Grade
 import de.munichhenge.engine.HengeEvent
+import de.munichhenge.engine.Links
 import de.munichhenge.engine.Mode
 import de.munichhenge.engine.Sightline
 import java.time.Instant
@@ -92,6 +93,19 @@ object Presentation {
     fun endpointWord(sightline: Sightline, viewFrom: Endpoint): String {
         val bearing = sightline.bearing(viewFrom) ?: return "here"
         return standingEndWord(bearing)
+    }
+
+    /** Card title for one viewing direction: "Stand at the east end, look WNW (287°)". */
+    fun directionTitle(sightline: Sightline, viewFrom: Endpoint): String {
+        val b = sightline.bearing(viewFrom) ?: return "Open horizon"
+        return "Stand at the ${standingEndWord(b)} end, look ${compass16(b)} (${Links.heading(b)}°)"
+    }
+
+    /** Card detail line: distance to the far end, its obstruction angle, a note for water ends. */
+    fun directionDetail(sightline: Sightline, viewFrom: Endpoint, onWater: Boolean): String {
+        val far = "Far end ${Math.round(sightline.lengthM)} m away, skyline there " +
+            String.format(java.util.Locale.ROOT, "%.1f", sightline.obstruction(viewFrom)) + "° up"
+        return if (onWater) "$far. This end is on the water: Street View shows the nearest bank or bridge." else far
     }
 
     private fun norm(deg: Double): Double = ((deg % 360.0) + 360.0) % 360.0

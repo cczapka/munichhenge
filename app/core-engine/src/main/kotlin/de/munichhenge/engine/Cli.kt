@@ -33,7 +33,19 @@ fun main(args: Array<String>) {
             println("Next $count events for $id from $date")
             events.forEach { println(format(it, data, engine)) }
         }
-        else -> error("unknown command $cmd")
+        "check" -> {
+            // The best events of a day with links to check each one before going (M5)
+            val n = args.getOrNull(2)?.toInt() ?: 10
+            println("Top $n events on $date, with links")
+            engine.eventsFor(date).filter { !it.openHorizon }.take(n).forEach { e ->
+                val sl = data.sightline(e.sightlineId) ?: return@forEach
+                val t = LinkTarget.forDirection(sl, e.viewFrom)
+                println(format(e, data, engine))
+                println("    Street View: ${Links.streetView(t)}" + if (t.onWater) "  (on water: nearest imagery)" else "")
+                println("    Walk there:  ${Links.walk(t.point)}")
+            }
+        }
+        else -> error("unknown command $cmd (upcoming | date | next | check)")
     }
 }
 

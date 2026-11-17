@@ -11,6 +11,8 @@ pipeline/   Python 3.11+. Turns an OSM extract into data/sightlines.json + data/
 app/        Android. Kotlin, Jetpack Compose, Gradle (Kotlin DSL), minSdk 26.
 data/       Generated JSON consumed by the app (committed, < 2 MB). Never hand-edit.
 featured/   Hand-curated sightlines and spots (featured.yaml). Edited by hand.
+testdata/   Test vectors shared by the Python and Kotlin test suites.
+docs/       Plans after PLAN.md: IMPROVEMENT-PLAN.md (M5–M11), PLAN-links-and-ui.md.
 ```
 
 ## Shared vocabulary (use these exact terms in code, comments and tests)
@@ -43,7 +45,10 @@ featured/   Hand-curated sightlines and spots (featured.yaml). Edited by hand.
 - Pure logic lives in `:core-solar` and `:core-engine` (plain Kotlin/JVM modules, no
   Android dependencies) so it can be unit-tested fast. `:app` is UI + glue only.
 - The app never downloads OSM data or does geo processing. It loads `data/*.json`
-  from assets. Only network calls: Open-Meteo (weather) and map tiles.
+  from assets. Only network calls: Open-Meteo (weather) and map tiles. Opening an
+  external app with a link (Street View, directions, `geo:`) is allowed; the URLs are
+  built by `Links` in `:core-engine` and `pipeline/pipeline/links.py`, which must agree
+  with `testdata/links_vectors.json`.
 - Tests must not touch the network.
 
 ## Commands

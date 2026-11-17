@@ -18,10 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.munichhenge.app.model.Presentation
+import de.munichhenge.engine.Endpoint
 
 /** Best events in the next 14 days across the city, grouped by day. */
 @Composable
-fun UpcomingScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
+fun UpcomingScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit) {
     val grouped by vm.upcoming.collectAsStateWithLifecycle()
     val g = grouped
     when {
@@ -42,7 +43,7 @@ fun UpcomingScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit) {
                 }
                 items(events, key = { "$date" + it.sightlineId + it.viewFrom + it.mode }) { e ->
                     EventRow(e, vm.data.sightline(e.sightlineId), cloudHint = rememberCloudHint(vm, e),
-                        onClick = { onOpenSightline(e.sightlineId) })
+                        onClick = { onOpenSightline(e.sightlineId, e.viewFrom) })
                     HorizontalDivider()
                 }
             }

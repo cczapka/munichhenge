@@ -35,7 +35,8 @@ hands it to Android with `ACTION_VIEW`. `CLAUDE.md` says the app's only network 
 Open-Meteo and map tiles; opening an external app does not change that, and one line will be
 added to `CLAUDE.md` to say so.
 
-**Links** (built by a pure Kotlin object, `app/.../model/ExternalLinks.kt`, no Android imports):
+**Links** (built by a pure Kotlin object, `Links` in `app/core-engine` (moved there from
+`:app` during implementation so the CLI can use it and it runs in local tests), no Android imports):
 
 | Purpose | Form |
 |---|---|

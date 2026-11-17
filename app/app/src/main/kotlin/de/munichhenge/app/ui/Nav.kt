@@ -24,15 +24,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import de.munichhenge.engine.Endpoint
 
 object Routes {
     const val TODAY = "today"
     const val UPCOMING = "upcoming"
     const val MAP = "map"
     const val SETTINGS = "settings"
-    const val SIGHTLINE = "sightline/{id}"
+    const val SIGHTLINE = "sightline/{id}?from={from}"
     const val POI = "poi/{id}"
-    fun sightline(id: String) = "sightline/$id"
+    /** `from` = the end the user stands at for the event they tapped; that card comes first. */
+    fun sightline(id: String, from: Endpoint? = null) = if (from == null) "sightline/$id" else "sightline/$id?from=${from.name}"
     fun poi(id: String) = "poi/$id"
 }
 
@@ -68,23 +70,30 @@ fun AppRoot() {
     ) { padding ->
         NavHost(nav, startDestination = Routes.TODAY, modifier = Modifier.padding(padding)) {
             composable(Routes.TODAY) {
-                TodayScreen(vm, onOpenSightline = { nav.navigate(Routes.sightline(it)) })
+                TodayScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
             }
             composable(Routes.UPCOMING) {
-                UpcomingScreen(vm, onOpenSightline = { nav.navigate(Routes.sightline(it)) })
+                UpcomingScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
             }
             composable(Routes.MAP) {
                 MapScreen(vm, onOpenSightline = { nav.navigate(Routes.sightline(it)) },
                     onOpenPoi = { nav.navigate(Routes.poi(it)) })
             }
             composable(Routes.SETTINGS) { SettingsScreen(vm) }
-            composable(Routes.SIGHTLINE, arguments = listOf(navArgument("id") { type = NavType.StringType })) { entry ->
-                SightlineDetailScreen(vm, id = entry.arguments?.getString("id") ?: "",
+            composable(
+                Routes.SIGHTLINE,
+                arguments = listOf(
+                    navArgument("id") { type = NavType.StringType },
+                    navArgument("from") { type = NavType.StringType; nullable = true; defaultValue = null },
+                ),
+            ) { entry ->
+                val from = entry.arguments?.getString("from")?.let { s -> Endpoint.entries.firstOrNull { it.name == s } }
+                SightlineDetailScreen(vm, id = entry.arguments?.getString("id") ?: "", from = from,
                     onOpenPoi = { nav.navigate(Routes.poi(it)) }, onBack = { nav.popBackStack() })
             }
             composable(Routes.POI, arguments = listOf(navArgument("id") { type = NavType.StringType })) { entry ->
                 PoiDetailScreen(vm, id = entry.arguments?.getString("id") ?: "",
-                    onOpenSightline = { nav.navigate(Routes.sightline(it)) }, onBack = { nav.popBackStack() })
+                    onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) }, onBack = { nav.popBackStack() })
             }
         }
     }
