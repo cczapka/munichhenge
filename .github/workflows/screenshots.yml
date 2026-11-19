@@ -1,0 +1,93 @@
+# Runs the debug APK on an Android emulator, taps through every screen in light and dark mode
+# (.github/scripts/screenshots.py) and commits small JPEGs to docs/screenshots/ so the UI can
+# be reviewed from the repository. Full-size PNGs and the logcat go to the run's artifacts.
+# Run by hand, or by a push that changes the tour itself. A run takes about 10-15 minutes
+# and needs network for map tiles and weather.
+name: screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/screenshots.yml"
+      - ".github/scripts/screenshots.py"
+
+permissions:
+  contents: write
+
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platforms;android-35 build-tools;35.0.0 platform-tools emulator system-images;android-34;google_apis;x86_64"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Assemble debug APK
+        working-directory: app
+        run: ./gradlew :app:assembleDebug --no-daemon
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Start emulator (Pixel 6, API 34)
+        run: |
+          AVDMANAGER=$(command -v avdmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager")
+          echo no | "$AVDMANAGER" create avd -n shots -k "system-images;android-34;google_apis;x86_64" -d pixel_6 --force
+          nohup "$ANDROID_HOME/emulator/emulator" -avd shots -no-window -no-audio -no-boot-anim -no-snapshot \
+            -gpu swiftshader_indirect -camera-back none -camera-front none > "$RUNNER_TEMP/emulator.log" 2>&1 &
+          adb wait-for-device
+          for i in $(seq 1 150); do
+            [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] && break
+            sleep 2
+          done
+          adb shell getprop sys.boot_completed
+          adb shell input keyevent 82
+          adb shell settings put system screen_off_timeout 1800000
+          sleep 20   # let the launcher and system apps settle
+      - name: Take screenshots
+        run: python3 .github/scripts/screenshots.py app/app/build/outputs/apk/debug/app-debug.apk "$RUNNER_TEMP/shots"
+      - name: Shrink for the repository
+        if: always()
+        run: |
+          pip install --quiet pillow
+          rm -rf docs/screenshots && mkdir -p docs/screenshots
+          python3 - "$RUNNER_TEMP/shots/raw" docs/screenshots <<'PY'
+          import glob, os, sys
+          from PIL import Image
+          src, dst = sys.argv[1], sys.argv[2]
+          for f in sorted(glob.glob(os.path.join(src, "*.png"))):
+              im = Image.open(f).convert("RGB")
+              im = im.resize((540, round(im.height * 540 / im.width)), Image.LANCZOS)
+              im.save(os.path.join(dst, os.path.basename(f)[:-4] + ".jpg"), quality=82, optimize=True)
+          PY
+          cp "$RUNNER_TEMP/shots/run.log" docs/screenshots/ 2>/dev/null || true
+          tail -n 400 "$RUNNER_TEMP/shots/logcat.txt" > docs/screenshots/logcat.txt 2>/dev/null || true
+          echo "Taken from ${GITHUB_SHA::7} on $(date -u +%FT%TZ) (Pixel 6 emulator, API 34)." > docs/screenshots/README.md
+          ls -la docs/screenshots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots-full
+          path: |
+            ${{ runner.temp }}/shots
+            ${{ runner.temp }}/emulator.log
+      - name: Commit screenshots
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/screenshots
+          git diff --cached --quiet && exit 0
+          git commit -m "screenshots: ${GITHUB_SHA::7} [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase origin ${{ github.ref_name }} && git push origin HEAD:${{ github.ref_name }} && break
+            sleep 5
+          done
