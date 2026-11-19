@@ -327,6 +327,34 @@ Done when: no raw id appears, Upcoming shows at most five cards per day by defau
 filter is shared by all tabs and survives a restart, and you have approved screenshots of
 Day and Upcoming in light and dark.
 
+### 4.1 As built (M7, 2026-11-19)
+
+- **Screenshots:** from the phone (D5), not CI. Roborazzi stays a later option.
+- **Structure:** tabs Day · Upcoming · Map. Settings is behind the gear in the top bar. The
+  top bar's chip shows the filter ("Sunrise & sunset · good+") and opens the filter sheet.
+- **Filter:** `model/EventFilter.kt`. It is stored as one DataStore string (`event_filter`).
+  Resetting the settings leaves the filter alone.
+- **Card:** `ui/EventCard.kt` replaces `EventRow`, including on the detail screens. Long-press
+  or ⋮ offers Remind me, Street View, Walk there and Details. The texts live in
+  `Presentation`: title fallback "Unnamed path, 423 m", countdown, "east end, north side",
+  "look WNW 287°" and the badges. The side of the street is shown when the side step is at
+  least 1 m.
+- **Day:** sun line from `SunEvents` at Marienplatz, which matches astral to the minute and
+  degree. The day is split into Sunrise, Sunset and a dimmed "Earlier today" group. A row of
+  quick filter chips scrolls sideways. A footer counts the events the filter hides. An empty
+  day offers the next date with an event, looking up to 60 days ahead.
+- **Upcoming:** the three best events still ahead come first, then sticky day headers with
+  the cloud outlook at sunrise and sunset, then five cards per day and "Show all N".
+- **Map:** draws only events the filter passes.
+- **Raw ids** are gone from the screens and notifications. `Presentation.sightlineName` and
+  `poiName` give the fallbacks.
+- **Tunables:** `model/UiConfig.kt`.
+- **Tests:** EventFilterTest, EventPresentationTest, DayModelTest, UpcomingModelTest and the
+  outlook test in OpenMeteoTest. Together with the older app tests that makes 36, all pure
+  JVM.
+- **Not done:** the trees badge appears only once M8 provides `treesInWay`. Every card says
+  "estimated" until M8 measures the skylines.
+
 ---
 
 ## 5. M8 — Skyline from Bavarian open data

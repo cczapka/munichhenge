@@ -51,4 +51,11 @@ class OpenMeteoTest {
         assertTrue(WeatherRules.worthNotifying(CloudCover(59, 10)))
         assertTrue(!WeatherRules.worthNotifying(CloudCover(60, 10)))
     }
+
+    @Test
+    fun `day outlook for the Upcoming headers`() {
+        assertEquals("sunrise ☀ 10% · sunset ☁ 80%", WeatherRules.outlook(CloudCover(10, 0), CloudCover(80, 50)))
+        assertEquals("sunset ⛅ 40%", WeatherRules.outlook(null, CloudCover(40, 5)))
+        assertEquals(null, WeatherRules.outlook(null, null))
+    }
 }

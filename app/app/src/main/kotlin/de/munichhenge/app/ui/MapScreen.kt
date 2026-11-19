@@ -38,8 +38,11 @@ import org.osmdroid.views.overlay.Polyline
 @Composable
 fun MapScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit, onOpenPoi: (String) -> Unit) {
     val context = LocalContext.current
-    val events by vm.dayEvents.collectAsStateWithLifecycle()
+    val all by vm.dayEvents.collectAsStateWithLifecycle()
+    val filter by vm.filter.collectAsStateWithLifecycle()
     val date by vm.selectedDate.collectAsStateWithLifecycle()
+    // the shared filter decides which events are drawn; null while computing
+    val events = all?.let { filter.apply(it, vm::sightline) }
     val density = context.resources.displayMetrics.density
 
     val mapView = remember {
@@ -72,10 +75,10 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit, onOpenPoi: (S
             color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
             shape = MaterialTheme.shapes.small,
         ) {
-            val n = events?.count { !it.openHorizon }
+            val n = events?.size
             Text(
                 if (n == null) "${Presentation.dateLabel(date)} · computing…"
-                else "${Presentation.dateLabel(date)} · $n aligned",
+                else "${Presentation.dateLabel(date)} · $n shown",
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                 style = MaterialTheme.typography.labelLarge,
             )
@@ -86,7 +89,7 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String) -> Unit, onOpenPoi: (S
 private fun gradeColor(grade: Grade): Int = when (grade) {
     Grade.PERFECT -> AColor.rgb(46, 125, 50)
     Grade.GOOD -> AColor.rgb(249, 168, 37)
-    Grade.NEAR -> AColor.rgb(158, 158, 158)
+    Grade.NEAR -> AColor.rgb(97, 97, 97)
 }
 
 private fun drawOverlays(
@@ -129,7 +132,7 @@ private fun drawOverlays(
             icon = arrow
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
             rotation = -e.bearing.toFloat()   // osmdroid rotates counter-clockwise; bearings are clockwise
-            title = sl.name ?: sl.id
+            title = Presentation.sightlineName(sl)
             snippet = "${Presentation.timeLine(e)} · ${Presentation.gradeWord(e.grade)}"
             setOnMarkerClickListener { _, _ -> onOpenSightline(sl.id); true }
         })
@@ -142,7 +145,7 @@ private fun drawOverlays(
         map.overlays.add(Marker(map).apply {
             position = GeoPoint(p.at.lat, p.at.lon)
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            title = p.name ?: p.id
+            title = Presentation.poiName(p)
             snippet = p.kind
             setOnMarkerClickListener { _, _ -> onOpenPoi(p.id); true }
         })

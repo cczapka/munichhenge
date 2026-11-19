@@ -26,11 +26,11 @@ object Digest {
     /** Title and one line per event. */
     fun text(date: LocalDate, events: List<HengeEvent>, nameOf: (String) -> String?,
              cloudOf: (HengeEvent) -> CloudCover?): Pair<String, String> {
-        val title = if (events.size == 1) "Henge tomorrow: ${nameOf(events[0].sightlineId) ?: events[0].sightlineId}"
+        val title = if (events.size == 1) "Henge tomorrow: ${nameOf(events[0].sightlineId) ?: "a sightline"}"
         else "${events.size} henge moments tomorrow (${Presentation.dateLabel(date)})"
         val body = events.joinToString("\n") { e ->
             val cloud = WeatherRules.label(cloudOf(e))?.let { " · $it" } ?: ""
-            "${Presentation.windowLabel(e)} ${Presentation.modeWord(e.mode)} · ${nameOf(e.sightlineId) ?: e.sightlineId} · " +
+            "${Presentation.windowLabel(e)} ${Presentation.modeWord(e.mode)} · ${nameOf(e.sightlineId) ?: "a sightline"} · " +
                 "${Presentation.gradeWord(e.grade)}$cloud"
         }
         return title to body

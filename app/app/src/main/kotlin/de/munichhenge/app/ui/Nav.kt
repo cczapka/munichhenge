@@ -1,20 +1,34 @@
 package de.munichhenge.app.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material.icons.filled.Upcoming
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -27,7 +41,7 @@ import androidx.navigation.navArgument
 import de.munichhenge.engine.Endpoint
 
 object Routes {
-    const val TODAY = "today"
+    const val DAY = "day"
     const val UPCOMING = "upcoming"
     const val MAP = "map"
     const val SETTINGS = "settings"
@@ -40,37 +54,62 @@ object Routes {
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector)
 
+/** Day · Upcoming · Map (Places joins in M9); Settings sits behind the gear in the top bar. */
 private val TABS = listOf(
-    Tab(Routes.TODAY, "Today", Icons.Filled.Today),
+    Tab(Routes.DAY, "Day", Icons.Filled.Today),
     Tab(Routes.UPCOMING, "Upcoming", Icons.Filled.Upcoming),
     Tab(Routes.MAP, "Map", Icons.Filled.Map),
-    Tab(Routes.SETTINGS, "Settings", Icons.Filled.Settings),
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppRoot() {
     val nav = rememberNavController()
     val vm: AppViewModel = viewModel()
     val backStack by nav.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
+    val filter by vm.filter.collectAsStateWithLifecycle()
+    var showFilter by rememberSaveable { mutableStateOf(false) }
+    val tab = TABS.firstOrNull { it.route == currentRoute }
 
     Scaffold(
+        topBar = {
+            if (tab != null) {
+                TopAppBar(
+                    title = { Text(tab.label) },
+                    actions = {
+                        AssistChip(
+                            onClick = { showFilter = true },
+                            label = { Text(filter.summary(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                            leadingIcon = {
+                                Icon(Icons.Filled.FilterList, contentDescription = "Filter",
+                                    modifier = Modifier.size(AssistChipDefaults.IconSize))
+                            },
+                            modifier = Modifier.widthIn(max = 230.dp),
+                        )
+                        IconButton(onClick = { nav.navigate(Routes.SETTINGS) { launchSingleTop = true } }) {
+                            Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                        }
+                    },
+                )
+            }
+        },
         bottomBar = {
             NavigationBar {
-                for (tab in TABS) {
+                for (t in TABS) {
                     NavigationBarItem(
-                        selected = currentRoute == tab.route,
-                        onClick = { navigateToTab(nav, tab.route) },
-                        icon = { Icon(tab.icon, contentDescription = tab.label) },
-                        label = { Text(tab.label) },
+                        selected = currentRoute == t.route,
+                        onClick = { navigateToTab(nav, t.route) },
+                        icon = { Icon(t.icon, contentDescription = t.label) },
+                        label = { Text(t.label) },
                     )
                 }
             }
         },
     ) { padding ->
-        NavHost(nav, startDestination = Routes.TODAY, modifier = Modifier.padding(padding)) {
-            composable(Routes.TODAY) {
-                TodayScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
+        NavHost(nav, startDestination = Routes.DAY, modifier = Modifier.padding(padding)) {
+            composable(Routes.DAY) {
+                DayScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
             }
             composable(Routes.UPCOMING) {
                 UpcomingScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
@@ -79,7 +118,7 @@ fun AppRoot() {
                 MapScreen(vm, onOpenSightline = { nav.navigate(Routes.sightline(it)) },
                     onOpenPoi = { nav.navigate(Routes.poi(it)) })
             }
-            composable(Routes.SETTINGS) { SettingsScreen(vm) }
+            composable(Routes.SETTINGS) { SettingsScreen(vm, onBack = { nav.popBackStack() }) }
             composable(
                 Routes.SIGHTLINE,
                 arguments = listOf(
@@ -96,6 +135,10 @@ fun AppRoot() {
                     onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) }, onBack = { nav.popBackStack() })
             }
         }
+    }
+
+    if (showFilter) {
+        FilterSheet(filter, onChange = vm::updateFilter, onDismiss = { showFilter = false })
     }
 }
 

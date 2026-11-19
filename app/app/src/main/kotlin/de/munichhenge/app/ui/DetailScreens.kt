@@ -1,6 +1,5 @@
 package de.munichhenge.app.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,10 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +43,7 @@ import java.time.LocalDate
 private const val NEXT_COUNT = 5
 
 @Composable
-private fun Header(title: String, onBack: () -> Unit) {
+internal fun BackHeader(title: String, onBack: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(end = 16.dp)) {
         IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back") }
         Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
@@ -65,27 +61,17 @@ private fun NextEvents(vm: AppViewModel, engine: HengeEngine?, load: suspend (He
     val next by produceState<List<HengeEvent>?>(initialValue = null, key1 = engine) {
         value = engine?.let { e -> withContext(Dispatchers.Default) { load(e) } }
     }
-    var message by remember { mutableStateOf<String?>(null) }
+    val now by vm.now.collectAsStateWithLifecycle()
     SectionTitle("Next events")
     when (val list = next) {
         null -> CircularProgressIndicator(modifier = Modifier.padding(16.dp))
         else -> if (list.isEmpty()) Text("No alignment in the next year.", modifier = Modifier.padding(16.dp))
-        else for (e in list) {
-            EventRow(e, sightlineOf(e), showDate = true, cloudHint = rememberCloudHint(vm, e), onClick = { onOpen(e) })
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = {
-                    val lead = vm.settings.value?.leadMinutes ?: 60
-                    message = if (vm.addReminder(e)) {
-                        "Reminder set for $lead min before ${Presentation.localTime(e.windowStart)} on ${Presentation.dateLabel(e.date)}"
-                    } else {
-                        "That moment has already passed."
-                    }
-                }) { Text("Add reminder") }
-            }
-            HorizontalDivider()
+        else {
+            Text("Hold a card or tap ⋮ for a reminder.", style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
+            for (e in list) EventCard(vm, e, sightlineOf(e), now, showDate = true, onOpen = { onOpen(e) })
         }
     }
-    message?.let { Text(it, modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.tertiary) }
 }
 
 @Composable
@@ -93,9 +79,9 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, from: Endpoint?, onOpenP
     val engine by vm.engine.collectAsStateWithLifecycle()
     val sl = vm.data.sightline(id)
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        Header(sl?.name ?: id, onBack)
+        BackHeader(sl?.let(Presentation::sightlineName) ?: "Unknown sightline", onBack)
         if (sl == null) {
-            Text("Unknown sightline $id", modifier = Modifier.padding(16.dp))
+            Text("This sightline is not in the current data.", modifier = Modifier.padding(16.dp))
             return@Column
         }
         Facts(sl)
@@ -132,12 +118,12 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, from: Endpoint?, onOpenP
         NextEvents(vm, engine, load = { it.nextEventsFor(id, LocalDate.now(Presentation.zone), NEXT_COUNT) },
             sightlineOf = { sl }, onOpen = { vm.setDate(it.date) })
         SectionTitle("Spots")
-        val spots = vm.data.pois.filter { p -> p.views.any { it.sightlineId == id } }.sortedBy { it.name ?: it.id }
+        val spots = vm.data.pois.filter { p -> p.views.any { it.sightlineId == id } }.sortedBy { Presentation.poiName(it) }
         if (spots.isEmpty()) Text("No spots within 40 m.", modifier = Modifier.padding(16.dp))
         for (p in spots) {
             val toward = p.views.filter { it.sightlineId == id }.map { it.toward }
             ListItem(
-                headlineContent = { Text(p.name ?: p.id) },
+                headlineContent = { Text(Presentation.poiName(p)) },
                 supportingContent = {
                     val looks = toward.joinToString(" / ") { "looks " + Presentation.compass16(sl.bearing(it.other) ?: 0.0) }
                     Text(listOfNotNull(p.kind, looks, p.tags["opening_hours"]).joinToString(" · "))
@@ -168,9 +154,9 @@ fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String, Endp
     val poi: Poi? = vm.data.poi(id)
     val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        Header(poi?.name ?: id, onBack)
+        BackHeader(poi?.let(Presentation::poiName) ?: "Unknown spot", onBack)
         if (poi == null) {
-            Text("Unknown spot $id", modifier = Modifier.padding(16.dp))
+            Text("This spot is not in the current data.", modifier = Modifier.padding(16.dp))
             return@Column
         }
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -182,14 +168,14 @@ fun PoiDetailScreen(vm: AppViewModel, id: String, onOpenSightline: (String, Endp
         Row(modifier = Modifier.padding(horizontal = 8.dp)) {
             TextButton(onClick = { LinkLauncher.open(context, Links.walk(poi.at)) }) { Text("Walk there") }
             TextButton(onClick = {
-                LinkLauncher.open(context, Links.geo(poi.at, poi.name ?: poi.id), chooserTitle = "Open in")
+                LinkLauncher.open(context, Links.geo(poi.at, Presentation.poiName(poi)), chooserTitle = "Open in")
             }) { Text("Open in maps") }
         }
         SectionTitle("Sightlines")
         for (v in poi.views) {
             val sl = vm.data.sightline(v.sightlineId) ?: continue
             ListItem(
-                headlineContent = { Text(sl.name ?: sl.id) },
+                headlineContent = { Text(Presentation.sightlineName(sl)) },
                 supportingContent = {
                     val b = sl.bearing(v.toward.other)
                     Text(if (b == null) "open horizon" else "looks ${Presentation.compass16(b)} (${"%.0f".format(b)}°) · ${v.distanceM.toInt()} m from the line")

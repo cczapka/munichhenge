@@ -38,7 +38,7 @@ class DailyDigestWorker(context: Context, params: WorkerParameters) : CoroutineW
         val cloudOf: (HengeEvent) -> de.munichhenge.app.weather.CloudCover? = { clouds[key(it)] }
         val chosen = Digest.select(candidates, settings.minQuality, cloudOf)
         if (chosen.isEmpty()) return Result.success()
-        val (title, body) = Digest.text(tomorrow, chosen, { graph.data.sightline(it)?.name }, cloudOf)
+        val (title, body) = Digest.text(tomorrow, chosen, { id -> graph.data.sightline(id)?.let(Presentation::sightlineName) }, cloudOf)
         Notifications.postDigest(applicationContext, tomorrow, title, body)
         return Result.success()
     }
@@ -80,7 +80,7 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
             val fireAt = event.windowStart.minus(Duration.ofMinutes(leadMinutes.toLong()))
             val delay = Duration.between(Instant.now(), fireAt)
             if (delay.isNegative) return false
-            val name = sightlineName ?: event.sightlineId
+            val name = sightlineName ?: "a sightline"
             val modeWord = if (event.mode == Mode.SUNSET) "sunset" else "sunrise"
             val title = "Henge in $leadMinutes min: $name"
             val body = "${Presentation.windowLabel(event)} $modeWord · ${Presentation.instruction(event)} · ${Presentation.gradeWord(event.grade)}"

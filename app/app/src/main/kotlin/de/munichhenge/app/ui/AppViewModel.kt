@@ -4,25 +4,36 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.munichhenge.app.MunichHengeApp
+import de.munichhenge.app.model.DayModel
+import de.munichhenge.app.model.EventFilter
 import de.munichhenge.app.model.Presentation
+import de.munichhenge.app.model.UiConfig
+import de.munichhenge.app.model.Upcoming
+import de.munichhenge.app.model.UpcomingModel
 import de.munichhenge.app.notify.ReminderWorker
-import de.munichhenge.app.weather.CloudCover
 import de.munichhenge.app.settings.Settings
+import de.munichhenge.app.weather.CloudCover
+import de.munichhenge.app.weather.WeatherRules
 import de.munichhenge.engine.HengeData
 import de.munichhenge.engine.HengeEngine
 import de.munichhenge.engine.HengeEvent
-import de.munichhenge.engine.Mode
+import de.munichhenge.engine.Sightline
+import de.munichhenge.solar.SunEvents
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import java.time.LocalDate
 
-/** State shared by the screens: selected date and modes, the engine, the day's events. */
+/** State shared by the screens: the selected date, the shared filter, the engine and its events. */
 class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val graph = (app as MunichHengeApp).graph
 
@@ -30,47 +41,84 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     val data: HengeData get() = graph.data
 
     val selectedDate = MutableStateFlow(LocalDate.now(Presentation.zone))
-    val modes = MutableStateFlow(setOf(Mode.SUNRISE, Mode.SUNSET))
 
-    /** Include "near" (1.5-3°) events in the Today list. Off by default: at the equinoxes
-     * dozens of east-west streets are within 3°. */
-    val showNear = MutableStateFlow(false)
+    /** One filter for Day, Upcoming and Map, persisted across restarts. */
+    val filter: StateFlow<EventFilter> = graph.settings.filter
+        .stateIn(viewModelScope, SharingStarted.Eagerly, EventFilter())
+
+    /** Ticks every half minute for countdowns and "earlier today". */
+    val now: StateFlow<Instant> = flow {
+        while (true) {
+            emit(Instant.now())
+            delay(UiConfig.CLOCK_TICK_SECONDS * 1000)
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Instant.now())
 
     val settings: StateFlow<Settings?> = graph.settings.flow
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    /** Null while computing. */
-    val dayEvents: StateFlow<List<HengeEvent>?> = combine(engine, selectedDate, modes) { e, d, m ->
-        if (e == null) null else withContext(Dispatchers.Default) { e.eventsFor(d, m) }
+    /** All of the selected day's events, unfiltered; null while computing. */
+    val dayEvents: StateFlow<List<HengeEvent>?> = combine(engine, selectedDate) { e, d ->
+        if (e == null) null else withContext(Dispatchers.Default) { e.eventsFor(d) }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    /** Best events in the next 14 days, grouped by day (PLAN.md 4.3 screen 4). */
-    val upcoming: StateFlow<List<Pair<LocalDate, List<HengeEvent>>>?> = combine(engine, settings) { e, s ->
-        if (e == null || s == null) null else withContext(Dispatchers.Default) {
-            Presentation.groupByDay(e.bestUpcoming(LocalDate.now(Presentation.zone), UPCOMING_DAYS, UPCOMING_MIN_QUALITY))
+    /** Days on Upcoming the user opened with "Show all". */
+    val expandedDays = MutableStateFlow<Set<LocalDate>>(emptySet())
+
+    /** Every event of the next 14 days; filtered and capped in [upcoming]. */
+    private val upcomingAll: StateFlow<List<HengeEvent>?> = engine.map { e ->
+        e?.let {
+            withContext(Dispatchers.Default) {
+                it.bestUpcoming(LocalDate.now(Presentation.zone), UiConfig.UPCOMING_DAYS, minQuality = 0.0)
+            }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val upcoming: StateFlow<Upcoming?> = combine(upcomingAll, filter, now, expandedDays) { all, f, t, x ->
+        all?.let { UpcomingModel.build(it, f, ::sightline, t, x) }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    fun sightline(id: String): Sightline? = data.sightline(id)
 
     fun setDate(d: LocalDate) { selectedDate.value = d }
     fun shiftDate(days: Long) { selectedDate.value = selectedDate.value.plusDays(days) }
 
-    fun toggleNear() { showNear.value = !showNear.value }
-
-    fun toggleMode(m: Mode) {
-        val cur = modes.value
-        modes.value = if (m in cur) (if (cur.size > 1) cur - m else cur) else cur + m
+    fun updateFilter(transform: (EventFilter) -> EventFilter) {
+        viewModelScope.launch { graph.settings.updateFilter(transform) }
     }
 
-    /** Cloud cover at the event's viewing end and t_full; null offline or out of forecast range. */
+    fun toggleExpanded(d: LocalDate) {
+        val cur = expandedDays.value
+        expandedDays.value = if (d in cur) cur - d else cur + d
+    }
+
+    /** Next date after `from` with an event at the filter, or null within the scan horizon. */
+    suspend fun nextDateWithEvent(from: LocalDate, f: EventFilter): LocalDate? {
+        val e = engine.value ?: return null
+        return withContext(Dispatchers.Default) {
+            DayModel.nextDateWithEvent(from, f, ::sightline, UiConfig.NEXT_EVENT_SCAN_DAYS) { e.eventsFor(it) }
+        }
+    }
+
+    /** Cloud cover at the event's viewing end and best moment; null offline or out of forecast range. */
     suspend fun cloudCover(e: HengeEvent): CloudCover? {
         val sl = data.sightline(e.sightlineId) ?: return null
         return graph.weather.cloudCover(sl.standingPoint(e.viewFrom), e.tBest)
     }
 
+    /** "sunrise ☀ 10% · sunset ☁ 80%" at the city centre, or null beyond the forecast. */
+    suspend fun dayOutlook(d: LocalDate): String? {
+        val c = UiConfig.CITY_CENTRE
+        val rise = SunEvents.sunrise(d, c, Presentation.zone)?.let { graph.weather.cloudCover(c, it) }
+        val set = SunEvents.sunset(d, c, Presentation.zone)?.let { graph.weather.cloudCover(c, it) }
+        return WeatherRules.outlook(rise, set)
+    }
+
     /** @return false when the reminder would already be in the past. */
     fun addReminder(e: HengeEvent): Boolean {
         val lead = settings.value?.leadMinutes ?: Settings().leadMinutes
-        return ReminderWorker.schedule(getApplication(), e, data.sightline(e.sightlineId)?.name, lead)
+        val name = data.sightline(e.sightlineId)?.let(Presentation::sightlineName)
+        return ReminderWorker.schedule(getApplication(), e, name, lead)
     }
 
     fun updateSettings(transform: (Settings) -> Settings) {
@@ -81,9 +129,4 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch { graph.settings.reset() }
     }
 
-    companion object {
-        const val UPCOMING_DAYS = 14
-        /** The Upcoming screen shows everything down to "near"; notifications use Settings.minQuality. */
-        const val UPCOMING_MIN_QUALITY = 0.0
-    }
 }

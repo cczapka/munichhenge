@@ -91,6 +91,12 @@ object WeatherRules {
 
     fun label(c: CloudCover?): String? = c?.let { "${symbol(it.totalPct)} ${it.totalPct}%" }
 
+    /** Day header on Upcoming: "sunrise ☀ 10% · sunset ☁ 80%"; null when neither hour is in the forecast. */
+    fun outlook(sunrise: CloudCover?, sunset: CloudCover?): String? {
+        val parts = listOfNotNull(label(sunrise)?.let { "sunrise $it" }, label(sunset)?.let { "sunset $it" })
+        return parts.takeIf { it.isNotEmpty() }?.joinToString(" · ")
+    }
+
     /** Notify unless the forecast says it is cloudy; unknown counts as fine (PLAN.md 4.5). */
     fun worthNotifying(c: CloudCover?): Boolean = c == null || c.totalPct < CLOUDY_MIN_PCT
 }

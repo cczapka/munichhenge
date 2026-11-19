@@ -6,7 +6,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import de.munichhenge.app.model.EventFilter
 import de.munichhenge.engine.EngineConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -48,6 +50,8 @@ class SettingsRepository(private val context: Context) {
         val streetWidthM = doublePreferencesKey("street_width_m")
         val maxHeightAboveFloorDeg = doublePreferencesKey("max_height_above_floor_deg")
         val obstructionOffsetDeg = doublePreferencesKey("obstruction_offset_deg")
+        /** The shared Day / Upcoming / Map filter, EventFilter.encode(). */
+        val eventFilter = stringPreferencesKey("event_filter")
     }
 
     private fun read(p: Preferences): Settings {
@@ -74,7 +78,20 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    /** Resets the settings; the filter is kept (it has its own reset in the filter sheet). */
     suspend fun reset() {
-        context.dataStore.edit { it.clear() }
+        context.dataStore.edit { p ->
+            p.remove(Keys.minQuality)
+            p.remove(Keys.leadMinutes)
+            p.remove(Keys.streetWidthM)
+            p.remove(Keys.maxHeightAboveFloorDeg)
+            p.remove(Keys.obstructionOffsetDeg)
+        }
+    }
+
+    val filter: Flow<EventFilter> = context.dataStore.data.map { EventFilter.decode(it[Keys.eventFilter]) }
+
+    suspend fun updateFilter(transform: (EventFilter) -> EventFilter) {
+        context.dataStore.edit { p -> p[Keys.eventFilter] = transform(EventFilter.decode(p[Keys.eventFilter])).encode() }
     }
 }

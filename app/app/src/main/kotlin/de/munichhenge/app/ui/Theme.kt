@@ -18,8 +18,12 @@ fun MunichHengeTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = if (isSystemInDarkTheme()) Dark else Light, content = content)
 }
 
+/** Grade badge colours with their text colour; each pair is at least 4.5:1 (WCAG AA). */
 object GradeColors {
     val perfect = Color(0xFF2E7D32)
+    val onPerfect = Color.White
     val good = Color(0xFFF9A825)
-    val near = Color(0xFF9E9E9E)
+    val onGood = Color(0xFF1B1B1B)
+    val near = Color(0xFF616161)
+    val onNear = Color.White
 }
