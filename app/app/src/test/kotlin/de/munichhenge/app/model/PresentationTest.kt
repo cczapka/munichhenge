@@ -69,13 +69,6 @@ class PresentationTest {
     }
 
     @Test
-    fun `stroke width grows with quality and is thin without an event`() {
-        assertEquals(4f, Presentation.strokeWidthPx(null, 2f))
-        assertEquals(6f, Presentation.strokeWidthPx(0.0, 2f))
-        assertEquals(24f, Presentation.strokeWidthPx(1.0, 2f))
-    }
-
-    @Test
     fun `open horizon footer line`() {
         val d = LocalDate.of(2026, 9, 20)
         val open = event(d, 1.0, open = true).copy(sightlineId = "sl_open_hill", grade = Grade.PERFECT)

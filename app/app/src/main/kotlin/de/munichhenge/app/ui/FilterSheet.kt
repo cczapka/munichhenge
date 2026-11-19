@@ -36,9 +36,9 @@ fun FilterSheet(filter: EventFilter, onChange: ((EventFilter) -> EventFilter) ->
             Section("Show")
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(selected = Mode.SUNRISE in filter.modes, onClick = { onChange { it.toggleMode(Mode.SUNRISE) } },
-                    label = { Text("Sunrise") })
+                    label = { Text("Sunrise") }, leadingIcon = { ModeIcon(Mode.SUNRISE, 18.dp) })
                 FilterChip(selected = Mode.SUNSET in filter.modes, onClick = { onChange { it.toggleMode(Mode.SUNSET) } },
-                    label = { Text("Sunset") })
+                    label = { Text("Sunset") }, leadingIcon = { ModeIcon(Mode.SUNSET, 18.dp) })
             }
 
             Section("At least")
@@ -90,9 +90,9 @@ fun QuickFilters(filter: EventFilter, onChange: ((EventFilter) -> EventFilter) -
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         FilterChip(selected = Mode.SUNRISE in filter.modes, onClick = { onChange { it.toggleMode(Mode.SUNRISE) } },
-            label = { Text("Sunrise") })
+            label = { Text("Sunrise") }, leadingIcon = { ModeIcon(Mode.SUNRISE, 18.dp) })
         FilterChip(selected = Mode.SUNSET in filter.modes, onClick = { onChange { it.toggleMode(Mode.SUNSET) } },
-            label = { Text("Sunset") })
+            label = { Text("Sunset") }, leadingIcon = { ModeIcon(Mode.SUNSET, 18.dp) })
         FilterChip(
             selected = filter.minGrade == Grade.PERFECT,
             onClick = { onChange { it.copy(minGrade = if (it.minGrade == Grade.PERFECT) Grade.GOOD else Grade.PERFECT) } },

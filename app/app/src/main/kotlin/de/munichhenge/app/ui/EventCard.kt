@@ -16,8 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Navigation
-import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -108,12 +106,7 @@ fun EventCard(
                 .padding(start = 14.dp, top = 10.dp, bottom = 12.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    if (event.mode == Mode.SUNSET) Icons.Filled.WbTwilight else Icons.Filled.WbSunny,
-                    contentDescription = Presentation.modeWord(event.mode),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(20.dp),
-                )
+                ModeIcon(event.mode, size = 24.dp)
                 Text(
                     Presentation.title(event, sightline),
                     style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
@@ -167,7 +160,7 @@ fun EventCard(
                     Icons.Filled.Navigation,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp).rotate(event.bearing.toFloat()),
-                    tint = MaterialTheme.colorScheme.secondary,
+                    tint = if (event.mode == Mode.SUNSET) ModeColors.sunset else ModeColors.sunrise,
                 )
                 Text(
                     if (event.openHorizon) Presentation.lookLabel(event)

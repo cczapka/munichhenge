@@ -2,7 +2,6 @@ package de.munichhenge.app.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Map
@@ -27,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -75,9 +73,9 @@ fun AppRoot() {
     Scaffold(
         topBar = {
             if (tab != null) {
+                // The tab is named in the bottom bar; the top bar carries the filter, so nothing wraps.
                 TopAppBar(
-                    title = { Text(tab.label) },
-                    actions = {
+                    title = {
                         AssistChip(
                             onClick = { showFilter = true },
                             label = { Text(filter.summary(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
@@ -85,8 +83,9 @@ fun AppRoot() {
                                 Icon(Icons.Filled.FilterList, contentDescription = "Filter",
                                     modifier = Modifier.size(AssistChipDefaults.IconSize))
                             },
-                            modifier = Modifier.widthIn(max = 230.dp),
                         )
+                    },
+                    actions = {
                         IconButton(onClick = { nav.navigate(Routes.SETTINGS) { launchSingleTop = true } }) {
                             Icon(Icons.Filled.Settings, contentDescription = "Settings")
                         }
@@ -115,7 +114,7 @@ fun AppRoot() {
                 UpcomingScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
             }
             composable(Routes.MAP) {
-                MapScreen(vm, onOpenSightline = { nav.navigate(Routes.sightline(it)) },
+                MapScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) },
                     onOpenPoi = { nav.navigate(Routes.poi(it)) })
             }
             composable(Routes.SETTINGS) { SettingsScreen(vm, onBack = { nav.popBackStack() }) }

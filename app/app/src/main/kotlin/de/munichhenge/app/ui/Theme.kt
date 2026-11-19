@@ -27,3 +27,9 @@ object GradeColors {
     val near = Color(0xFF616161)
     val onNear = Color.White
 }
+
+/** Sunrise and sunset colours, the same as in res/drawable/ic_sunrise.xml and ic_sunset.xml. */
+object ModeColors {
+    val sunrise = Color(0xFFE8A200)
+    val sunset = Color(0xFFD9480F)
+}

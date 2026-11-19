@@ -193,10 +193,6 @@ object Presentation {
             }
         }
 
-    /** Map stroke width for a sightline on the selected date: thin when it has no event. */
-    fun strokeWidthPx(quality: Double?, densityScale: Float): Float =
-        if (quality == null) 2f * densityScale else (3f + 9f * quality.toFloat()) * densityScale
-
     /** Which end of the sightline the viewer stands at, in words for the detail screen. */
     fun endpointWord(sightline: Sightline, viewFrom: Endpoint): String {
         val bearing = sightline.bearing(viewFrom) ?: return "here"

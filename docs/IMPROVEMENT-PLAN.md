@@ -350,8 +350,28 @@ Day and Upcoming in light and dark.
   `poiName` give the fallbacks.
 - **Tunables:** `model/UiConfig.kt`.
 - **Tests:** EventFilterTest, EventPresentationTest, DayModelTest, UpcomingModelTest and the
-  outlook test in OpenMeteoTest. Together with the older app tests that makes 36, all pure
+  outlook test in OpenMeteoTest, then MapModelTest. Together with the older app tests that makes 39, all pure
   JVM.
+- **Phone feedback, round 1:**
+  - Sunrise and sunset now have their own icons: a half sun on the horizon with an arrow up
+    in yellow, or down in red-orange (`res/drawable/ic_sunrise.xml`, `ic_sunset.xml`).
+  - The top bar holds the filter chip instead of a title, which used to wrap.
+  - The "best" block shows three different places.
+  - When all of today's events are over, the Day screen says so and offers the next date.
+    "Earlier today" shows three cards plus "Show all".
+  - Map, part of M9 step 7 brought forward:
+    - muted CARTO basemaps, light and dark, credited "© OpenStreetMap contributors
+      © CARTO";
+    - event lines coloured by sunrise or sunset, with a white edge, thicker for better
+      alignment;
+    - a sunrise or sunset marker where you stand;
+    - all other streets only from zoom 15, spots as dots from zoom 15.5;
+    - a date control and legend at the top;
+    - tapping a line shows its card at the bottom;
+    - no zoom buttons.
+
+    The layers are built once, or once per day, instead of on every redraw.
+    `model/MapModel.kt` (tested) decides which lines are drawn.
 - **Not done:** the trees badge appears only once M8 provides `treesInWay`. Every card says
   "estimated" until M8 measures the skylines.
 

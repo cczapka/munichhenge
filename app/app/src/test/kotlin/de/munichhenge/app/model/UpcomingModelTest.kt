@@ -50,4 +50,12 @@ class UpcomingModelTest {
         assertEquals(emptyList(), u.days)
         assertEquals(emptyList(), u.hero)
     }
+
+    @Test
+    fun `hero shows three different places`() {
+        val same = (1..3).map { Fx.event(id = "naupliastr", score = 0.95 - it / 100.0, t = "2026-11-2${it}T15:19:00Z") }
+        val u = UpcomingModel.build(same + events, EventFilter(), of, now, expanded = emptySet(), heroCount = 3)
+        assertEquals(listOf("naupliastr", "d2_7", "d1_ok"), u.hero.map { it.sightlineId })
+        assertEquals("2026-11-21", u.hero[0].date.toString())   // its best day
+    }
 }

@@ -19,7 +19,9 @@ object UpcomingModel {
         expanded: Set<LocalDate>, perDay: Int = UiConfig.UPCOMING_PER_DAY, heroCount: Int = UiConfig.HERO_COUNT,
     ): Upcoming {
         val ahead = filter.apply(events, sightlineOf).filter { !Presentation.isOver(it, now) }
-        val hero = ahead.sortedWith(compareByDescending<HengeEvent> { it.score }.thenBy { it.tBest }).take(heroCount)
+        // one card per place: a street aligning on three evenings is one recommendation
+        val hero = ahead.sortedWith(compareByDescending<HengeEvent> { it.score }.thenBy { it.tBest })
+            .distinctBy { it.sightlineId }.take(heroCount)
         val days = ahead.groupBy { it.date }.toSortedMap().map { (d, es) ->
             UpcomingDay(d, if (d in expanded) es else es.take(perDay), es.size)
         }
