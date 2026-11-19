@@ -37,24 +37,22 @@ fun SettingsScreen(vm: AppViewModel) {
         }
         HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
         Text("Engine", style = MaterialTheme.typography.titleMedium)
-        Text("Alignment error bands in degrees; anything beyond \"near\" is not an event.",
+        Text("Street width: how wide a street's far end is assumed to be where no measured skyline exists. " +
+            "Wider streets let the sun in further off the axis.",
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        SettingSlider("Perfect ≤", s.perfectDeg, 0.1f..3f, format = { "%.1f°".format(it) }) { v ->
-            vm.updateSettings { it.copy(perfectDeg = v.toDouble()) }
+        SettingSlider("Street width", s.streetWidthM, 10f..40f, steps = 5, format = { "${it.toInt()} m" }) { v ->
+            vm.updateSettings { it.copy(streetWidthM = v.toDouble()) }
         }
-        SettingSlider("Good ≤", s.goodDeg, 0.2f..5f, format = { "%.1f°".format(it) }) { v ->
-            vm.updateSettings { it.copy(goodDeg = v.toDouble()) }
-        }
-        SettingSlider("Near ≤", s.nearDeg, 0.5f..8f, format = { "%.1f°".format(it) }) { v ->
-            vm.updateSettings { it.copy(nearDeg = v.toDouble()) }
+        Text("Highest the sun may stand above the skyline and still count. Lower keeps only sunsets " +
+            "right on the horizon.",
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        SettingSlider("Max height above skyline", s.maxHeightAboveFloorDeg, 1f..6f, format = { "%.1f°".format(it) }) { v ->
+            vm.updateSettings { it.copy(maxHeightAboveFloorDeg = v.toDouble()) }
         }
         Text("Obstruction offset: added to every sightline's estimated obstruction angle.",
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         SettingSlider("Obstruction offset", s.obstructionOffsetDeg, -2f..3f, format = { "%+.1f°".format(it) }) { v ->
             vm.updateSettings { it.copy(obstructionOffsetDeg = v.toDouble()) }
-        }
-        SettingSlider("Canyon bonus", s.canyonBonus, 0f..0.3f, format = { "%.2f".format(it) }) { v ->
-            vm.updateSettings { it.copy(canyonBonus = v.toDouble()) }
         }
         TextButton(onClick = { vm.resetSettings() }, modifier = Modifier.padding(top = 8.dp)) { Text("Reset to defaults") }
     }

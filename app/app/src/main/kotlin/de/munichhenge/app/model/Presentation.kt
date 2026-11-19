@@ -6,6 +6,7 @@ import de.munichhenge.engine.HengeEvent
 import de.munichhenge.engine.Links
 import de.munichhenge.engine.Mode
 import de.munichhenge.engine.Sightline
+import de.munichhenge.engine.Style
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -52,6 +53,17 @@ object Presentation {
     private val dateFmt: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.ENGLISH)
 
     fun localTime(t: Instant): String = t.atZone(zone).format(timeFmt)
+
+    /** "16:19–16:24": when to be there. */
+    fun windowLabel(e: HengeEvent): String = localTime(e.windowStart) + "–" + localTime(e.windowEnd)
+
+    fun styleWord(style: Style): String = when (style) {
+        Style.ON_HORIZON -> "on the horizon"
+        Style.IN_CANYON -> "between the buildings"
+    }
+
+    /** "16:21 sunset · 16:19–16:24 · on the horizon" */
+    fun timeLine(e: HengeEvent): String = "${localTime(e.tBest)} ${modeWord(e.mode)} · ${windowLabel(e)} · ${styleWord(e.style)}"
     fun dateLabel(d: LocalDate): String = d.format(dateFmt)
 
     fun spotsLabel(n: Int): String = when (n) {
@@ -65,7 +77,7 @@ object Presentation {
     /** Events grouped by local date in date order; within a day best first, then by time. */
     fun groupByDay(events: List<HengeEvent>): List<Pair<LocalDate, List<HengeEvent>>> =
         events.groupBy { it.date }.toSortedMap().map { (d, es) ->
-            d to es.sortedWith(compareByDescending<HengeEvent> { it.quality }.thenBy { it.tFull })
+            d to es.sortedWith(compareByDescending<HengeEvent> { it.score }.thenBy { it.tBest })
         }
 
     /** What the Today list shows: real events (near ones only on request) and, separately,
@@ -74,14 +86,14 @@ object Presentation {
 
     fun dayList(events: List<HengeEvent>, showNear: Boolean): DayList {
         val (open, real) = events.partition { it.openHorizon }
-        return DayList(real.filter { showNear || it.grade != Grade.NEAR }, open.sortedBy { it.tFull })
+        return DayList(real.filter { showNear || it.grade != Grade.NEAR }, open.sortedBy { it.tBest })
     }
 
     /** "Olympiaberg: sunrise 07:02 (88°), sunset 19:11 (272°)". */
     fun openHorizonLine(events: List<HengeEvent>, nameOf: (String) -> String?): String =
         events.groupBy { it.sightlineId }.entries.joinToString("\n") { (id, es) ->
-            (nameOf(id) ?: id) + ": " + es.sortedBy { it.tFull }.joinToString(", ") {
-                "${modeWord(it.mode)} ${localTime(it.tFull)} (${Math.round(it.bearing)}°)"
+            (nameOf(id) ?: id) + ": " + es.sortedBy { it.tBest }.joinToString(", ") {
+                "${modeWord(it.mode)} ${localTime(it.tBest)} (${Math.round(it.bearing)}°)"
             }
         }
 

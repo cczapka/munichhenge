@@ -9,7 +9,7 @@ import de.munichhenge.engine.HengeEvent
 /** "☀ 12%" for the event hour, or null while loading / offline / beyond the forecast. */
 @Composable
 fun rememberCloudHint(vm: AppViewModel, event: HengeEvent): String? {
-    val hint by produceState<String?>(initialValue = null, key1 = event.sightlineId, key2 = event.tFull) {
+    val hint by produceState<String?>(initialValue = null, key1 = event.sightlineId, key2 = event.tBest) {
         value = WeatherRules.label(vm.cloudCover(event))
     }
     return hint

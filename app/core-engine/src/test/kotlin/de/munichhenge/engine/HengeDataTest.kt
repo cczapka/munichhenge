@@ -47,6 +47,23 @@ class HengeDataTest {
     }
 
     @Test
+    fun `11 - schema v1 has no profiles and schema v2 carries measured ones`() {
+        val v1 = HengeData.fromJson(sightlinesJson, poisJson)
+        assertNull(v1.sightline("sl_x")!!.profileAb)
+        val oneDegree = java.util.Base64.getEncoder().encodeToString(ByteArray(SkylineProfile.SIZE) { 20 })
+        val v2 = sightlinesJson.replace("\"version\": 1", "\"version\": 2").replace(
+            "\"osm_way_ids\":[1,2,3]}",
+            "\"osm_way_ids\":[1,2,3],\"skyline_ab\":\"$oneDegree\",\"skyline_status_ab\":\"measured\"," +
+                "\"skyline_ba\":\"$oneDegree\",\"skyline_status_ba\":\"partial\",\"trees_ba\":\"$oneDegree\"}")
+        val x = HengeData.fromJson(v2, poisJson).sightline("sl_x")!!
+        assertEquals(Confidence.MEASURED, x.profileAb!!.confidence)
+        assertEquals(1.0, x.profileAb!!.floorDeg, 1e-9)
+        assertNull(x.profileAb!!.softAt(0.0))
+        assertEquals(Confidence.PARTIAL, x.profileBa!!.confidence)
+        assertEquals(1.0, x.profileBa!!.softAt(0.0)!!, 1e-9)
+    }
+
+    @Test
     fun `bearing and obstruction for a viewing direction`() {
         val d = HengeData.fromJson(sightlinesJson, poisJson)
         val f = d.sightline("f_axis")!!

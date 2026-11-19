@@ -23,14 +23,19 @@ docs/       Plans after PLAN.md: IMPROVEMENT-PLAN.md (M5–M11), PLAN-links-and-
 - **Obstruction angle** — the apparent altitude (degrees above the horizon) of whatever
   blocks the view at the far end of a sightline (building, trees, terrain). The sun is
   visible down the sightline only while its altitude exceeds this angle.
-- **Henge moment** — the instant the sun's center reaches the obstruction angle of a
-  sightline, i.e. the disk is sitting on the effective horizon at the end of the street.
-  `full`: center at obstruction + 0.2665° (whole disk resting on the line).
-  `half`: center exactly at obstruction (half the disk showing).
-- **Alignment error** — `|sun azimuth at the henge moment − sightline bearing|`, in degrees.
-  Perfect ≤ 0.5°, good ≤ 1.5°, near ≤ 3°. Anything larger is not an event.
-- **Event** — one sightline × one direction × one date × sunrise|sunset, with its henge
-  moments, alignment error and quality score in [0, 1].
+- **Skyline profile** — per viewing direction, the obstruction angle as a function of the
+  azimuth offset from the bearing, every 0.1° from −4° to +4° (positive = right). Measured
+  (M8) or synthesised from length, obstruction angle and canyon flag (`ESTIMATED`).
+- **Opening** — at a given altitude, the sky reaching left and right of the axis before a
+  wall; sides with no wall at all are open road, capped at ±1.5°.
+- **Event** — one sightline × one direction × one date × sunrise|sunset during which the
+  sun's centre is above the skyline, inside the opening and at most 4° above the skyline.
+  It has a best moment (`tBest`: centred, low, disc showing), a window around it, a style
+  (`ON_HORIZON` within one sun diameter of the skyline, else `IN_CANYON`), a quality in
+  [0, 1] for today's alignment, an interest in [0, 1] for the place, and a score
+  (quality × interest blend) used for ranking. Definitions: docs/IMPROVEMENT-PLAN.md §3.
+- **Offset** — sun azimuth minus bearing at the best moment, signed, degrees. (Until M5 the
+  app used an unsigned "alignment error" at a fixed "henge moment"; both are gone.)
 - **Spot** — a POI (bar, restaurant, café, biergarten, viewpoint, featured place) attached
   to one or more sightlines with a view direction.
 

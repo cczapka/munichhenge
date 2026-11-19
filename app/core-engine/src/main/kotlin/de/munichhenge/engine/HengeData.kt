@@ -30,7 +30,7 @@ class HengeData(val sightlines: List<Sightline>, val pois: List<Poi>) {
         fun fromJson(sightlinesJson: String, poisJson: String): HengeData {
             val s = json.decodeFromString<SightlinesFile>(sightlinesJson)
             val p = json.decodeFromString<PoisFile>(poisJson)
-            require(s.version == 1) { "unsupported sightlines.json version ${s.version}" }
+            require(s.version in 1..2) { "unsupported sightlines.json version ${s.version}" }
             require(p.version == 1) { "unsupported pois.json version ${p.version}" }
             return HengeData(s.sightlines.map { it.toModel() }, p.pois.map { it.toModel() })
         }
@@ -65,12 +65,25 @@ internal data class SightlineJson(
     val featured: Boolean = false,
     val notes: String? = null,
     @SerialName("osm_way_ids") val osmWayIds: List<Long> = emptyList(),
+    // schema v2 (M8): measured skyline profiles per viewing direction
+    @SerialName("skyline_ab") val skylineAb: String? = null,
+    @SerialName("skyline_ba") val skylineBa: String? = null,
+    @SerialName("trees_ab") val treesAb: String? = null,
+    @SerialName("trees_ba") val treesBa: String? = null,
+    @SerialName("skyline_status_ab") val skylineStatusAb: String? = null,
+    @SerialName("skyline_status_ba") val skylineStatusBa: String? = null,
 ) {
+    private fun profile(hard: String?, soft: String?, status: String?): SkylineProfile? = hard?.let {
+        SkylineProfile.decode(it, soft, if (status == "partial") Confidence.PARTIAL else Confidence.MEASURED)
+    }
+
     fun toModel() = Sightline(
         id = id, name = name, kind = kind, a = a.toGeoPoint(), b = b.toGeoPoint(), lengthM = lengthM,
         maxOffsetM = maxOffsetM, bearingAb = bearingAb, bearingBa = bearingBa,
         obstructionTowardADeg = obstructionTowardADeg, obstructionTowardBDeg = obstructionTowardBDeg,
         canyon = canyon, featured = featured, notes = notes, osmWayIds = osmWayIds,
+        profileAb = profile(skylineAb, treesAb, skylineStatusAb),
+        profileBa = profile(skylineBa, treesBa, skylineStatusBa),
     )
 }
 

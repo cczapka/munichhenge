@@ -64,7 +64,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     /** Cloud cover at the event's viewing end and t_full; null offline or out of forecast range. */
     suspend fun cloudCover(e: HengeEvent): CloudCover? {
         val sl = data.sightline(e.sightlineId) ?: return null
-        return graph.weather.cloudCover(sl.standingPoint(e.viewFrom), e.tFull)
+        return graph.weather.cloudCover(sl.standingPoint(e.viewFrom), e.tBest)
     }
 
     /** @return false when the reminder would already be in the past. */

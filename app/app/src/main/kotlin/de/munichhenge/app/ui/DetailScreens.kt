@@ -76,7 +76,7 @@ private fun NextEvents(vm: AppViewModel, engine: HengeEngine?, load: suspend (He
                 TextButton(onClick = {
                     val lead = vm.settings.value?.leadMinutes ?: 60
                     message = if (vm.addReminder(e)) {
-                        "Reminder set for $lead min before ${Presentation.localTime(e.tFull)} on ${Presentation.dateLabel(e.date)}"
+                        "Reminder set for $lead min before ${Presentation.localTime(e.windowStart)} on ${Presentation.dateLabel(e.date)}"
                     } else {
                         "That moment has already passed."
                     }
@@ -147,7 +147,7 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, from: Endpoint?, onOpenP
             HorizontalDivider()
         }
         Text("Cloud cover (Open-Meteo) is shown next to events within the 16-day forecast; reminders fire " +
-            "the lead time from Settings before the full-disk moment.",
+            "the lead time from Settings before the window opens.",
             modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
     }

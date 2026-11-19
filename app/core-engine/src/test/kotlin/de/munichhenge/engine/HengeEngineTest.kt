@@ -1,13 +1,11 @@
 package de.munichhenge.engine
 
-import de.munichhenge.solar.SunPosition
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class HengeEngineTest {
@@ -19,7 +17,7 @@ class HengeEngineTest {
             .flatMap { engine.eventsFor(it, setOf(mode)) }
             .filter { it.sightlineId == id }
 
-    /** Groups events into runs of consecutive-ish dates (gap > 10 days starts a new cluster). */
+    /** Groups events into runs of nearby dates (a gap > 10 days starts a new cluster). */
     private fun clusters(events: List<HengeEvent>): List<List<HengeEvent>> {
         val out = mutableListOf<MutableList<HengeEvent>>()
         for (e in events.sortedBy { it.date }) {
@@ -29,126 +27,85 @@ class HengeEngineTest {
         return out
     }
 
+    private fun bestDay(c: List<HengeEvent>) = c.maxBy { it.quality }.date
+
     @Test
-    fun `a 270 degree street has exactly two sunset seasons, around the equinoxes`() {
+    fun `9 - a 270 degree street has two sunset seasons with best days at the equinoxes`() {
         val engine = HengeEngine(Synthetic.data(Synthetic.street("west", 270.0, obstruction = 0.0)))
         val events = yearEvents(engine, "west", Mode.SUNSET)
         assertTrue(events.all { it.viewFrom == Endpoint.A && it.bearing == 270.0 && it.mode == Mode.SUNSET })
-        val perfect = clusters(events.filter { it.grade == Grade.PERFECT })
-        assertEquals(2, perfect.size, "perfect clusters: ${perfect.map { c -> c.map { it.date } }}")
-        // astral: sunset azimuth 270.9° on 2026-03-20 and 270.5° on 2026-09-23; the henge moment
-        // (centre at +0.27°) is ~0.6° further south than sunset, so the best day is ~Mar 19/20 and Sep 23.
-        val best = perfect.map { c -> c.minBy { it.alignmentErrorDeg }.date }
-        assertTrue(abs(ChronoUnit.DAYS.between(LocalDate.of(year, 3, 20), best[0])) <= 2, "spring best ${best[0]}")
-        assertTrue(abs(ChronoUnit.DAYS.between(LocalDate.of(year, 9, 23), best[1])) <= 2, "autumn best ${best[1]}")
-        // and every event within 3°, none outside the seasons
-        assertTrue(events.all { it.alignmentErrorDeg <= 3.0 })
-        assertEquals(2, clusters(events).size)
-        // looking the other way (stand at B, bearing 90°) the same street sees equinox sunrises
+        val c = clusters(events)
+        assertEquals(2, c.size, "clusters: ${c.map { cl -> cl.first().date to cl.last().date }}")
+        assertEquals(2, clusters(events.filter { it.grade == Grade.PERFECT }).size)
+        assertTrue(abs(ChronoUnit.DAYS.between(LocalDate.of(year, 3, 20), bestDay(c[0]))) <= 2, "spring best ${bestDay(c[0])}")
+        assertTrue(abs(ChronoUnit.DAYS.between(LocalDate.of(year, 9, 23), bestDay(c[1]))) <= 2, "autumn best ${bestDay(c[1])}")
         val rises = yearEvents(engine, "west", Mode.SUNRISE)
         assertTrue(rises.isNotEmpty() && rises.all { it.viewFrom == Endpoint.B && it.bearing == 90.0 })
         assertEquals(2, clusters(rises).size)
     }
 
     @Test
-    fun `a 300 degree street has two sunset seasons in May and late July or August`() {
+    fun `a 300 degree street has two good sunset seasons in May and July or August`() {
+        // Around midsummer the sun stands within the gate 3-4° up (NEAR, between the buildings),
+        // so all events form one long season; the good ones near the skyline are two.
         val engine = HengeEngine(Synthetic.data(Synthetic.street("nw", 300.0)))
-        val c = clusters(yearEvents(engine, "nw", Mode.SUNSET))
+        val all = yearEvents(engine, "nw", Mode.SUNSET)
+        assertTrue(all.filter { it.date.monthValue == 6 }.all { it.grade == Grade.NEAR && it.style == Style.IN_CANYON })
+        val c = clusters(all.filter { it.grade != Grade.NEAR })
         assertEquals(2, c.size, c.map { it.map { e -> e.date } }.toString())
-        val best = c.map { cl -> cl.minBy { it.alignmentErrorDeg }.date }
-        assertEquals(5, best[0].monthValue, "first season ${best[0]}")
-        assertTrue(best[1].monthValue in 7..8, "second season ${best[1]}")
+        assertEquals(5, bestDay(c[0]).monthValue, "first season ${bestDay(c[0])}")
+        assertTrue(bestDay(c[1]).monthValue in 7..8, "second season ${bestDay(c[1])}")
     }
 
     @Test
-    fun `a 90 degree street has sunrise seasons at the equinoxes and the reverse sunset seasons`() {
-        val engine = HengeEngine(Synthetic.data(Synthetic.street("east", 90.0, obstruction = 0.0)))
-        val rises = yearEvents(engine, "east", Mode.SUNRISE)
-        assertTrue(rises.isNotEmpty() && rises.all { it.viewFrom == Endpoint.A && it.bearing == 90.0 })
-        val riseClusters = clusters(rises.filter { it.grade == Grade.PERFECT })
-        assertEquals(2, riseClusters.size)
-        assertTrue(abs(ChronoUnit.DAYS.between(LocalDate.of(year, 3, 20), riseClusters[0].minBy { it.alignmentErrorDeg }.date)) <= 2)
-        assertTrue(abs(ChronoUnit.DAYS.between(LocalDate.of(year, 9, 23), riseClusters[1].minBy { it.alignmentErrorDeg }.date)) <= 2)
-        // looking the other way (stand at B, bearing 270) it is the same as the 270° street
-        val sets = yearEvents(engine, "east", Mode.SUNSET)
-        assertTrue(sets.isNotEmpty() && sets.all { it.viewFrom == Endpoint.B && it.bearing == 270.0 })
+    fun `a 90 degree street mirrors the 270 degree one`() {
+        val east = HengeEngine(Synthetic.data(Synthetic.street("east", 90.0, obstruction = 0.0)))
         val west = HengeEngine(Synthetic.data(Synthetic.street("west", 270.0, obstruction = 0.0)))
-        val westSets = yearEvents(west, "west", Mode.SUNSET)
-        assertEquals(westSets.map { it.date to it.grade }, sets.map { it.date to it.grade })
-        for ((w, e) in westSets.zip(sets)) assertEquals(w.alignmentErrorDeg, e.alignmentErrorDeg, 0.02)
+        val rises = clusters(yearEvents(east, "east", Mode.SUNRISE))
+        assertEquals(2, rises.size)
+        assertTrue(rises.flatten().all { it.viewFrom == Endpoint.A && it.bearing == 90.0 })
+        val sets = clusters(yearEvents(east, "east", Mode.SUNSET))
+        val westSets = clusters(yearEvents(west, "west", Mode.SUNSET))
+        assertTrue(sets.flatten().all { it.viewFrom == Endpoint.B && it.bearing == 270.0 })
+        for ((a, b) in sets.zip(westSets)) assertTrue(abs(ChronoUnit.DAYS.between(bestDay(a), bestDay(b))) <= 1)
     }
 
     @Test
-    fun `a street outside both azimuth ranges never matches`() {
-        val engine = HengeEngine(Synthetic.data(Synthetic.street("ssw", 200.0)))   // 200° / 20°
+    fun `9 - a street outside both azimuth ranges never has an event`() {
+        val engine = HengeEngine(Synthetic.data(Synthetic.street("ssw", 200.0)))
         assertTrue(yearEvents(engine, "ssw", Mode.SUNSET).isEmpty())
         assertTrue(yearEvents(engine, "ssw", Mode.SUNRISE).isEmpty())
     }
 
     @Test
-    fun `grades follow the tolerance bands`() {
-        val date = LocalDate.of(year, 3, 20)
-        val probe = HengeEngine(Synthetic.data(Synthetic.street("p", 270.0)))
-        val exact = probe.eventsFor(date, setOf(Mode.SUNSET)).single().azimuthAtFull
-        val data = Synthetic.data(
-            Synthetic.street("perfect", exact + 0.3), Synthetic.street("good", exact - 1.0),
-            Synthetic.street("near", exact + 2.5), Synthetic.street("none", exact - 4.0),
-        )
-        val byId = HengeEngine(data).eventsFor(date, setOf(Mode.SUNSET)).associateBy { it.sightlineId }
-        assertEquals(Grade.PERFECT, byId["perfect"]!!.grade)
-        assertEquals(Grade.GOOD, byId["good"]!!.grade)
-        assertEquals(Grade.NEAR, byId["near"]!!.grade)
-        assertNull(byId["none"])
-        assertEquals(0.3, byId["perfect"]!!.alignmentErrorDeg, 0.02)
-        assertEquals(1.0 - 2.5 / 3.0, byId["near"]!!.quality, 0.01)
-        assertTrue(byId["perfect"]!!.quality > byId["good"]!!.quality && byId["good"]!!.quality > byId["near"]!!.quality)
-    }
-
-    @Test
-    fun `henge moments sit at their target altitudes and are ordered by mode`() {
-        val sl = Synthetic.street("w", 270.0, obstruction = 2.0)
-        val e = HengeEngine(Synthetic.data(sl)).eventsFor(LocalDate.of(year, 3, 19), setOf(Mode.SUNSET)).single()
-        assertTrue(e.tFull < e.tHalf, "at sunset the full disk rests on the line before half of it is gone")
-        assertEquals(2.0 + 0.2665, SunPosition.at(e.tFull, sl.a).apparentAltitudeDeg, 0.01)
-        assertEquals(2.0, SunPosition.at(e.tHalf, sl.a).apparentAltitudeDeg, 0.01)
-        assertEquals(SunPosition.at(e.tFull, sl.a).azimuthDeg, e.azimuthAtFull, 1e-9)
-        assertEquals(LocalDate.of(year, 3, 19), e.date)
-
-        val east = Synthetic.street("e", 90.0, obstruction = 2.0)
-        val r = HengeEngine(Synthetic.data(east)).eventsFor(LocalDate.of(year, 3, 21), setOf(Mode.SUNRISE)).single()
-        assertTrue(r.tHalf < r.tFull, "at sunrise half the disk shows before the whole disk clears the line")
-        assertEquals(2.2665, SunPosition.at(r.tFull, east.a).apparentAltitudeDeg, 0.01)
-    }
-
-    @Test
-    fun `higher obstruction shifts the henge moment earlier and the azimuth south at sunset`() {
+    fun `higher obstruction moves the best moment earlier and the sun further south at sunset`() {
         val date = LocalDate.of(year, 4, 30)
-        // sunset azimuth 293.7° on 2026-04-30 (astral); at higher altitude the sun is further south
-        val low = HengeEngine(Synthetic.data(Synthetic.street("l", 292.0, obstruction = 0.5))).eventsFor(date, setOf(Mode.SUNSET)).single()
-        val high = HengeEngine(Synthetic.data(Synthetic.street("h", 292.0, obstruction = 2.0))).eventsFor(date, setOf(Mode.SUNSET)).single()
-        assertTrue(high.tFull < low.tFull)
-        assertTrue(high.azimuthAtFull < low.azimuthAtFull)
+        val (_, az) = Synthetic.sunAt(date, 1.0, Mode.SUNSET)
+        val low = HengeEngine(Synthetic.data(Synthetic.street("l", az - 0.5, obstruction = 0.5))).eventsFor(date, setOf(Mode.SUNSET)).single()
+        val high = HengeEngine(Synthetic.data(Synthetic.street("h", az - 0.5, obstruction = 2.0))).eventsFor(date, setOf(Mode.SUNSET)).single()
+        assertTrue(high.tBest < low.tBest)
+        assertTrue(high.sunAzimuthDeg < low.sunAzimuthDeg)
     }
 
     @Test
-    fun `obstruction offset shifts every henge moment`() {
-        val sl = Synthetic.street("w", 270.0, obstruction = 1.0)
+    fun `obstruction offset shifts every best moment and never pushes the floor below zero`() {
         val date = LocalDate.of(year, 3, 19)
+        val (_, az) = Synthetic.sunAt(date, 1.0, Mode.SUNSET)
+        val sl = Synthetic.street("w", az - 0.55, obstruction = 1.0)          // in the gate at floors 0, 1 and 2
         val base = HengeEngine(Synthetic.data(sl)).eventsFor(date, setOf(Mode.SUNSET)).single()
         val raised = HengeEngine(Synthetic.data(sl), EngineConfig(obstructionOffsetDeg = 1.0)).eventsFor(date, setOf(Mode.SUNSET)).single()
-        assertEquals(2.2665, SunPosition.at(raised.tFull, sl.a).apparentAltitudeDeg, 0.01)
-        assertTrue(raised.tFull < base.tFull)
-        // negative offsets never push the obstruction below the horizon
+        assertTrue(raised.tBest < base.tBest)
+        assertEquals(2.0, raised.sunAltitudeDeg - raised.heightAboveFloorDeg, 1e-6, "floor raised to 2°")
         val floor = HengeEngine(Synthetic.data(sl), EngineConfig(obstructionOffsetDeg = -5.0)).eventsFor(date, setOf(Mode.SUNSET)).single()
-        assertEquals(0.2665, SunPosition.at(floor.tFull, sl.a).apparentAltitudeDeg, 0.01)
+        assertEquals(0.0, floor.sunAltitudeDeg - floor.heightAboveFloorDeg, 1e-6, "floor clamped at the horizon")
     }
 
     @Test
     fun `events carry the pois looking down the sightline in that direction`() {
         val sl = Synthetic.street("w", 270.0)
         val pois = listOf(
-            Synthetic.poi("cafe_at_a", View("w", Endpoint.B, 10.0)),     // stands near A, looks toward B: sunset event
-            Synthetic.poi("bar_at_b", View("w", Endpoint.A, 5.0)),       // looks toward A (east): only sunrise
+            Synthetic.poi("cafe_at_a", View("w", Endpoint.B, 10.0)),
+            Synthetic.poi("bar_at_b", View("w", Endpoint.A, 5.0)),
             Synthetic.poi("both", View("w", Endpoint.A, 5.0), View("w", Endpoint.B, 5.0)),
         )
         val e = HengeEngine(Synthetic.data(sl, pois = pois)).eventsFor(LocalDate.of(year, 3, 20), setOf(Mode.SUNSET)).single()
@@ -158,18 +115,12 @@ class HengeEngineTest {
     @Test
     fun `nextEventsFor agrees with eventsFor and stops at count`() {
         val engine = HengeEngine(Synthetic.data(Synthetic.street("w", 270.0), Synthetic.street("nw", 300.0)))
-        val next = engine.nextEventsFor("nw", LocalDate.of(year, 1, 1), 5, setOf(Mode.SUNSET))
+        val next = engine.nextEventsFor("nw", jan1, 5, setOf(Mode.SUNSET))
         assertEquals(5, next.size)
-        assertTrue(next.zipWithNext().all { (a, b) -> a.tFull < b.tFull })
-        for (e in next) {
-            val same = engine.eventsFor(e.date, setOf(e.mode)).filter { it.sightlineId == "nw" }
-            assertEquals(listOf(e), same)
-        }
+        assertTrue(next.zipWithNext().all { (a, b) -> a.tBest < b.tBest })
+        for (e in next) assertEquals(listOf(e), engine.eventsFor(e.date, setOf(e.mode)).filter { it.sightlineId == "nw" })
         assertEquals(5, next.first().date.monthValue)
-        val all = engine.nextEventsFor("nw", LocalDate.of(year, 1, 1), 1000, setOf(Mode.SUNSET))
-        assertEquals(2, clusters(all).size)
-        // both modes: the reverse direction (120° from B) sees mid-January sunrises first
-        val first = engine.nextEventsFor("nw", LocalDate.of(year, 1, 1), 1).single()
+        val first = engine.nextEventsFor("nw", jan1, 1).single()
         assertEquals(Mode.SUNRISE, first.mode)
         assertEquals(Endpoint.B, first.viewFrom)
         assertEquals(1, first.date.monthValue)
@@ -179,46 +130,46 @@ class HengeEngineTest {
     fun `nextEventsForPoi uses the poi's views`() {
         val pois = listOf(Synthetic.poi("cafe", View("w", Endpoint.B, 10.0)))
         val engine = HengeEngine(Synthetic.data(Synthetic.street("w", 270.0), Synthetic.street("nw", 300.0), pois = pois))
-        val next = engine.nextEventsForPoi("cafe", LocalDate.of(year, 1, 1), 3)
+        val next = engine.nextEventsForPoi("cafe", jan1, 3)
         assertEquals(3, next.size)
         assertTrue(next.all { it.sightlineId == "w" && it.mode == Mode.SUNSET && "cafe" in it.poiIds })
-        assertTrue(engine.nextEventsForPoi("nope", LocalDate.of(year, 1, 1), 3).isEmpty())
+        assertTrue(engine.nextEventsForPoi("nope", jan1, 3).isEmpty())
     }
 
     @Test
-    fun `bestUpcoming ranks by quality across days and honours minQuality`() {
+    fun `bestUpcoming ranks by score and filters by quality`() {
         val engine = HengeEngine(Synthetic.data(Synthetic.street("w", 270.0), Synthetic.street("nw", 300.0)))
-        val best = engine.bestUpcoming(LocalDate.of(year, 3, 10), days = 14, minQuality = 0.7)
+        val from = LocalDate.of(year, 3, 10)
+        val best = engine.bestUpcoming(from, days = 14, minQuality = 0.5)
         assertTrue(best.isNotEmpty())
-        assertTrue(best.all { it.quality >= 0.7 && it.sightlineId == "w" })
-        assertTrue(best.zipWithNext().all { (a, b) -> a.quality >= b.quality })
-        assertTrue(best.all { !it.date.isBefore(LocalDate.of(year, 3, 10)) && it.date.isBefore(LocalDate.of(year, 3, 24)) })
-        assertTrue(engine.bestUpcoming(LocalDate.of(year, 1, 1), 14, 0.0).isEmpty())
+        assertTrue(best.all { it.quality >= 0.5 && it.sightlineId == "w" && !it.openHorizon })
+        assertTrue(best.zipWithNext().all { (a, b) -> a.score >= b.score })
+        assertTrue(best.all { !it.date.isBefore(from) && it.date.isBefore(from.plusDays(14)) })
+        assertTrue(engine.bestUpcoming(jan1, 14, 0.0).isEmpty())
     }
 
     @Test
     fun `open horizon spots get one event per day and mode but never rank as best`() {
         val engine = HengeEngine(Synthetic.data(Synthetic.openHorizon("sl_open_hill"), Synthetic.street("w", 270.0)))
         val date = LocalDate.of(year, 6, 21)
-        val today = engine.eventsFor(date)
-        val open = today.filter { it.sightlineId == "sl_open_hill" }
-        assertEquals(2, open.size)
-        assertTrue(open.all { it.openHorizon && it.alignmentErrorDeg == 0.0 && it.grade == Grade.PERFECT })
+        val open = engine.eventsFor(date).filter { it.sightlineId == "sl_open_hill" }
+        assertEquals(setOf(Mode.SUNRISE, Mode.SUNSET), open.map { it.mode }.toSet())
+        assertTrue(open.all { it.openHorizon && it.grade == Grade.PERFECT && it.style == Style.ON_HORIZON })
         val sunset = open.single { it.mode == Mode.SUNSET }
-        assertEquals(sunset.azimuthAtFull, sunset.bearing, 1e-9)
-        assertTrue(today.filter { !it.openHorizon }.isEmpty())   // June: the 270° street is out of season
+        assertEquals(sunset.sunAzimuthDeg, sunset.bearing, 1e-9)
+        assertTrue(sunset.windowStart < sunset.tBest && sunset.tBest < sunset.windowEnd)
+        assertTrue(engine.eventsFor(date).none { !it.openHorizon }, "June: the 270° street is out of season")
         assertTrue(engine.bestUpcoming(date, 7, 0.0).none { it.openHorizon })
-        assertTrue(engine.nextEventsFor("sl_open_hill", date, 3).size == 3)
+        assertEquals(3, engine.nextEventsFor("sl_open_hill", date, 3).size)
     }
 
     @Test
-    fun `date is the Europe Berlin calendar date and results are cached`() {
+    fun `dates are Europe Berlin calendar dates and results are cached`() {
         val engine = HengeEngine(Synthetic.data(Synthetic.street("w", 270.0)))
         val date = LocalDate.of(year, 3, 20)
         val a = engine.eventsFor(date)
-        val b = engine.eventsFor(date)
-        assertTrue(a === b, "second call must hit the cache")
-        for (e in a) assertEquals(date, e.tFull.atZone(engine.config.zone).toLocalDate())
+        assertTrue(a === engine.eventsFor(date), "second call must hit the cache")
         assertNotNull(a.firstOrNull())
+        for (e in a) assertEquals(date, e.tBest.atZone(engine.config.zone).toLocalDate())
     }
 }

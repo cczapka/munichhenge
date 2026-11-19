@@ -17,10 +17,10 @@ object Digest {
     /** Local time the daily digest runs. */
     val RUN_AT: LocalTime = LocalTime.of(10, 0)
 
-    /** Events worth a notification: quality >= minQuality and not forecast cloudy; best first. */
+    /** Events worth a notification: quality >= minQuality and not forecast cloudy; best score first. */
     fun select(events: List<HengeEvent>, minQuality: Double, cloudOf: (HengeEvent) -> CloudCover?): List<HengeEvent> =
         events.filter { !it.openHorizon && it.quality >= minQuality && WeatherRules.worthNotifying(cloudOf(it)) }
-            .sortedWith(compareByDescending<HengeEvent> { it.quality }.thenBy { it.tFull })
+            .sortedWith(compareByDescending<HengeEvent> { it.score }.thenBy { it.tBest })
             .take(TOP_N)
 
     /** Title and one line per event. */
@@ -30,7 +30,7 @@ object Digest {
         else "${events.size} henge moments tomorrow (${Presentation.dateLabel(date)})"
         val body = events.joinToString("\n") { e ->
             val cloud = WeatherRules.label(cloudOf(e))?.let { " · $it" } ?: ""
-            "${Presentation.localTime(e.tFull)} ${Presentation.modeWord(e.mode)} · ${nameOf(e.sightlineId) ?: e.sightlineId} · " +
+            "${Presentation.windowLabel(e)} ${Presentation.modeWord(e.mode)} · ${nameOf(e.sightlineId) ?: e.sightlineId} · " +
                 "${Presentation.gradeWord(e.grade)}$cloud"
         }
         return title to body

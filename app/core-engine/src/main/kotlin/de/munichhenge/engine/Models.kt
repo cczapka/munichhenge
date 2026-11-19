@@ -13,8 +13,16 @@ enum class Endpoint {
 
 enum class Mode { SUNRISE, SUNSET }
 
-/** Alignment error bands (CLAUDE.md): perfect ≤ 0.5°, good ≤ 1.5°, near ≤ 3°. */
+/** Event grades; thresholds in EngineConfig (IMPROVEMENT-PLAN.md 3.2). */
 enum class Grade { PERFECT, GOOD, NEAR }
+
+/** How an event looks at its best moment. */
+enum class Style {
+    /** The disc sits within one diameter of the skyline: the classic henge picture. */
+    ON_HORIZON,
+    /** The sun is centred between the walls, higher up. */
+    IN_CANYON,
+}
 
 /** A straight run between endpoints A and B (see CLAUDE.md vocabulary). */
 data class Sightline(
@@ -35,7 +43,14 @@ data class Sightline(
     val featured: Boolean,
     val notes: String?,
     val osmWayIds: List<Long>,
+    /** Measured skyline seen from A toward B (schema v2, M8); null = synthesise from the fields above. */
+    val profileAb: SkylineProfile? = null,
+    /** Measured skyline seen from B toward A. */
+    val profileBa: SkylineProfile? = null,
 ) {
+    /** Measured skyline profile for a viewing direction, if the data carries one. */
+    fun profile(viewFrom: Endpoint): SkylineProfile? = if (viewFrom == Endpoint.A) profileAb else profileBa
+
     /** All-azimuth virtual sightline of an open_horizon spot (a == b, no bearing). */
     val openHorizon: Boolean get() = bearingAb == null
 
@@ -67,24 +82,48 @@ data class Poi(
     val notes: String?,
 )
 
-/** One sightline × one direction × one date × sunrise|sunset (PLAN.md 4.2). */
+/**
+ * One sightline x one direction x one date x sunrise|sunset (IMPROVEMENT-PLAN.md 3.2): the sun
+ * is visible down the sightline, above the skyline and inside the street's opening.
+ */
 data class HengeEvent(
     val sightlineId: String,
     /** Where you stand. */
     val viewFrom: Endpoint,
-    /** Azimuth you look toward. For open-horizon events this is the sun's azimuth at tFull. */
+    /** Azimuth you look toward. For open-horizon events the sun's azimuth at tBest. */
     val bearing: Double,
     val mode: Mode,
     /** Local (config zone) calendar date. */
     val date: LocalDate,
-    /** Sun centre at obstruction + one radius: the whole disk rests on the line. */
-    val tFull: Instant,
-    /** Sun centre exactly at the obstruction angle: half the disk showing. */
-    val tHalf: Instant,
-    val azimuthAtFull: Double,
-    val alignmentErrorDeg: Double,
-    /** 0..1, max(0, 1 - error/near) plus optional canyon bonus. */
+    /** The best moment: centred, low and with the disc showing. */
+    val tBest: Instant,
+    /** The span around tBest worth being there for, chronological (windowStart <= windowEnd). */
+    val windowStart: Instant,
+    val windowEnd: Instant,
+    val style: Style,
+    val sunAzimuthDeg: Double,
+    /** Apparent altitude of the sun's centre at tBest. */
+    val sunAltitudeDeg: Double,
+    /** Sun's azimuth minus the bearing at tBest, (-4, 4); positive = right of the axis. */
+    val offsetDeg: Double,
+    /** Sun's centre above the skyline at its offset, degrees. */
+    val heightAboveFloorDeg: Double,
+    /** Share of the disc's diameter above the skyline, 0..1. */
+    val discFraction: Double,
+    /** 0 = centred in the opening, 1 = touching a wall. */
+    val centring: Double,
+    /** Metres to step right (negative: left) of the centre line so the sun sits over the middle of
+     * the far end; null when that is more than half the street width. */
+    val stepRightM: Double?,
+    /** A tree rises above the sun at tBest (soft layer, M8). */
+    val treesInWay: Boolean,
+    val confidence: Confidence,
+    /** How good the alignment is today, 0..1. */
     val quality: Double,
+    /** How worthwhile the place is, 0..1, independent of the date. */
+    val interest: Double,
+    /** Ranking value: quality x (interestFloor + (1 - interestFloor) x interest). */
+    val score: Double,
     val grade: Grade,
     /** POIs that look down this sightline in this direction, sorted by id. */
     val poiIds: List<String>,

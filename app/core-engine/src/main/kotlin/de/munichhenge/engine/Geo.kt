@@ -12,6 +12,12 @@ object Geo {
 
     fun normalizeDeg(deg: Double): Double = ((deg % 360.0) + 360.0) % 360.0
 
+    /** Signed difference a - b wrapped to (-180, 180]: positive when a is clockwise of b. */
+    fun signedDiffDeg(a: Double, b: Double): Double {
+        val d = normalizeDeg(a - b)
+        return if (d > 180.0) d - 360.0 else d
+    }
+
     /** Smallest absolute difference between two bearings, in [0, 180]. */
     fun angleDiffDeg(a: Double, b: Double): Double {
         val d = normalizeDeg(a - b)

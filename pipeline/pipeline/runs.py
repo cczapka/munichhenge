@@ -30,6 +30,7 @@ from .geom import (
     perp_offset,
     polyline_length,
     project,
+    true_bearings,
 )
 from .models import Chain, Run, Way
 
@@ -278,3 +279,28 @@ def dedupe_runs(runs: Sequence[Run], cfg: PipelineConfig) -> list[Run]:
     kept = [ordered[i] for i in sorted(kept_idx)]
     log.info("dedupe: %d runs -> %d (dropped %d parallel duplicates)", len(runs), len(kept), dropped)
     return kept
+
+
+# --------------------------------------------------------------------------- orientation
+
+def canonicalize(run: Run) -> None:
+    """Make A the western end (true bearing A->B in [0°, 180°)), in place.
+
+    OSM ways have no meaningful direction for our purpose, and edits or a different
+    stitching order can flip a street's node order. Sightline ids hash the endpoints in
+    order, so without this a rebuild renamed about a third of all sightlines (Sept -> Nov
+    2026: 467 of 1365, almost all the same street with A and B swapped).
+
+    Left alone: bridges (A is the crossing point on the deck by construction), featured
+    sightlines (their yaml fixes A, B and the obstruction per end) and open-horizon spots.
+    Must run before obstruction angles and ids are assigned.
+    """
+    if run.featured or run.open_horizon or run.kind == "bridge":
+        return
+    bearing_ab, _, _ = true_bearings(run.a, run.b)
+    if bearing_ab < 180.0:
+        return
+    run.a, run.b = run.b, run.a
+    run.points = list(reversed(run.points))
+    run.obstruction_toward_a_deg, run.obstruction_toward_b_deg = (run.obstruction_toward_b_deg,
+                                                                  run.obstruction_toward_a_deg)

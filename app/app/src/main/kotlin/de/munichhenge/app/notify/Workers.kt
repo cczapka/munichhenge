@@ -33,7 +33,7 @@ class DailyDigestWorker(context: Context, params: WorkerParameters) : CoroutineW
         val clouds = HashMap<String, de.munichhenge.app.weather.CloudCover?>()
         for (e in candidates.take(Digest.TOP_N * 3)) {
             val sl = graph.data.sightline(e.sightlineId) ?: continue
-            clouds[key(e)] = graph.weather.cloudCover(sl.standingPoint(e.viewFrom), e.tFull)
+            clouds[key(e)] = graph.weather.cloudCover(sl.standingPoint(e.viewFrom), e.tBest)
         }
         val cloudOf: (HengeEvent) -> de.munichhenge.app.weather.CloudCover? = { clouds[key(it)] }
         val chosen = Digest.select(candidates, settings.minQuality, cloudOf)
@@ -77,13 +77,13 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
 
         /** @return false when the reminder time is already in the past. */
         fun schedule(context: Context, event: HengeEvent, sightlineName: String?, leadMinutes: Int): Boolean {
-            val fireAt = event.tFull.minus(Duration.ofMinutes(leadMinutes.toLong()))
+            val fireAt = event.windowStart.minus(Duration.ofMinutes(leadMinutes.toLong()))
             val delay = Duration.between(Instant.now(), fireAt)
             if (delay.isNegative) return false
             val name = sightlineName ?: event.sightlineId
             val modeWord = if (event.mode == Mode.SUNSET) "sunset" else "sunrise"
             val title = "Henge in $leadMinutes min: $name"
-            val body = "${Presentation.localTime(event.tFull)} $modeWord · ${Presentation.instruction(event)} · ${Presentation.gradeWord(event.grade)}"
+            val body = "${Presentation.windowLabel(event)} $modeWord · ${Presentation.instruction(event)} · ${Presentation.gradeWord(event.grade)}"
             val key = "${event.sightlineId}/${event.viewFrom}/${event.mode}/${event.date}"
             val request = OneTimeWorkRequestBuilder<ReminderWorker>()
                 .setInitialDelay(delay.toMillis(), TimeUnit.MILLISECONDS)

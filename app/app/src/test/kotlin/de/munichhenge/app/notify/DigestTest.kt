@@ -1,10 +1,12 @@
 package de.munichhenge.app.notify
 
 import de.munichhenge.app.weather.CloudCover
+import de.munichhenge.engine.Confidence
 import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.Grade
 import de.munichhenge.engine.HengeEvent
 import de.munichhenge.engine.Mode
+import de.munichhenge.engine.Style
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -16,8 +18,11 @@ import kotlin.test.assertEquals
 class DigestTest {
     private val d = LocalDate.of(2026, 9, 21)
     private fun ev(id: String, q: Double, t: String = "2026-09-21T17:04:00Z", open: Boolean = false) = HengeEvent(
-        sightlineId = id, viewFrom = Endpoint.A, bearing = 270.0, mode = Mode.SUNSET, date = d, tFull = Instant.parse(t),
-        tHalf = Instant.parse(t).plusSeconds(100), azimuthAtFull = 270.0, alignmentErrorDeg = (1 - q) * 3, quality = q,
+        sightlineId = id, viewFrom = Endpoint.A, bearing = 270.0, mode = Mode.SUNSET, date = d, tBest = Instant.parse(t),
+        windowStart = Instant.parse(t).minusSeconds(120), windowEnd = Instant.parse(t).plusSeconds(180),
+        style = Style.ON_HORIZON, sunAzimuthDeg = 270.0, sunAltitudeDeg = 1.3, offsetDeg = 0.0, heightAboveFloorDeg = 0.3,
+        discFraction = 1.0, centring = 0.0, stepRightM = null, treesInWay = false, confidence = Confidence.ESTIMATED,
+        quality = q, interest = 0.5, score = q,
         grade = if (q > 0.83) Grade.PERFECT else if (q > 0.5) Grade.GOOD else Grade.NEAR, poiIds = emptyList(), openHorizon = open,
     )
 
@@ -35,7 +40,7 @@ class DigestTest {
         val (title, body) = Digest.text(d, listOf(ev("x", 0.95), ev("y", 0.8, "2026-09-21T05:10:00Z")),
             { mapOf("x" to "Landwehrstraße", "y" to "Einsteinstraße")[it] }) { if (it.sightlineId == "x") CloudCover(20, 0) else null }
         assertEquals("2 henge moments tomorrow (Mon, 21 Sep 2026)", title)
-        assertEquals("19:04 sunset · Landwehrstraße · perfect · ☀ 20%\n07:10 sunset · Einsteinstraße · good", body)
+        assertEquals("19:02–19:07 sunset · Landwehrstraße · perfect · ☀ 20%\n07:08–07:13 sunset · Einsteinstraße · good", body)
         assertEquals("Henge tomorrow: Landwehrstraße", Digest.text(d, listOf(ev("x", 0.95)), { "Landwehrstraße" }) { null }.first)
     }
 

@@ -212,3 +212,34 @@ def test_bridge_run_is_not_deduped_into_the_river(cfg):
     bridge = run_from([(1000, 0), (2000, 0)], name="Brücke (Isar downstream)")
     bridge.kind = "bridge"
     assert len(dedupe_runs([river, bridge], cfg)) == 2
+
+
+# ----------------------------------------------------------------------------- canonical orientation
+
+def test_reversed_street_gets_the_same_ends_and_id(cfg):
+    from pipeline.geom import true_bearings
+    from pipeline.ids import assign_sightline_ids
+    from pipeline.runs import canonicalize
+    east = extract_runs([make_way([(0, 0), (300, 40), (700, 90)], node_ids=[1, 2, 3])], cfg)
+    west = extract_runs([make_way([(700, 90), (300, 40), (0, 0)], node_ids=[3, 2, 1])], cfg)
+    for r in east + west:
+        canonicalize(r)
+    assign_sightline_ids(east)
+    assign_sightline_ids(west)
+    assert [(r.a, r.b, r.id) for r in east] == [(r.a, r.b, r.id) for r in west]
+    ab, _, _ = true_bearings(east[0].a, east[0].b)
+    assert 0 <= ab < 180, "A is the western end, so A->B points into the eastern half"
+
+
+def test_canonicalize_leaves_bridges_featured_and_open_horizon_alone(cfg):
+    from pipeline.runs import canonicalize
+    bridge = run_from([(1000, 0), (0, 0)])
+    bridge.kind = "bridge"            # A must stay the crossing point on the deck
+    feat = run_from([(1000, 0), (0, 0)], featured=True)
+    for r in (bridge, feat):
+        a, b = r.a, r.b
+        canonicalize(r)
+        assert (r.a, r.b) == (a, b)
+    street = run_from([(1000, 0), (0, 0)])
+    canonicalize(street)
+    assert street.a == ll(0, 0) and street.points[0] == xy(0, 0)

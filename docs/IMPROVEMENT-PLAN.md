@@ -259,6 +259,52 @@ pass the canyon check of the review is 100 % by construction; the count of daily
 reported before and after (expected to drop from about 50 to 15–25); you compare five
 events against Street View with the M5 links and none shows a wall where the sun should be.
 
+### 3.9 As built (M6, 2026-11-19)
+
+Where the implementation differs from 3.1–3.8, and what was measured:
+
+- **Disc fraction** is the share of the disc's vertical diameter above the skyline at the
+  sun's offset, not five sample points: smooth, and 0.5 exactly when the centre touches.
+- **PERFECT** needs at least 90 % of the disc (`perfectMinDisc` 0.9), because the best
+  moment of an aligned street lands at the full-disc kink within one 5 s step.
+- **Open sides:** a side counts as open road only if nothing on it rises above the floor.
+  A wall that rises beyond the ±4° edge reports the opening at ±4°. Without this the
+  opening snapped from ±4° to ±1.5° as a high sun passed the wall's top at the edge (found
+  by the cross-check).
+- **Scanning** uses an interpolated sun path (exact every 3 min, linear in between, within
+  0.005° of exact; tested), a 60 s pass and a 5 s refinement around the best sample.
+- **Window** = contiguous span around the best moment scoring at least 70 % of it
+  (`windowScoreFraction`). For an aligned street it ends within a minute of the moment
+  the centre reaches the skyline (tested).
+- **Stable ids** (prerequisite): the pipeline stores every street with its western end as A
+  (`runs.canonicalize`), so rebuilds no longer swap ends and rename a third of the ids.
+
+Measured on the real data (1,369 sightlines):
+
+| | budget | measured |
+|---|---|---|
+| one day, warm | 50 ms | 19 ms |
+| 14 days | 1 s | 0.22 s |
+| one sightline, a year | 300 ms | 20 ms |
+| full year | 6 s | 2.8 s |
+
+Events per day, 19–25 Nov 2026, against the old engine for 16–22 Nov:
+
+| grade | old | new |
+|---|---|---|
+| perfect | 8.0 | 10.6 |
+| good | 18.0 | 21.0 |
+| near | 24.0 | 70.2 |
+
+The plan expected 15–25 events a day; good-or-better stayed near 30. Near grew because
+events higher up between the buildings now count; they are hidden by default in the app and
+shrink with the "max height above skyline" setting.
+
+Independent cross-check (sun position with astral, visibility rule re-implemented in
+Python): all 712 events of that week visible and inside the opening at their best moment;
+sun azimuth and altitude within 0.004° of astral. This ran locally; running it in CI needs
+astral as a dev dependency (decision for M11).
+
 ---
 
 ## 4. M7 — UI part 1

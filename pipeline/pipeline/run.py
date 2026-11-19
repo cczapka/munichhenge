@@ -26,7 +26,7 @@ from .models import Extract, Poi, Run
 from .obstruction import BuildingIndex, fill_obstructions
 from .output import write_debug_geojson, write_json
 from .pois import snap_pois
-from .runs import dedupe_runs, extract_runs
+from .runs import canonicalize, dedupe_runs, extract_runs
 
 log = logging.getLogger("pipeline")
 
@@ -43,6 +43,8 @@ def build(ex: Extract, featured: Featured, cfg: PipelineConfig) -> tuple[list[Ru
     runs = merge_featured_sightlines(runs, featured)   # before dedupe: featured absorbs its auto twin
     runs = dedupe_runs(runs, cfg)
     runs.extend(open_horizon_run(s, cfg) for s in featured.spots if s.open_horizon)
+    for r in runs:
+        canonicalize(r)                                 # stable ids across rebuilds: A = western end
     assign_sightline_ids(runs)
     index = BuildingIndex(ex.buildings) if ex.buildings else None
     fill_obstructions(runs, index, cfg)

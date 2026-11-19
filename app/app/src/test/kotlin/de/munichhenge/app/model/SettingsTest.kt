@@ -1,24 +1,28 @@
 package de.munichhenge.app.model
 
 import de.munichhenge.app.settings.Settings
+import de.munichhenge.engine.EngineConfig
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SettingsTest {
     @Test
-    fun `defaults match the plan`() {
+    fun `defaults match the engine`() {
         val s = Settings()
         assertEquals(0.7, s.minQuality); assertEquals(60, s.leadMinutes)
         val c = s.toEngineConfig()
-        assertEquals(0.5, c.perfectDeg); assertEquals(1.5, c.goodDeg); assertEquals(3.0, c.nearDeg)
-        assertEquals(0.0, c.obstructionOffsetDeg); assertEquals(0.0, c.canyonBonus)
+        val d = EngineConfig()
+        assertEquals(d.assumedStreetWidthM, c.assumedStreetWidthM)
+        assertEquals(d.maxHeightAboveFloorDeg, c.maxHeightAboveFloorDeg)
+        assertEquals(0.0, c.obstructionOffsetDeg)
     }
 
     @Test
-    fun `tolerance bands stay ordered and values clamped`() {
-        val s = Settings(perfectDeg = 2.0, goodDeg = 1.0, nearDeg = 0.8, minQuality = 1.4, leadMinutes = -5).normalized()
-        assertEquals(0.8, s.nearDeg); assertEquals(0.8, s.goodDeg); assertEquals(0.8, s.perfectDeg)
+    fun `values are clamped`() {
+        val s = Settings(minQuality = 1.4, leadMinutes = -5, streetWidthM = 200.0, maxHeightAboveFloorDeg = 0.1,
+            obstructionOffsetDeg = 9.0).normalized()
         assertEquals(1.0, s.minQuality); assertEquals(0, s.leadMinutes)
-        assertEquals(5.0, Settings(obstructionOffsetDeg = 9.0).normalized().obstructionOffsetDeg)
+        assertEquals(60.0, s.streetWidthM); assertEquals(1.0, s.maxHeightAboveFloorDeg); assertEquals(5.0, s.obstructionOffsetDeg)
+        assertEquals(60.0, s.toEngineConfig().assumedStreetWidthM)
     }
 }

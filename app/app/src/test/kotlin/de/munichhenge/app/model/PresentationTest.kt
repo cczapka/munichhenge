@@ -1,10 +1,12 @@
 package de.munichhenge.app.model
 
+import de.munichhenge.engine.Confidence
 import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.Grade
 import de.munichhenge.engine.HengeEvent
 import de.munichhenge.engine.Mode
 import de.munichhenge.engine.Sightline
+import de.munichhenge.engine.Style
 import de.munichhenge.solar.GeoPoint
 import java.time.Instant
 import java.time.LocalDate
@@ -16,8 +18,10 @@ class PresentationTest {
     private fun event(date: LocalDate, quality: Double, bearing: Double = 270.0, t: String = "2026-09-20T17:05:00Z",
                       open: Boolean = false) = HengeEvent(
         sightlineId = "sl_x", viewFrom = Endpoint.A, bearing = bearing, mode = Mode.SUNSET, date = date,
-        tFull = Instant.parse(t), tHalf = Instant.parse(t).plusSeconds(120), azimuthAtFull = bearing,
-        alignmentErrorDeg = (1 - quality) * 3, quality = quality, grade = Grade.GOOD, poiIds = listOf("p1", "p2"),
+        tBest = Instant.parse(t), windowStart = Instant.parse(t).minusSeconds(120), windowEnd = Instant.parse(t).plusSeconds(180),
+        style = Style.ON_HORIZON, sunAzimuthDeg = bearing, sunAltitudeDeg = 1.3, offsetDeg = 0.0, heightAboveFloorDeg = 0.3,
+        discFraction = 1.0, centring = 0.0, stepRightM = null, treesInWay = false, confidence = Confidence.ESTIMATED,
+        quality = quality, interest = 0.5, score = quality, grade = Grade.GOOD, poiIds = listOf("p1", "p2"),
         openHorizon = open,
     )
 
@@ -61,7 +65,7 @@ class PresentationTest {
             event(d2, 0.9), event(d2, 0.7, t = "2026-09-20T17:00:00Z")))
         assertEquals(listOf(d2, d1), grouped.map { it.first })
         assertEquals(listOf(0.9, 0.7, 0.7), grouped[0].second.map { it.quality })
-        assertEquals("2026-09-20T17:00:00Z", grouped[0].second[1].tFull.toString())
+        assertEquals("2026-09-20T17:00:00Z", grouped[0].second[1].tBest.toString())
     }
 
     @Test
@@ -81,7 +85,7 @@ class PresentationTest {
         assertEquals(listOf("good"), hidden.events.map { it.sightlineId })
         assertEquals(listOf("sl_open_hill"), hidden.openHorizon.map { it.sightlineId })
         assertEquals(listOf("near", "good"), Presentation.dayList(listOf(near, good), showNear = true).events.map { it.sightlineId })
-        val sunrise = open.copy(mode = Mode.SUNRISE, bearing = 88.0, tFull = Instant.parse("2026-09-20T05:02:00Z"))
+        val sunrise = open.copy(mode = Mode.SUNRISE, bearing = 88.0, tBest = Instant.parse("2026-09-20T05:02:00Z"))
         assertEquals("Hill: sunrise 07:02 (88°), sunset 19:05 (270°)",
             Presentation.openHorizonLine(listOf(open, sunrise)) { "Hill" })
     }
@@ -101,6 +105,14 @@ class PresentationTest {
         assertEquals("Far end 1486 m away, skyline there 0.6° up", Presentation.directionDetail(street, Endpoint.B, false))
         assertTrue(Presentation.directionDetail(street, Endpoint.A, true).endsWith("Street View shows the nearest bank or bridge."))
         assertEquals("Open horizon", Presentation.directionTitle(street.copy(bearingAb = null, bearingBa = null), Endpoint.A))
+    }
+
+    @Test
+    fun `time line shows the best moment, the window and the style`() {
+        val e = event(LocalDate.of(2026, 9, 20), 0.9)                      // tBest 17:05Z = 19:05 CEST
+        assertEquals("19:03–19:08", Presentation.windowLabel(e))
+        assertEquals("19:05 sunset · 19:03–19:08 · on the horizon", Presentation.timeLine(e))
+        assertEquals("between the buildings", Presentation.styleWord(Style.IN_CANYON))
     }
 
     @Test

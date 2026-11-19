@@ -70,7 +70,8 @@ fun DirectionCard(title: String, detail: String, target: LinkTarget, highlighted
 fun StreetViewHint() {
     Text(
         "Street View shows the far end, not the sun. Imagery can be years old and from another season, " +
-            "and the camera stands on the road about 2.5 m up.",
+            "and the camera stands on the road about 2.5 m up. If a business's own 360° photo opens instead, " +
+            "use the arrows to step back onto the street.",
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,

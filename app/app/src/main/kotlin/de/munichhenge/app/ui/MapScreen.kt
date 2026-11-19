@@ -95,7 +95,7 @@ private fun drawOverlays(
 ) {
     map.overlays.clear()
     val best: Map<String, HengeEvent> = events.filter { !it.openHorizon }
-        .groupBy { it.sightlineId }.mapValues { (_, es) -> es.maxBy { it.quality } }
+        .groupBy { it.sightlineId }.mapValues { (_, es) -> es.maxBy { it.score } }
 
     // lines: plain sightlines first so event lines draw on top
     for (sl in data.sightlines) {
@@ -130,7 +130,7 @@ private fun drawOverlays(
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
             rotation = -e.bearing.toFloat()   // osmdroid rotates counter-clockwise; bearings are clockwise
             title = sl.name ?: sl.id
-            snippet = "${Presentation.localTime(e.tFull)} ${Presentation.modeWord(e.mode)} · ${Presentation.gradeWord(e.grade)}"
+            snippet = "${Presentation.timeLine(e)} · ${Presentation.gradeWord(e.grade)}"
             setOnMarkerClickListener { _, _ -> onOpenSightline(sl.id); true }
         })
     }
