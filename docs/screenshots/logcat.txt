@@ -1,0 +1,400 @@
+11-20 00:41:20.417 I/PBSessionCacheImpl( 1703): Deleted sessionId[7491668343610300] from persistence.
+11-20 00:41:20.424 V/ClearcutMetricXmitter( 1606): Transmission is done.
+11-20 00:41:20.438 E/bwfc    ( 5361): Phenotype API error. Event # edax@baa6a313, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.438 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.auth.easyunlock(change count changed - expected 1  but was 0)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.438 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.441 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.441 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.auth.easyunlock(change count changed - expected 1  but was 0), resolution=null}]
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.441 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.449 E/PhenotypeRegOp( 5427): Attempting to overwrite config package for com.google.android.gms.games [CONTEXT service_id=231 ]
+11-20 00:41:20.449 E/PhenotypeRegOp( 5427): Attempting to overwrite config package for com.google.android.gms.maps#com.google.android.gms [CONTEXT service_id=231 ]
+11-20 00:41:20.450 E/PhenotypeRegOp( 5427): Attempting to overwrite config package for com.google.android.gms.cast [CONTEXT service_id=231 ]
+11-20 00:41:20.450 E/PhenotypeRegOp( 5427): Attempting to overwrite config package for com.google.android.gms.mobile_data_plan [CONTEXT service_id=231 ]
+11-20 00:41:20.451 I/A       ( 1703): Using proto config with mendel
+11-20 00:41:20.453 E/PhenotypeRegOp( 5427): Attempting to overwrite config package for com.google.android.gms.udc [CONTEXT service_id=231 ]
+11-20 00:41:20.454 I/A       ( 1703): Using proto config with mendel
+11-20 00:41:20.456 W/A       ( 1703): UiCallbackStub-onGenericEvent[ServiceEvent = 241] task was not run. Callback from Service received after client was disposed.
+11-20 00:41:20.456 W/A       ( 1703): UiCallbackStub-onGenericEvent[ServiceEvent = 241] task was not run. Callback from Service received after client was disposed.
+11-20 00:41:20.458 I/PBSessionCacheImpl( 1703): Deleted sessionId[7491668343610551] from persistence.
+11-20 00:41:20.458 W/A       ( 1703): UiCallbackStub-onGenericEvent[ServiceEvent = 60] task was not run. Callback from Service received after client was disposed.
+11-20 00:41:20.461 I/NgaEntryPointEventSendr( 1606): State changed: Ready => Disconnected (onOpaDisconnected)
+11-20 00:41:20.467 W/MobStoreFlagStore( 5361): Failed to commit due to stale snapshot for com.google.android.gms.auth.easyunlock, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.474 I/A       ( 1703): group apa_head_suggest not present without account in *
+11-20 00:41:20.478 I/A       ( 1703): incrementApaDataDownloadStoreStatus(latency = PT0.001S, appVersion = 13.17.16.23, status = NOT_FOUND, locale = *, fileGroupnames = apa_head_suggest, accountScoped = false, localGroupsAvailable = false, timeSinceSearchBoot = Optional[PT1M23.385S] (ONE_TO_FIVE_MINUTES), timeSinceDataDownloadInit = PT1M0.408S (ONE_TO_FIVE_MINUTES))
+11-20 00:41:20.479 I/A       ( 1703): incrementApaDataDownloadStoreStatusNotFound(appVersion = 13.17.16.23, locale = *, groupName = apa_head_suggest, accountScoped = false, foundGroups = 0, status = 0, localGroupsAvailable = false)
+11-20 00:41:20.705 I/.gms.persistent( 5361): Compiler allocated 5020KB to compile void bwhy.C(java.util.Set, long, dmuh, dmui, java.util.List, java.util.LinkedHashMap, dzew, bwhx, boolean)
+11-20 00:41:20.779 E/bwfc    ( 5361): Phenotype API error. Event # edax@511a01c1, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.779 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.dtdi#com.google.android.gms(change count changed - expected 3  but was 1)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.779 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.783 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.783 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.dtdi#com.google.android.gms(change count changed - expected 3  but was 1), resolution=null}]
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.783 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.784 E/bwfc    ( 5361): Phenotype API error. Event # edax@5f9e907e, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.784 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.magictether(change count changed - expected 1  but was 0)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.784 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.784 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.dtdi#com.google.android.gms, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.786 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.786 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.magictether(change count changed - expected 1  but was 0), resolution=null}]
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.786 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.786 E/bwfc    ( 5361): Phenotype API error. Event # edax@230b8475, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.786 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.magictether(change count changed - expected 1  but was 0)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.786 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.787 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.magictether, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.787 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.787 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.magictether(change count changed - expected 1  but was 0), resolution=null}]
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.787 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.787 W/MobStoreFlagStore( 5361): Failed to commit due to stale snapshot for com.google.android.gms.magictether, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.788 E/bwfc    ( 5361): Phenotype API error. Event # edax@86721f2d, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.788 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.maps#com.google.android.gms(change count changed - expected 3  but was 1)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.788 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.790 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.790 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.maps#com.google.android.gms(change count changed - expected 3  but was 1), resolution=null}]
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.790 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.794 E/bwfc    ( 5361): Phenotype API error. Event # edax@ce2b3102, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.794 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.backup(change count changed - expected 3  but was 2)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.794 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.794 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.794 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.backup(change count changed - expected 3  but was 2), resolution=null}]
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.794 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): Committing snapshot for com.google.android.gms.backup failed, retrying
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): java.util.concurrent.ExecutionException: aard: 29501: Stale snapshot for com.google.android.gms.backup(change count changed - expected 3  but was 2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at cfsz.p(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at cfsz.o(:com.google.android.gms@231818047@23.18.18 (190800-535401451):7)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at bwch.j(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at bwch.h(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at abfh.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):12)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at com.google.android.gms.common.config.PhenotypeUpdateOperation.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):15)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at zhv.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at hjm.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):3)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at hjl.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):11)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): Caused by: aard: 29501: Stale snapshot for com.google.android.gms.backup(change count changed - expected 3  but was 2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at abmc.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at aawv.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at aawv.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at bwen.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at bwff.j(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):10)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeFlagCommitter( 5361): 	... 1 more
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): At PhenotypeCommitHelper commitConfiguration failed com.google.android.gms.backup, retrying=[INVALID: format=%b, type=dnyo, value=true] [CONTEXT service_id=256 ]
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): java.util.concurrent.ExecutionException: aard: 29501: Stale snapshot for com.google.android.gms.backup(change count changed - expected 3  but was 2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at cfsz.p(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at cfsz.o(:com.google.android.gms@231818047@23.18.18 (190800-535401451):7)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at bwch.j(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at bwch.h(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at abfh.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):12)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at com.google.android.gms.common.config.PhenotypeUpdateOperation.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):15)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at zhv.onHandleIntent(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at hjm.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):3)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at hjl.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):11)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): Caused by: aard: 29501: Stale snapshot for com.google.android.gms.backup(change count changed - expected 3  but was 2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at abmc.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at aawv.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at aawv.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at bwen.a(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at bwff.j(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):10)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.795 W/PhenotypeCommitHelper( 5361): 	... 1 more
+11-20 00:41:20.796 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.maps#com.google.android.gms, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.797 E/bwfc    ( 5361): Phenotype API error. Event # edax@be78197, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.797 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.personalsafety(change count changed - expected 1  but was 0)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.797 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.798 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.798 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.personalsafety(change count changed - expected 1  but was 0), resolution=null}]
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.798 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.799 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.personalsafety, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.801 E/bwfc    ( 5361): Phenotype API error. Event # edax@64e34bbb, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.801 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.phonesky_recovery(change count changed - expected 1  but was 0)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.801 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.801 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.801 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.phonesky_recovery(change count changed - expected 1  but was 0), resolution=null}]
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.801 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.802 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.phonesky_recovery, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.802 E/bwfc    ( 5361): Phenotype API error. Event # edax@52dfecd5, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.802 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.vision(change count changed - expected 1  but was 0)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.802 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.806 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.806 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.vision(change count changed - expected 1  but was 0), resolution=null}]
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.806 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.808 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.vision, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.808 E/bwfc    ( 5361): Phenotype API error. Event # edax@b53b7ae0, EventCode: 5 [CONTEXT service_id=51 ]
+11-20 00:41:20.808 E/bwfc    ( 5361): bwdx: 29501: Stale snapshot for com.google.android.gms.trustagent.activeunlock.primary#com.google.android.gms(change count changed - expected 3  but was 1)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at bwfg.b(:com.google.android.gms@231818047@23.18.18 (190800-535401451):16)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at bwff.g(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):4)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.808 E/bwfc    ( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.808 W/AsyncOperation( 5361): operation=CommitToConfigurationOperationCall, opStatusCode=29501 [CONTEXT service_id=51 ]
+11-20 00:41:20.808 W/AsyncOperation( 5361): OperationException[Status{statusCode=Stale snapshot for com.google.android.gms.trustagent.activeunlock.primary#com.google.android.gms(change count changed - expected 3  but was 1), resolution=null}]
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at bwfc.e(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at bwfc.f(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at avsy.eo(:com.google.android.gms@231818047@23.18.18 (190800-535401451):1)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at avtf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):14)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at dfhf.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):2)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at aced.c(:com.google.android.gms@231818047@23.18.18 (190800-535401451):6)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at aced.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):8)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at acjn.run(:com.google.android.gms@231818047@23.18.18 (190800-535401451):0)
+11-20 00:41:20.808 W/AsyncOperation( 5361): 	at java.lang.Thread.run(Thread.java:1012)
+11-20 00:41:20.809 W/MobStoreFlagStore( 5427): Failed to commit due to stale snapshot for com.google.android.gms.trustagent.activeunlock.primary#com.google.android.gms, triggering flag update. Experiments may be delayed til next app start.
+11-20 00:41:20.891 W/.gms.persistent( 5361): Long monitor contention with owner [com.google.android.gms.chimera.container.intentoperation.PersistentIntentOperationChimeraService-Executor] processing com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener for action com.google.android.gms.phenotype.COMMITTED (5553) at void hjm.run()(:com.google.android.gms@231818047@23.18.18 (190800-535401451):3) waiters=0 in void hjm.run() for 14.355s
+11-20 00:41:20.899 D/ActivityManager(  518): sync unfroze 2597 com.google.android.tts for 3
+11-20 00:41:20.903 I/PhenotypeBackgroundRecv( 2597): Successfully updated snapshot for com.google.android.libraries.consentverifier#com.google.android.tts
+11-20 00:41:20.943 D/ActivityManager(  518): sync unfroze 1682 com.google.android.apps.youtube.music for 3
+11-20 00:41:20.954 I/PhenotypeBackgroundRecv( 1574): Skipping com.google.android.apps.wellbeing.device#com.google.android.apps.wellbeing which doesn't use ProcessStable flags.
+11-20 00:41:20.955 I/PhenotypeBackgroundRecv( 2597): Skipping com.google.android.gms.icing.mdd#com.google.android.tts which doesn't use ProcessStable flags.
+11-20 00:41:21.092 I/Bugle   ( 4254): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@c3a1141
+11-20 00:41:21.095 I/PhenotypeBackgroundRecv( 4254): Successfully updated snapshot for com.google.android.libraries.internal.growth.growthkit#com.google.android.apps.messaging
+11-20 00:41:21.098 I/Bugle   ( 4254): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@13bfb72
+11-20 00:41:21.099 I/PhenotypeBackgroundRecv( 4254): Skipping com.google.lighter.android#com.google.android.apps.messaging which doesn't use ProcessStable flags.
+11-20 00:41:21.104 I/Bugle   ( 4254): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@9bea779
+11-20 00:41:21.106 I/PhenotypeBackgroundRecv( 4254): Skipping com.google.android.gms.icing.mdd#com.google.android.apps.messaging which doesn't use ProcessStable flags.
+11-20 00:41:21.109 I/Bugle   ( 4254): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@3e26c6c
+11-20 00:41:21.110 I/PhenotypeBackgroundRecv( 4254): Successfully updated snapshot for com.google.android.libraries.notifications.platform#com.google.android.apps.messaging
+11-20 00:41:21.113 I/Bugle   ( 4254): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@e76203b
+11-20 00:41:21.114 I/PhenotypeBackgroundRecv( 4254): Skipping com.google.android.apps.messaging.auto#com.google.android.apps.messaging which doesn't use ProcessStable flags.
+11-20 00:41:21.181 I/PackageUpdateTaskChimer( 5361): Scheduling Phenotype config package catchup updates to be 86400 seconds from now (1795135281181) [CONTEXT service_id=51 ]
+11-20 00:41:21.218 D/BoundBrokerSvc( 5427): onUnbind: Intent { act=com.google.android.gms.checkin.START pkg=com.google.android.gms }
+11-20 00:41:21.432 D/BoundBrokerSvc( 5361): onUnbind: Intent { act=com.google.android.gms.clearcut.bootcount.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-20 00:41:21.590 D/BoundBrokerSvc( 5361): onUnbind: Intent { act=com.google.android.gms.libs.gmscorelogger.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }
+11-20 00:41:22.054 V/ContactsProvider( 1484): Scheduled notifyChange started.
+11-20 00:41:22.055 D/BluetoothPbapService( 1026):  onChange on contact uri 
+11-20 00:41:22.061 D/BluetoothPbapUtils( 1026): primaryVersionCounter = 0, secondaryVersionCounter=0
+11-20 00:41:22.077 D/BoundBrokerSvc( 5427): onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-20 00:41:22.078 D/BoundBrokerSvc( 5427): onUnbind: Intent { act=com.google.android.mdh.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-20 00:41:22.090 I/NetworkScheduler.Stats( 5361): Task com.google.android.gms/com.google.android.gms.icing.proxy.IcingInternalCorporaUpdateService started execution. cause:9 exec_start_elapsed_seconds: 122 [CONTEXT service_id=218 ]
+11-20 00:41:22.090 I/NetworkScheduler.Stats( 5361): Task com.google.android.gms/com.google.android.gms.icing.proxy.IcingInternalCorporaUpdateService finished executing. cause:9 result: 1 elapsed_millis: 10 uptime_millis: 10 exec_start_elapsed_seconds: 122 [CONTEXT service_id=218 ]
+11-20 00:41:22.103 D/BoundBrokerSvc( 5427): onUnbind: Intent { act=com.google.android.mdh.service.listener.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-20 00:41:22.135 D/BoundBrokerSvc( 5427): onUnbind: Intent { act=com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+11-20 00:41:22.387 I/logd    (    0): logdr: UID=2000 GID=2000 PID=5919 n tail=0 logMask=99 pid=0 start=0ns deadline=0ns
+11-20 00:41:22.290 D/BoundBrokerSvc( 5361): onUnbind: Intent { act=com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
