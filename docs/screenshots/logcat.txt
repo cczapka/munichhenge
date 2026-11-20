@@ -1,281 +1,284 @@
-11-20 01:08:56.469 I/SafetyLabelChangedBroadcastReceiver(  832): received broadcast packageName: de.munichhenge, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
-11-20 01:08:56.714 I/ActivityManager(  523): Force stopping de.munichhenge appid=10192 user=0: from pid 4232
-11-20 01:08:56.759 D/CarrierSvcBindHelper( 1042): onPackageAdded: de.munichhenge
-11-20 01:08:56.888 D/ImsResolver( 1042): maybeAddedImsService, packageName: de.munichhenge
-11-20 01:08:56.909 V/SplashScreenExceptionList(  523): SplashScreen checking exception for package de.munichhenge (target sdk:35) -> false
-11-20 01:08:56.943 V/WindowManagerShell(  831): Transition requested: android.os.BinderProxy@a9c1e5c TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity } baseActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} topActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} origActivity=null realActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} numActivities=1 lastActiveTime=50871 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@ce12565} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{65fe23a de.munichhenge.app.ui.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
-11-20 01:08:56.945 I/ActivityTaskManager(  523): START u0 {flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
-11-20 01:08:56.966 D/CoreBackPreview(  523): Window{1fd31ce u0 Splash Screen de.munichhenge}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@2be9cda, mPriority=0, mIsAnimationCallback=false}
-11-20 01:08:57.260 V/WindowManager(  523): Sent Transition #7 createdAt=11-20 01:08:56.902 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity } baseActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} topActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} origActivity=null realActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} numActivities=1 lastActiveTime=50871 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{45e2924 Task{d9da5a0 #8 type=standard A=10192:de.munichhenge}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{278ac8d de.munichhenge.app.ui.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
-11-20 01:08:57.260 V/WindowManager(  523):     info={id=7 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{45e2924 Task{d9da5a0 #8 type=standard A=10192:de.munichhenge}}} m=OPEN f=NONE leash=Surface(name=Task=8)/@0x9246cb6 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{4029e42 Task{a2c2a06 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xb6ec0e5 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
-11-20 01:08:57.262 I/de.munichhenge( 4314): Late-enabling -Xcheck:jni
-11-20 01:08:57.296 I/de.munichhenge( 4314): Using CollectorTypeCC GC.
-11-20 01:08:57.299 W/de.munichhenge( 4314): Unexpected CPU variant for x86: x86_64.
-11-20 01:08:57.299 W/de.munichhenge( 4314): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
-11-20 01:08:57.352 I/ActivityManager(  523): Start proc 4314:de.munichhenge/u0a192 for next-top-activity {de.munichhenge/de.munichhenge.app.ui.MainActivity}
-11-20 01:08:57.703 W/ziparchive( 4314): Unable to open '/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.dm': No such file or directory
-11-20 01:08:57.703 W/ziparchive( 4314): Unable to open '/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.dm': No such file or directory
-11-20 01:08:57.764 D/CarrierSvcBindHelper( 1042): onHandleForceStop: [de.munichhenge]
-11-20 01:08:57.764 D/CarrierSvcBindHelper( 1042): onPackageModified: de.munichhenge
-11-20 01:08:57.858 D/ImsResolver( 1042): maybeAddedImsService, packageName: de.munichhenge
-11-20 01:08:58.603 D/nativeloader( 4314): Configuring clns-6 for other apk /data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/lib/x86_64:/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/de.munichhenge
-11-20 01:08:58.624 V/GraphicsEnvironment( 4314): ANGLE GameManagerService for de.munichhenge: false
-11-20 01:08:58.624 V/GraphicsEnvironment( 4314): de.munichhenge is not listed in per-application setting
-11-20 01:08:58.970 E/JobScheduler.JobStatus(  523): App de.munichhenge became active but still in NEVER bucket
-11-20 01:08:59.275 I/AiAiEcho( 1634): AppFetcherImplV2 updateApps package:[de.munichhenge], userId:[0], reason:[package is added.].
-11-20 01:08:59.402 D/CoreBackPreview(  523): Window{b27731e u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@5d8e94b, mPriority=0, mIsAnimationCallback=false}
-11-20 01:08:59.555 I/AiAiEcho( 1634): AppFetcherImpl onPackageChanged de.munichhenge.
-11-20 01:08:59.573 I/AiAiEcho( 1634): AppIndexer Package:[de.munichhenge] UserProfile:[0] Enabled:[true].
-11-20 01:08:59.573 I/AiAiEcho( 1634): AppFetcherImplV2 updateApps package:[de.munichhenge], userId:[0], reason:[package is updated.].
-11-20 01:09:01.108 W/ziparchive(  523): Unable to open '/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.dm': No such file or directory
-11-20 01:09:01.115 I/ActivityTaskManager(  523): Displayed de.munichhenge/.app.ui.MainActivity for user 0: +4s200ms
-11-20 01:09:01.126 D/CoreBackPreview(  523): Window{1fd31ce u0 Splash Screen de.munichhenge EXITING}: Setting back callback null
-11-20 01:09:01.129 W/InputManager-JNI(  523): Input channel object '1fd31ce Splash Screen de.munichhenge (client)' was disposed without first being removed with the input manager!
-11-20 01:09:01.537 I/ImeTracker(  523): de.munichhenge:6c869bfa: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
-11-20 01:09:01.537 I/ImeTracker(  523): de.munichhenge:6c869bfa: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:09:01.574 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
-11-20 01:09:01.998 D/AndroidRuntime( 4482): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:02.026 I/AndroidRuntime( 4482): Using default boot image
-11-20 01:09:02.026 I/AndroidRuntime( 4482): Leaving lock profiling enabled
-11-20 01:09:02.384 D/AndroidRuntime( 4482): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:03.425 I/FontLog ( 1424): Package de.munichhenge has no metadata [CONTEXT service_id=132 ]
-11-20 01:09:03.466 I/BlockstoreStorage( 1474): Clearing Blockstore Data for package de.munichhenge [CONTEXT service_id=258 ]
-11-20 01:09:03.945 D/AndroidRuntime( 4482): Shutting down VM
-11-20 01:09:04.534 D/ProfileInstaller( 4314): Installing profile for de.munichhenge
-11-20 01:09:05.400 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{d5c1488 com.google.android.apps.messaging/10130} BLOCKED
-11-20 01:09:05.529 D/CarrierSvcBindHelper( 1042): onPackageModified: de.munichhenge
-11-20 01:09:05.616 D/ImsResolver( 1042): maybeAddedImsService, packageName: de.munichhenge
-11-20 01:09:05.820 I/AiAiEcho( 1634): AppFetcherImpl onPackageChanged de.munichhenge.
-11-20 01:09:05.824 I/AiAiEcho( 1634): AppIndexer Package:[de.munichhenge] UserProfile:[0] Enabled:[true].
-11-20 01:09:05.824 I/AiAiEcho( 1634): AppFetcherImplV2 updateApps package:[de.munichhenge], userId:[0], reason:[package is updated.].
-11-20 01:09:11.178 I/de.munichhenge( 4314): Compiler allocated 5086KB to compile kotlin.Unit de.munichhenge.app.ui.EventCardKt.EventCard$lambda$33(kotlin.jvm.functions.Function0, androidx.compose.runtime.MutableState, de.munichhenge.engine.HengeEvent, de.munichhenge.engine.Sightline, de.munichhenge.app.ui.AppViewModel, android.content.Context, boolean, java.time.Instant, java.lang.String, androidx.compose.foundation.layout.ColumnScope, androidx.compose.runtime.Composer, int)
-11-20 01:09:11.291 I/de.munichhenge( 4314): Background concurrent copying GC freed 332856(14MB) AllocSpace objects, 27(8512KB) LOS objects, 49% free, 10MB/21MB, paused 1.175ms,33us total 410.285ms
-11-20 01:09:14.241 D/AndroidRuntime( 4822): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:14.246 I/AndroidRuntime( 4822): Using default boot image
-11-20 01:09:14.246 I/AndroidRuntime( 4822): Leaving lock profiling enabled
-11-20 01:09:14.417 D/AndroidRuntime( 4822): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:15.702 D/AndroidRuntime( 4822): Shutting down VM
-11-20 01:09:15.961 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{e59c3b9 com.google.android.youtube/10139} BLOCKED
-11-20 01:09:15.961 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{ff0e3fe com.google.android.googlequicksearchbox/10132} BLOCKED
-11-20 01:09:15.961 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{37ca75f com.google.android.apps.messaging/10130} BLOCKED
-11-20 01:09:15.961 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{98c65ac com.google.android.as/10125} BLOCKED
-11-20 01:09:15.961 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{4266826 com.google.android.apps.maps/10154} BLOCKED
-11-20 01:09:15.962 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{6c9e275 com.google.android.contacts/10155} BLOCKED
-11-20 01:09:20.524 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{4b5fc00 com.google.android.settings.intelligence/10118} BLOCKED
-11-20 01:09:24.370 D/AndroidRuntime( 5130): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:24.377 I/AndroidRuntime( 5130): Using default boot image
-11-20 01:09:24.377 I/AndroidRuntime( 5130): Leaving lock profiling enabled
-11-20 01:09:24.547 D/AndroidRuntime( 5130): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:25.762 D/AndroidRuntime( 5130): Shutting down VM
-11-20 01:09:26.912 D/AndroidRuntime( 5248): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:26.929 I/AndroidRuntime( 5248): Using default boot image
-11-20 01:09:26.929 I/AndroidRuntime( 5248): Leaving lock profiling enabled
-11-20 01:09:27.191 D/AndroidRuntime( 5248): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:27.374 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{ea2fb67 com.google.android.as/10125} BLOCKED
-11-20 01:09:27.374 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{ca89d14 com.google.android.contacts/10155} BLOCKED
-11-20 01:09:28.329 D/AndroidRuntime( 5248): Shutting down VM
-11-20 01:09:29.363 D/AndroidRuntime( 5297): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:29.366 I/AndroidRuntime( 5297): Using default boot image
-11-20 01:09:29.367 I/AndroidRuntime( 5297): Leaving lock profiling enabled
-11-20 01:09:29.419 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{38edb2f com.google.android.contacts/10155} BLOCKED
-11-20 01:09:29.463 D/AndroidRuntime( 5297): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:30.587 D/AndroidRuntime( 5297): Shutting down VM
-11-20 01:09:39.931 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{82ed4f2 com.google.android.contacts/10155} BLOCKED
-11-20 01:09:46.572 D/AndroidRuntime( 5863): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:46.576 I/AndroidRuntime( 5863): Using default boot image
-11-20 01:09:46.576 I/AndroidRuntime( 5863): Leaving lock profiling enabled
-11-20 01:09:46.657 D/AndroidRuntime( 5863): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:47.629 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{e30eb9c com.google.android.contacts/10155} BLOCKED
-11-20 01:09:47.855 D/AndroidRuntime( 5863): Shutting down VM
-11-20 01:09:55.619 D/AndroidRuntime( 5913): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:09:55.622 I/AndroidRuntime( 5913): Using default boot image
-11-20 01:09:55.622 I/AndroidRuntime( 5913): Leaving lock profiling enabled
-11-20 01:09:55.689 D/AndroidRuntime( 5913): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:09:56.754 D/AndroidRuntime( 5913): Shutting down VM
-11-20 01:09:57.638 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{e7fec0 com.google.android.contacts/10155} BLOCKED
-11-20 01:09:57.956 I/de.munichhenge( 4314): Background young concurrent copying GC freed 160933(6009KB) AllocSpace objects, 7(192KB) LOS objects, 18% free, 17MB/21MB, paused 12us,10us total 179.756ms
-11-20 01:09:58.292 I/de.munichhenge( 4314): Background concurrent copying GC freed 68820(6525KB) AllocSpace objects, 1(24KB) LOS objects, 49% free, 16MB/33MB, paused 22us,16us total 257.266ms
-11-20 01:09:58.741 I/AppsFilter(  523): interaction: PackageSetting{eec982b de.munichhenge/10192} -> PackageSetting{9b9ca0 com.google.android.googlequicksearchbox/10132} BLOCKED
-11-20 01:10:13.999 D/AndroidRuntime( 6040): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:14.002 I/AndroidRuntime( 6040): Using default boot image
-11-20 01:10:14.002 I/AndroidRuntime( 6040): Leaving lock profiling enabled
-11-20 01:10:14.098 D/AndroidRuntime( 6040): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:15.136 D/AndroidRuntime( 6040): Shutting down VM
-11-20 01:10:16.075 D/AndroidRuntime( 6067): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:16.078 I/AndroidRuntime( 6067): Using default boot image
-11-20 01:10:16.078 I/AndroidRuntime( 6067): Leaving lock profiling enabled
-11-20 01:10:16.142 D/AndroidRuntime( 6067): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:17.357 D/AndroidRuntime( 6067): Shutting down VM
-11-20 01:10:18.305 D/CoreBackPreview(  523): Window{a380b52 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@ef2fd4c, mPriority=0, mIsAnimationCallback=false}
-11-20 01:10:18.630 I/ImeTracker(  523): de.munichhenge:3c54e2fe: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
-11-20 01:10:18.630 I/ImeTracker(  523): de.munichhenge:3c54e2fe: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:10:18.649 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
-11-20 01:10:20.986 D/CoreBackPreview(  523): Window{a380b52 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback null
-11-20 01:10:21.007 W/InputManager-JNI(  523): Input channel object 'a380b52 de.munichhenge/de.munichhenge.app.ui.MainActivity (client)' was disposed without first being removed with the input manager!
-11-20 01:10:21.057 I/ImeTracker(  523): de.munichhenge:e7f96764: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
-11-20 01:10:21.057 I/ImeTracker(  523): de.munichhenge:e7f96764: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:10:21.059 D/AndroidRuntime( 6120): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:21.059 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
-11-20 01:10:21.063 I/AndroidRuntime( 6120): Using default boot image
-11-20 01:10:21.063 I/AndroidRuntime( 6120): Leaving lock profiling enabled
-11-20 01:10:21.157 D/AndroidRuntime( 6120): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:22.266 D/AndroidRuntime( 6120): Shutting down VM
-11-20 01:10:26.005 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, true)
-11-20 01:10:26.027 I/ActivityManager(  523): Force stopping de.munichhenge appid=10192 user=0: from pid 6167
-11-20 01:10:26.053 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, true)
-11-20 01:10:26.055 I/ActivityManager(  523): Killing 4314:de.munichhenge/u0a192 (adj 0): stop de.munichhenge due to from pid 6167
-11-20 01:10:26.055 W/ActivityTaskManager(  523): Force removing ActivityRecord{60eb907 u0 de.munichhenge/.app.ui.MainActivity t8 f}}: app died, no saved state
-11-20 01:10:26.116 D/CarrierSvcBindHelper( 1042): onHandleForceStop: [de.munichhenge]
-11-20 01:10:26.136 I/WindowManager(  523): WIN DEATH: Window{b27731e u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}
-11-20 01:10:26.136 W/InputManager-JNI(  523): Input channel object 'b27731e de.munichhenge/de.munichhenge.app.ui.MainActivity (client)' was disposed without first being removed with the input manager!
-11-20 01:10:26.141 I/ImeTracker(  523): de.munichhenge:ade3101f: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_REMOVE_CLIENT
-11-20 01:10:26.141 I/ImeTracker(  523): de.munichhenge:ade3101f: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:10:26.177 V/ActivityManager(  523): Got obituary of 4314:de.munichhenge
-11-20 01:10:26.213 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, true)
-11-20 01:10:26.231 V/SplashScreenExceptionList(  523): SplashScreen checking exception for package de.munichhenge (target sdk:35) -> false
-11-20 01:10:26.233 I/ActivityTaskManager(  523): Add Task{d9da5a0 #8 type=standard A=10192:de.munichhenge} to hidden list because adding Task{379b560 #9 type=standard A=10192:de.munichhenge}
-11-20 01:10:26.235 I/ActivityTaskManager(  523): START u0 {flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
-11-20 01:10:26.245 I/ActivityManager(  523): Start proc 6182:de.munichhenge/u0a192 for next-top-activity {de.munichhenge/de.munichhenge.app.ui.MainActivity}
-11-20 01:10:26.264 D/CoreBackPreview(  523): Window{c2ea942 u0 Splash Screen de.munichhenge}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@d884b89, mPriority=0, mIsAnimationCallback=false}
-11-20 01:10:26.287 I/de.munichhenge( 6182): Late-enabling -Xcheck:jni
-11-20 01:10:26.327 I/de.munichhenge( 6182): Using CollectorTypeCC GC.
-11-20 01:10:26.328 W/de.munichhenge( 6182): Unexpected CPU variant for x86: x86_64.
-11-20 01:10:26.328 W/de.munichhenge( 6182): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
-11-20 01:10:26.440 D/CompatibilityChangeReporter( 6182): Compat change id reported: 171979766; UID 10192; state: ENABLED
-11-20 01:10:26.440 D/CompatibilityChangeReporter( 6182): Compat change id reported: 242716250; UID 10192; state: ENABLED
-11-20 01:10:26.498 W/ziparchive( 6182): Unable to open '/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.dm': No such file or directory
-11-20 01:10:26.498 W/ziparchive( 6182): Unable to open '/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.dm': No such file or directory
-11-20 01:10:26.503 V/WindowManager(  523):     info={id=8 t=CHANGE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{813c220 Task{379b560 #9 type=standard A=10192:de.munichhenge}}} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=9)/@0xa6dc652 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{45e2924 Task{d9da5a0 #8 type=standard A=10192:de.munichhenge}}} m=CLOSE f=NONE leash=Surface(name=Task=8)/@0x9246cb6 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{a4f97d9 Display{#0 state=ON size=1080x2400 ROTATION_0}}} m=CHANGE f=IS_DISPLAY leash=Surface(name=WindowedMagnification:0:31)/@0xe189382 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
-11-20 01:10:27.098 D/nativeloader( 6182): Configuring clns-6 for other apk /data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/lib/x86_64:/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/de.munichhenge
-11-20 01:10:27.103 V/GraphicsEnvironment( 6182): Currently set values for:
-11-20 01:10:27.103 V/GraphicsEnvironment( 6182):   angle_gl_driver_selection_pkgs=[]
-11-20 01:10:27.103 V/GraphicsEnvironment( 6182):   angle_gl_driver_selection_values=[]
-11-20 01:10:27.104 V/GraphicsEnvironment( 6182): ANGLE GameManagerService for de.munichhenge: false
-11-20 01:10:27.104 V/GraphicsEnvironment( 6182): de.munichhenge is not listed in per-application setting
-11-20 01:10:27.104 V/GraphicsEnvironment( 6182): Neither updatable production driver nor prerelease driver is supported.
-11-20 01:10:27.113 D/WM-WrkMgrInitializer( 6182): Initializing WorkManager with default configuration.
-11-20 01:10:27.126 D/WM-PackageManagerHelper( 6182): Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
-11-20 01:10:27.126 D/WM-Schedulers( 6182): Created SystemJobScheduler and enabled SystemJobService
-11-20 01:10:27.136 D/WM-ForceStopRunnable( 6182): The default process name was not specified.
-11-20 01:10:27.137 D/WM-ForceStopRunnable( 6182): Performing cleanup operations.
-11-20 01:10:27.151 D/WM-SystemJobScheduler( 6182): Reconciling jobs
-11-20 01:10:27.153 D/CompatibilityChangeReporter( 6182): Compat change id reported: 160794467; UID 10192; state: ENABLED
-11-20 01:10:27.154 D/WM-ForceStopRunnable( 6182): Application was force-stopped, rescheduling.
-11-20 01:10:27.166 D/CompatibilityChangeReporter( 6182): Compat change id reported: 194532703; UID 10192; state: ENABLED
-11-20 01:10:27.169 D/CompatibilityChangeReporter( 6182): Compat change id reported: 253665015; UID 10192; state: ENABLED
-11-20 01:10:27.169 D/WM-SystemJobScheduler( 6182): Scheduling work ID b1c07182-3a5a-442e-8c20-4efd29b6ca2dJob ID 0
-11-20 01:10:27.174 D/libEGL  ( 6182): loaded /vendor/lib64/egl/libEGL_emulation.so
-11-20 01:10:27.175 D/libEGL  ( 6182): loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
-11-20 01:10:27.176 D/libEGL  ( 6182): loaded /vendor/lib64/egl/libGLESv2_emulation.so
-11-20 01:10:27.201 D/CompatibilityChangeReporter( 6182): Compat change id reported: 237531167; UID 10192; state: DISABLED
-11-20 01:10:27.202 W/OpenGLRenderer( 6182): Unknown dataspace 0
-11-20 01:10:27.242 D/WM-GreedyScheduler( 6182): Cancelling work ID b1c07182-3a5a-442e-8c20-4efd29b6ca2d
-11-20 01:10:27.285 D/WM-SystemJobScheduler( 6182): Scheduling work ID b1c07182-3a5a-442e-8c20-4efd29b6ca2dJob ID 1
-11-20 01:10:27.290 D/WM-PackageManagerHelper( 6182): Skipping component enablement for androidx.work.impl.background.systemalarm.RescheduleReceiver
-11-20 01:10:27.354 D/CoreBackPreview(  523): Window{8db6e57 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@9d10029, mPriority=0, mIsAnimationCallback=false}
-11-20 01:10:27.540 W/OpenGLRenderer( 6182): Failed to initialize 101010-2 format, error = EGL_SUCCESS
-11-20 01:10:27.574 I/Gralloc4( 6182): mapper 4.x is not supported
-11-20 01:10:27.965 W/ziparchive(  523): Unable to open '/data/app/~~cnAdzzePohS0OGv5zAaifQ==/de.munichhenge-yBMoQsY_-mbe1_Dk0MCrmg==/base.dm': No such file or directory
-11-20 01:10:27.969 I/OpenGLRenderer( 6182): Davey! duration=849ms; Flags=1, FrameTimelineVsyncId=16862, IntendedVsync=141065842742, Vsync=141149176072, InputEventId=0, HandleInputStart=141158155156, AnimationStart=141158157880, PerformTraversalsStart=141158219592, DrawStart=141536560922, FrameDeadline=141082509408, FrameInterval=141158127685, FrameStartTime=16666666, SyncQueued=141554609555, SyncStart=141554893368, IssueDrawCommandsStart=141557400212, SwapBuffers=141796008584, FrameCompleted=141915987875, DequeueBufferDuration=3385, QueueBufferDuration=231305, GpuCompleted=141915987875, SwapBuffersCompleted=141904723264, DisplayPresentTime=0, CommandSubmissionCompleted=141796008584, 
-11-20 01:10:27.985 I/ActivityTaskManager(  523): Displayed de.munichhenge/.app.ui.MainActivity for user 0: +1s755ms
-11-20 01:10:27.993 D/CoreBackPreview(  523): Window{c2ea942 u0 Splash Screen de.munichhenge EXITING}: Setting back callback null
-11-20 01:10:27.993 W/InputManager-JNI(  523): Input channel object 'c2ea942 Splash Screen de.munichhenge (client)' was disposed without first being removed with the input manager!
-11-20 01:10:28.002 I/Choreographer( 6182): Skipped 45 frames!  The application may be doing too much work on its main thread.
-11-20 01:10:28.096 D/AndroidRuntime( 6214): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:28.101 I/AndroidRuntime( 6214): Using default boot image
-11-20 01:10:28.101 I/AndroidRuntime( 6214): Leaving lock profiling enabled
-11-20 01:10:28.175 I/ImeTracker(  523): de.munichhenge:611b8615: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
-11-20 01:10:28.175 I/ImeTracker(  523): de.munichhenge:611b8615: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:10:28.180 I/OpenGLRenderer( 6182): Davey! duration=910ms; Flags=0, FrameTimelineVsyncId=16885, IntendedVsync=141199176070, Vsync=141949176040, InputEventId=0, HandleInputStart=141954583714, AnimationStart=141954586598, PerformTraversalsStart=142055077940, DrawStart=142081363301, FrameDeadline=141949176040, FrameInterval=141954392388, FrameStartTime=16666666, SyncQueued=142088308007, SyncStart=142088333375, IssueDrawCommandsStart=142088403359, SwapBuffers=142099422741, FrameCompleted=142110169430, DequeueBufferDuration=5177, QueueBufferDuration=3012532, GpuCompleted=142110108299, SwapBuffersCompleted=142110169430, DisplayPresentTime=0, CommandSubmissionCompleted=142099422741, 
-11-20 01:10:28.194 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
-11-20 01:10:28.214 D/AndroidRuntime( 6214): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:29.316 D/EGL_emulation( 6182): app_time_stats: avg=192.04ms min=24.96ms max=522.07ms count=7
-11-20 01:10:29.438 D/AndroidRuntime( 6214): Shutting down VM
-11-20 01:10:32.659 D/ProfileInstaller( 6182): Installing profile for de.munichhenge
-11-20 01:10:36.014 D/EGL_emulation( 6182): app_time_stats: avg=6697.75ms min=6697.75ms max=6697.75ms count=1
-11-20 01:10:36.272 I/de.munichhenge( 6182): Compiler allocated 5086KB to compile kotlin.Unit de.munichhenge.app.ui.EventCardKt.EventCard$lambda$33(kotlin.jvm.functions.Function0, androidx.compose.runtime.MutableState, de.munichhenge.engine.HengeEvent, de.munichhenge.engine.Sightline, de.munichhenge.app.ui.AppViewModel, android.content.Context, boolean, java.time.Instant, java.lang.String, androidx.compose.foundation.layout.ColumnScope, androidx.compose.runtime.Composer, int)
-11-20 01:10:37.396 I/AppsFilter(  523): interaction: PackageSetting{5925886 de.munichhenge/10192} -> PackageSetting{3ecb547 com.google.android.contacts/10155} BLOCKED
-11-20 01:10:39.220 D/AndroidRuntime( 6332): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:39.223 I/AndroidRuntime( 6332): Using default boot image
-11-20 01:10:39.223 I/AndroidRuntime( 6332): Leaving lock profiling enabled
-11-20 01:10:39.290 D/AndroidRuntime( 6332): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:40.422 D/AndroidRuntime( 6332): Shutting down VM
-11-20 01:10:41.427 D/EGL_emulation( 6182): app_time_stats: avg=383.36ms min=24.28ms max=4834.44ms count=14
-11-20 01:10:45.529 D/EGL_emulation( 6182): app_time_stats: avg=677.14ms min=20.50ms max=3839.98ms count=6
-11-20 01:10:47.362 I/AppsFilter(  523): interaction: PackageSetting{5925886 de.munichhenge/10192} -> PackageSetting{6fe0774 com.google.android.contacts/10155} BLOCKED
-11-20 01:10:48.648 D/AndroidRuntime( 6404): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:48.651 I/AndroidRuntime( 6404): Using default boot image
-11-20 01:10:48.651 I/AndroidRuntime( 6404): Leaving lock profiling enabled
-11-20 01:10:48.709 D/AndroidRuntime( 6404): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:49.839 D/AndroidRuntime( 6404): Shutting down VM
-11-20 01:10:50.737 D/AndroidRuntime( 6428): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:50.740 I/AndroidRuntime( 6428): Using default boot image
-11-20 01:10:50.740 I/AndroidRuntime( 6428): Leaving lock profiling enabled
-11-20 01:10:50.792 D/EGL_emulation( 6182): app_time_stats: avg=370.07ms min=23.88ms max=4736.02ms count=14
-11-20 01:10:50.837 D/AndroidRuntime( 6428): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:51.995 D/AndroidRuntime( 6428): Shutting down VM
-11-20 01:10:52.924 D/AndroidRuntime( 6451): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:10:52.928 I/AndroidRuntime( 6451): Using default boot image
-11-20 01:10:52.928 I/AndroidRuntime( 6451): Leaving lock profiling enabled
-11-20 01:10:52.931 W/WindowOnBackDispatcher( 6182): OnBackInvokedCallback is not enabled for the application.
-11-20 01:10:52.931 W/WindowOnBackDispatcher( 6182): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
-11-20 01:10:52.987 D/EGL_emulation( 6182): app_time_stats: avg=731.70ms min=47.16ms max=2100.25ms count=3
-11-20 01:10:53.017 D/AndroidRuntime( 6451): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:10:54.228 D/AndroidRuntime( 6451): Shutting down VM
-11-20 01:10:58.035 D/EGL_emulation( 6182): app_time_stats: avg=839.92ms min=21.96ms max=4182.52ms count=6
-11-20 01:10:59.469 D/EGL_emulation( 6182): app_time_stats: avg=1433.91ms min=1433.91ms max=1433.91ms count=1
-11-20 01:11:03.647 D/EGL_emulation( 6182): app_time_stats: avg=1044.47ms min=49.37ms max=3924.64ms count=4
-11-20 01:11:06.768 D/EGL_emulation( 6182): app_time_stats: avg=238.39ms min=21.83ms max=2672.35ms count=13
-11-20 01:11:09.964 D/EGL_emulation( 6182): app_time_stats: avg=261.87ms min=15.92ms max=2714.97ms count=12
-11-20 01:11:09.989 D/AndroidRuntime( 6535): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:11:09.997 I/AndroidRuntime( 6535): Using default boot image
-11-20 01:11:09.997 I/AndroidRuntime( 6535): Leaving lock profiling enabled
-11-20 01:11:10.069 D/AndroidRuntime( 6535): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:11:11.253 D/AndroidRuntime( 6535): Shutting down VM
-11-20 01:11:12.131 D/EGL_emulation( 6182): app_time_stats: avg=722.41ms min=109.47ms max=1945.24ms count=3
-11-20 01:11:15.333 D/EGL_emulation( 6182): app_time_stats: avg=210.09ms min=22.47ms max=2660.72ms count=15
-11-20 01:11:18.981 D/AndroidRuntime( 6584): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:11:18.983 I/AndroidRuntime( 6584): Using default boot image
-11-20 01:11:18.983 I/AndroidRuntime( 6584): Leaving lock profiling enabled
-11-20 01:11:19.039 D/AndroidRuntime( 6584): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:11:20.196 D/AndroidRuntime( 6584): Shutting down VM
-11-20 01:11:21.065 D/EGL_emulation( 6182): app_time_stats: avg=235.99ms min=24.37ms max=4735.51ms count=24
-11-20 01:11:21.075 I/OsmDroid( 6182): Using tile source: Mapnik
-11-20 01:11:21.076 I/OsmDroid( 6182): Tile cache increased from 0 to 9
-11-20 01:11:21.100 D/CompatibilityChangeReporter( 6182): Compat change id reported: 210923482; UID 10192; state: ENABLED
-11-20 01:11:37.414 D/AndroidRuntime( 6657): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:11:37.416 I/AndroidRuntime( 6657): Using default boot image
-11-20 01:11:37.416 I/AndroidRuntime( 6657): Leaving lock profiling enabled
-11-20 01:11:37.471 D/AndroidRuntime( 6657): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:11:38.499 D/AndroidRuntime( 6657): Shutting down VM
-11-20 01:11:39.384 D/EGL_emulation( 6182): app_time_stats: avg=4579.17ms min=53.43ms max=17572.86ms count=4
-11-20 01:11:39.412 D/AndroidRuntime( 6680): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:11:39.416 I/AndroidRuntime( 6680): Using default boot image
-11-20 01:11:39.416 I/AndroidRuntime( 6680): Leaving lock profiling enabled
-11-20 01:11:39.491 D/AndroidRuntime( 6680): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:11:40.703 D/AndroidRuntime( 6680): Shutting down VM
-11-20 01:11:41.579 W/WindowOnBackDispatcher( 6182): OnBackInvokedCallback is not enabled for the application.
-11-20 01:11:41.579 W/WindowOnBackDispatcher( 6182): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
-11-20 01:11:41.592 W/WindowOnBackDispatcher( 6182): OnBackInvokedCallback is not enabled for the application.
-11-20 01:11:41.592 W/WindowOnBackDispatcher( 6182): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
-11-20 01:11:41.633 D/EGL_emulation( 6182): app_time_stats: avg=749.31ms min=72.18ms max=2030.63ms count=3
-11-20 01:11:41.671 D/CoreBackPreview(  523): Window{174861 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@8b979e3, mPriority=0, mIsAnimationCallback=false}
-11-20 01:11:42.029 I/ImeTracker(  523): de.munichhenge:ce7f1d5d: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
-11-20 01:11:42.029 I/ImeTracker(  523): de.munichhenge:ce7f1d5d: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:11:42.033 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
-11-20 01:11:44.293 D/EGL_emulation( 6182): app_time_stats: avg=639.44ms min=12.75ms max=2211.37ms count=4
-11-20 01:11:44.303 W/WindowOnBackDispatcher( 6182): sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@75a09ae
-11-20 01:11:44.303 D/CoreBackPreview(  523): Window{174861 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback null
-11-20 01:11:44.314 W/InputManager-JNI(  523): Input channel object '174861 de.munichhenge/de.munichhenge.app.ui.MainActivity (client)' was disposed without first being removed with the input manager!
-11-20 01:11:44.350 I/ImeTracker(  523): de.munichhenge:6e92ebee: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
-11-20 01:11:44.351 I/ImeTracker(  523): de.munichhenge:6e92ebee: onCancelled at PHASE_SERVER_SHOULD_HIDE
-11-20 01:11:44.354 D/AndroidRuntime( 6722): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-11-20 01:11:44.355 I/GoogleInputMethodService( 1562): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
-11-20 01:11:44.358 I/AndroidRuntime( 6722): Using default boot image
-11-20 01:11:44.358 I/AndroidRuntime( 6722): Leaving lock profiling enabled
-11-20 01:11:44.438 D/AndroidRuntime( 6722): Calling main entry com.android.commands.uiautomator.Launcher
-11-20 01:11:45.506 D/AndroidRuntime( 6722): Shutting down VM
-11-20 01:11:46.375 W/WindowOnBackDispatcher( 6182): OnBackInvokedCallback is not enabled for the application.
-11-20 01:11:46.375 W/WindowOnBackDispatcher( 6182): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
-11-20 01:11:46.391 D/EGL_emulation( 6182): app_time_stats: avg=1583.72ms min=140.01ms max=4336.50ms count=3
-11-20 01:11:49.071 D/EGL_emulation( 6182): app_time_stats: avg=893.35ms min=34.54ms max=2590.85ms count=3
+11-20 01:25:14.714 D/ImsResolver( 1039): maybeAddedImsService, packageName: de.munichhenge
+11-20 01:25:14.756 I/ActivityManager(  520): Force stopping de.munichhenge appid=10192 user=0: from pid 4575
+11-20 01:25:14.779 I/AiAiEcho( 1632): AppFetcherImpl onPackageChanged de.munichhenge.
+11-20 01:25:14.781 D/CarrierSvcBindHelper( 1039): onHandleForceStop: [de.munichhenge]
+11-20 01:25:14.784 I/AiAiEcho( 1632): AppIndexer Package:[de.munichhenge] UserProfile:[0] Enabled:[true].
+11-20 01:25:14.785 I/AiAiEcho( 1632): AppFetcherImplV2 updateApps package:[de.munichhenge], userId:[0], reason:[package is updated.].
+11-20 01:25:14.868 V/SplashScreenExceptionList(  520): SplashScreen checking exception for package de.munichhenge (target sdk:35) -> false
+11-20 01:25:14.870 I/ActivityTaskManager(  520): START u0 {flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+11-20 01:25:14.920 I/ActivityManager(  520): Start proc 4584:de.munichhenge/u0a192 for next-top-activity {de.munichhenge/de.munichhenge.app.ui.MainActivity}
+11-20 01:25:14.921 V/WindowManagerShell(  828): Transition requested: android.os.BinderProxy@e123533 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity } baseActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} topActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} origActivity=null realActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} numActivities=1 lastActiveTime=59617 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@26860f0} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{d9a9669 de.munichhenge.app.ui.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{b52a654 com.google.android.youtube/10139} BLOCKED
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{9d699fd com.google.android.googlequicksearchbox/10132} BLOCKED
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{9f8d6f2 com.google.android.apps.messaging/10130} BLOCKED
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{19d7143 com.google.android.devicelockcontroller/10179} BLOCKED
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{9971eac com.google.android.apps.maps/10154} BLOCKED
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{55dd3c0 com.google.android.rkpdapp/10190} BLOCKED
+11-20 01:25:14.958 I/AppsFilter(  520): interaction: PackageSetting{d7661a7 de.munichhenge/10192} -> PackageSetting{ef696e3 com.google.android.projection.gearhead/10123} BLOCKED
+11-20 01:25:14.963 I/de.munichhenge( 4584): Late-enabling -Xcheck:jni
+11-20 01:25:14.988 I/de.munichhenge( 4584): Using CollectorTypeCC GC.
+11-20 01:25:14.988 W/de.munichhenge( 4584): Unexpected CPU variant for x86: x86_64.
+11-20 01:25:14.988 W/de.munichhenge( 4584): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-20 01:25:15.208 D/CoreBackPreview(  520): Window{a162a08 u0 Splash Screen de.munichhenge}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@e3dbcd3, mPriority=0, mIsAnimationCallback=false}
+11-20 01:25:15.274 W/ziparchive( 4584): Unable to open '/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.dm': No such file or directory
+11-20 01:25:15.274 W/ziparchive( 4584): Unable to open '/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.dm': No such file or directory
+11-20 01:25:15.419 V/WindowManager(  520): Sent Transition #7 createdAt=11-20 01:25:14.837 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity } baseActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} topActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} origActivity=null realActivity=ComponentInfo{de.munichhenge/de.munichhenge.app.ui.MainActivity} numActivities=1 lastActiveTime=59617 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{30f661f Task{cf42560 #8 type=standard A=10192:de.munichhenge}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 128 - 0, 0) topActivityInfo=ActivityInfo{9a61d6c de.munichhenge.app.ui.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-20 01:25:15.420 V/WindowManager(  520):     info={id=7 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{30f661f Task{cf42560 #8 type=standard A=10192:de.munichhenge}}} m=OPEN f=NONE leash=Surface(name=Task=8)/@0x3c33479 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{6399f35 Task{a3b2e31 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xf06edff sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+11-20 01:25:16.096 I/FontLog ( 1426): Package de.munichhenge has no metadata [CONTEXT service_id=132 ]
+11-20 01:25:16.275 I/BlockstoreStorage( 1481): Clearing Blockstore Data for package de.munichhenge [CONTEXT service_id=258 ]
+11-20 01:25:16.323 D/nativeloader( 4584): Configuring clns-6 for other apk /data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/lib/x86_64:/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/de.munichhenge
+11-20 01:25:16.332 V/GraphicsEnvironment( 4584): ANGLE GameManagerService for de.munichhenge: false
+11-20 01:25:16.332 V/GraphicsEnvironment( 4584): de.munichhenge is not listed in per-application setting
+11-20 01:25:17.122 D/CoreBackPreview(  520): Window{e1bb9d4 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@745f361, mPriority=0, mIsAnimationCallback=false}
+11-20 01:25:18.184 W/ziparchive(  520): Unable to open '/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.dm': No such file or directory
+11-20 01:25:18.191 I/ActivityTaskManager(  520): Displayed de.munichhenge/.app.ui.MainActivity for user 0: +3s349ms
+11-20 01:25:18.274 W/InputManager-JNI(  520): Input channel object 'a162a08 Splash Screen de.munichhenge (client)' was disposed without first being removed with the input manager!
+11-20 01:25:18.910 D/AndroidRuntime( 4660): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:25:18.931 I/AndroidRuntime( 4660): Using default boot image
+11-20 01:25:18.933 I/AndroidRuntime( 4660): Leaving lock profiling enabled
+11-20 01:25:19.313 D/AndroidRuntime( 4660): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:25:20.474 D/AndroidRuntime( 4660): Shutting down VM
+11-20 01:25:22.073 I/ImeTracker(  520): de.munichhenge:e3bd9c76: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-20 01:25:22.073 I/ImeTracker(  520): de.munichhenge:e3bd9c76: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:25:22.104 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
+11-20 01:25:22.363 D/ProfileInstaller( 4584): Installing profile for de.munichhenge
+11-20 01:25:23.670 D/AndroidRuntime( 4826): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:25:23.679 I/AndroidRuntime( 4826): Using default boot image
+11-20 01:25:23.681 I/AndroidRuntime( 4826): Leaving lock profiling enabled
+11-20 01:25:23.800 D/AndroidRuntime( 4826): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:25:25.182 D/AndroidRuntime( 4826): Shutting down VM
+11-20 01:25:26.364 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{8067471 com.google.android.apps.messaging/10130} BLOCKED
+11-20 01:25:26.364 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{2a03256 com.google.android.contacts/10155} BLOCKED
+11-20 01:25:30.102 D/CarrierSvcBindHelper( 1039): onPackageModified: de.munichhenge
+11-20 01:25:30.106 D/ImsResolver( 1039): maybeAddedImsService, packageName: de.munichhenge
+11-20 01:25:30.684 I/AiAiEcho( 1632): AppFetcherImpl onPackageChanged de.munichhenge.
+11-20 01:25:30.685 I/AiAiEcho( 1632): AppIndexer Package:[de.munichhenge] UserProfile:[0] Enabled:[true].
+11-20 01:25:30.685 I/AiAiEcho( 1632): AppFetcherImplV2 updateApps package:[de.munichhenge], userId:[0], reason:[package is updated.].
+11-20 01:25:32.078 I/de.munichhenge( 4584): Compiler allocated 5094KB to compile kotlin.Unit de.munichhenge.app.ui.EventCardKt.EventCard$lambda$33(kotlin.jvm.functions.Function0, androidx.compose.runtime.MutableState, de.munichhenge.engine.HengeEvent, de.munichhenge.engine.Sightline, de.munichhenge.app.ui.AppViewModel, android.content.Context, boolean, java.time.Instant, java.lang.String, androidx.compose.foundation.layout.ColumnScope, androidx.compose.runtime.Composer, int)
+11-20 01:25:32.546 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{24263fe com.google.android.settings.intelligence/10118} BLOCKED
+11-20 01:25:35.860 D/AndroidRuntime( 5236): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:25:35.874 I/AndroidRuntime( 5236): Using default boot image
+11-20 01:25:35.877 I/AndroidRuntime( 5236): Leaving lock profiling enabled
+11-20 01:25:36.217 D/AndroidRuntime( 5236): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:25:36.414 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{23a73fa com.google.android.googlequicksearchbox/10132} BLOCKED
+11-20 01:25:36.414 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{f95bdab com.google.android.apps.messaging/10130} BLOCKED
+11-20 01:25:36.414 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{fce0c08 com.google.android.as/10126} BLOCKED
+11-20 01:25:36.414 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{895bfa1 com.google.android.gm/10143} BLOCKED
+11-20 01:25:36.414 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{fabd5c6 com.google.android.contacts/10155} BLOCKED
+11-20 01:25:37.588 D/AndroidRuntime( 5236): Shutting down VM
+11-20 01:25:44.408 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{7c955bb com.google.android.contacts/10155} BLOCKED
+11-20 01:25:46.425 D/AndroidRuntime( 5713): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:25:46.436 I/AndroidRuntime( 5713): Using default boot image
+11-20 01:25:46.436 I/AndroidRuntime( 5713): Leaving lock profiling enabled
+11-20 01:25:46.600 D/AndroidRuntime( 5713): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:25:47.719 D/AndroidRuntime( 5713): Shutting down VM
+11-20 01:25:48.712 D/AndroidRuntime( 5737): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:25:48.715 I/AndroidRuntime( 5737): Using default boot image
+11-20 01:25:48.715 I/AndroidRuntime( 5737): Leaving lock profiling enabled
+11-20 01:25:48.924 D/AndroidRuntime( 5737): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:25:50.143 D/AndroidRuntime( 5737): Shutting down VM
+11-20 01:25:51.159 D/AndroidRuntime( 5873): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:25:51.169 I/AndroidRuntime( 5873): Using default boot image
+11-20 01:25:51.169 I/AndroidRuntime( 5873): Leaving lock profiling enabled
+11-20 01:25:51.365 D/AndroidRuntime( 5873): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:25:52.758 D/AndroidRuntime( 5873): Shutting down VM
+11-20 01:25:53.033 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{4572458 com.google.android.contacts/10155} BLOCKED
+11-20 01:26:00.257 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{223d1a com.google.android.contacts/10155} BLOCKED
+11-20 01:26:09.051 D/AndroidRuntime( 6039): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:26:09.060 I/AndroidRuntime( 6039): Using default boot image
+11-20 01:26:09.060 I/AndroidRuntime( 6039): Leaving lock profiling enabled
+11-20 01:26:09.253 D/AndroidRuntime( 6039): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:26:10.473 D/AndroidRuntime( 6039): Shutting down VM
+11-20 01:26:14.866 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{94de759 com.google.android.contacts/10155} BLOCKED
+11-20 01:26:16.003 I/AppsFilter(  520): interaction: PackageSetting{7905218 de.munichhenge/10192} -> PackageSetting{8a941f5 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-20 01:26:18.555 D/AndroidRuntime( 6123): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:26:18.558 I/AndroidRuntime( 6123): Using default boot image
+11-20 01:26:18.558 I/AndroidRuntime( 6123): Leaving lock profiling enabled
+11-20 01:26:18.626 D/AndroidRuntime( 6123): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:26:19.778 D/AndroidRuntime( 6123): Shutting down VM
+11-20 01:26:21.424 I/de.munichhenge( 4584): Background concurrent copying GC freed 116566(9008KB) AllocSpace objects, 60(1960KB) LOS objects, 49% free, 16MB/33MB, paused 70us,15us total 109.490ms
+11-20 01:26:37.284 D/AndroidRuntime( 6206): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:26:37.288 I/AndroidRuntime( 6206): Using default boot image
+11-20 01:26:37.288 I/AndroidRuntime( 6206): Leaving lock profiling enabled
+11-20 01:26:37.362 D/AndroidRuntime( 6206): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:26:38.431 D/AndroidRuntime( 6206): Shutting down VM
+11-20 01:26:39.396 D/AndroidRuntime( 6229): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:26:39.400 I/AndroidRuntime( 6229): Using default boot image
+11-20 01:26:39.400 I/AndroidRuntime( 6229): Leaving lock profiling enabled
+11-20 01:26:39.469 D/AndroidRuntime( 6229): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:26:40.737 D/AndroidRuntime( 6229): Shutting down VM
+11-20 01:26:41.677 D/CoreBackPreview(  520): Window{493f6dc u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@7fefc86, mPriority=0, mIsAnimationCallback=false}
+11-20 01:26:41.818 I/ImeTracker(  520): de.munichhenge:abf4126c: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-20 01:26:41.819 I/ImeTracker(  520): de.munichhenge:abf4126c: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:26:41.823 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
+11-20 01:26:44.398 D/CoreBackPreview(  520): Window{493f6dc u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback null
+11-20 01:26:44.447 W/InputManager-JNI(  520): Input channel object '493f6dc de.munichhenge/de.munichhenge.app.ui.MainActivity (client)' was disposed without first being removed with the input manager!
+11-20 01:26:44.480 I/ImeTracker(  520): de.munichhenge:84ceeab8: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-20 01:26:44.484 I/ImeTracker(  520): de.munichhenge:84ceeab8: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:26:44.495 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
+11-20 01:26:44.530 D/AndroidRuntime( 6276): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:26:44.535 I/AndroidRuntime( 6276): Using default boot image
+11-20 01:26:44.535 I/AndroidRuntime( 6276): Leaving lock profiling enabled
+11-20 01:26:44.668 D/AndroidRuntime( 6276): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:26:45.896 D/AndroidRuntime( 6276): Shutting down VM
+11-20 01:26:49.635 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, true)
+11-20 01:26:49.738 I/ActivityManager(  520): Force stopping de.munichhenge appid=10192 user=0: from pid 6342
+11-20 01:26:49.741 I/ActivityManager(  520): Killing 4584:de.munichhenge/u0a192 (adj 0): stop de.munichhenge due to from pid 6342
+11-20 01:26:49.742 W/ActivityTaskManager(  520): Force removing ActivityRecord{9798563 u0 de.munichhenge/.app.ui.MainActivity t8 f}}: app died, no saved state
+11-20 01:26:49.752 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, true)
+11-20 01:26:49.833 I/ImeTracker(  520): de.munichhenge:23c520f7: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_REMOVE_CLIENT
+11-20 01:26:49.833 I/ImeTracker(  520): de.munichhenge:23c520f7: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:26:49.847 W/WindowManager(  520): Failed to deliver inset control state change to w=Window{e1bb9d4 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}
+11-20 01:26:49.874 I/WindowManager(  520): WIN DEATH: Window{e1bb9d4 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}
+11-20 01:26:49.874 W/InputManager-JNI(  520): Input channel object 'e1bb9d4 de.munichhenge/de.munichhenge.app.ui.MainActivity (client)' was disposed without first being removed with the input manager!
+11-20 01:26:49.877 V/ActivityManager(  520): Got obituary of 4584:de.munichhenge
+11-20 01:26:49.914 D/CarrierSvcBindHelper( 1039): onHandleForceStop: [de.munichhenge]
+11-20 01:26:49.916 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, true)
+11-20 01:26:50.006 V/SplashScreenExceptionList(  520): SplashScreen checking exception for package de.munichhenge (target sdk:35) -> false
+11-20 01:26:50.007 I/ActivityTaskManager(  520): Add Task{cf42560 #8 type=standard A=10192:de.munichhenge} to hidden list because adding Task{d947e4e #9 type=standard A=10192:de.munichhenge}
+11-20 01:26:50.008 I/ActivityTaskManager(  520): START u0 {flg=0x10000000 cmp=de.munichhenge/.app.ui.MainActivity} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+11-20 01:26:50.041 I/ActivityManager(  520): Start proc 6367:de.munichhenge/u0a192 for next-top-activity {de.munichhenge/de.munichhenge.app.ui.MainActivity}
+11-20 01:26:50.065 D/CoreBackPreview(  520): Window{65bf175 u0 Splash Screen de.munichhenge}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@e072ff1, mPriority=0, mIsAnimationCallback=false}
+11-20 01:26:50.088 I/de.munichhenge( 6367): Late-enabling -Xcheck:jni
+11-20 01:26:50.120 I/de.munichhenge( 6367): Using CollectorTypeCC GC.
+11-20 01:26:50.123 W/de.munichhenge( 6367): Unexpected CPU variant for x86: x86_64.
+11-20 01:26:50.123 W/de.munichhenge( 6367): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-20 01:26:50.274 D/CompatibilityChangeReporter( 6367): Compat change id reported: 171979766; UID 10192; state: ENABLED
+11-20 01:26:50.274 D/CompatibilityChangeReporter( 6367): Compat change id reported: 242716250; UID 10192; state: ENABLED
+11-20 01:26:50.306 W/ziparchive( 6367): Unable to open '/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.dm': No such file or directory
+11-20 01:26:50.306 W/ziparchive( 6367): Unable to open '/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.dm': No such file or directory
+11-20 01:26:50.526 V/WindowManager(  520):     info={id=8 t=CHANGE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{87d7a96 Task{d947e4e #9 type=standard A=10192:de.munichhenge}}} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=9)/@0x62fd058 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{30f661f Task{cf42560 #8 type=standard A=10192:de.munichhenge}}} m=CLOSE f=NONE leash=Surface(name=Task=8)/@0x3c33479 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{WCT{RemoteToken{ecb1617 Display{#0 state=ON size=1080x2400 ROTATION_0}}} m=CHANGE f=IS_DISPLAY leash=Surface(name=WindowedMagnification:0:31)/@0xb36c91d sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+11-20 01:26:51.206 D/nativeloader( 6367): Configuring clns-6 for other apk /data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/lib/x86_64:/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/de.munichhenge
+11-20 01:26:51.213 V/GraphicsEnvironment( 6367): Currently set values for:
+11-20 01:26:51.213 V/GraphicsEnvironment( 6367):   angle_gl_driver_selection_pkgs=[]
+11-20 01:26:51.213 V/GraphicsEnvironment( 6367):   angle_gl_driver_selection_values=[]
+11-20 01:26:51.213 V/GraphicsEnvironment( 6367): ANGLE GameManagerService for de.munichhenge: false
+11-20 01:26:51.213 V/GraphicsEnvironment( 6367): de.munichhenge is not listed in per-application setting
+11-20 01:26:51.213 V/GraphicsEnvironment( 6367): Neither updatable production driver nor prerelease driver is supported.
+11-20 01:26:51.219 D/WM-WrkMgrInitializer( 6367): Initializing WorkManager with default configuration.
+11-20 01:26:51.244 D/WM-PackageManagerHelper( 6367): Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
+11-20 01:26:51.244 D/WM-Schedulers( 6367): Created SystemJobScheduler and enabled SystemJobService
+11-20 01:26:51.264 D/WM-ForceStopRunnable( 6367): The default process name was not specified.
+11-20 01:26:51.269 D/WM-ForceStopRunnable( 6367): Performing cleanup operations.
+11-20 01:26:51.392 D/libEGL  ( 6367): loaded /vendor/lib64/egl/libEGL_emulation.so
+11-20 01:26:51.396 D/libEGL  ( 6367): loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+11-20 01:26:51.397 D/libEGL  ( 6367): loaded /vendor/lib64/egl/libGLESv2_emulation.so
+11-20 01:26:51.410 D/CompatibilityChangeReporter( 6367): Compat change id reported: 237531167; UID 10192; state: DISABLED
+11-20 01:26:51.425 W/OpenGLRenderer( 6367): Unknown dataspace 0
+11-20 01:26:51.429 D/WM-SystemJobScheduler( 6367): Reconciling jobs
+11-20 01:26:51.445 D/CompatibilityChangeReporter( 6367): Compat change id reported: 160794467; UID 10192; state: ENABLED
+11-20 01:26:51.454 D/WM-ForceStopRunnable( 6367): Application was force-stopped, rescheduling.
+11-20 01:26:51.474 D/CompatibilityChangeReporter( 6367): Compat change id reported: 194532703; UID 10192; state: ENABLED
+11-20 01:26:51.474 D/CompatibilityChangeReporter( 6367): Compat change id reported: 253665015; UID 10192; state: ENABLED
+11-20 01:26:51.474 D/WM-SystemJobScheduler( 6367): Scheduling work ID 3c7ecc6f-2a9c-4edf-9ead-e0c34dcdbdacJob ID 0
+11-20 01:26:51.545 D/WM-GreedyScheduler( 6367): Cancelling work ID 3c7ecc6f-2a9c-4edf-9ead-e0c34dcdbdac
+11-20 01:26:51.626 D/WM-SystemJobScheduler( 6367): Scheduling work ID 3c7ecc6f-2a9c-4edf-9ead-e0c34dcdbdacJob ID 1
+11-20 01:26:51.694 D/CoreBackPreview(  520): Window{42278a3 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b35972a, mPriority=0, mIsAnimationCallback=false}
+11-20 01:26:51.698 D/WM-PackageManagerHelper( 6367): Skipping component enablement for androidx.work.impl.background.systemalarm.RescheduleReceiver
+11-20 01:26:52.065 W/OpenGLRenderer( 6367): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-20 01:26:52.132 I/Gralloc4( 6367): mapper 4.x is not supported
+11-20 01:26:52.681 I/OpenGLRenderer( 6367): Davey! duration=1398ms; Flags=1, FrameTimelineVsyncId=19229, IntendedVsync=156026023090, Vsync=156176023084, InputEventId=0, HandleInputStart=156186083509, AnimationStart=156186085792, PerformTraversalsStart=156186145591, DrawStart=156907461604, FrameDeadline=156042689756, FrameInterval=156186002309, FrameStartTime=16666666, SyncQueued=156921423217, SyncStart=156921866733, IssueDrawCommandsStart=156922430834, SwapBuffers=157263633063, FrameCompleted=157425222685, DequeueBufferDuration=2664, QueueBufferDuration=404159, GpuCompleted=157425166322, SwapBuffersCompleted=157425222685, DisplayPresentTime=0, CommandSubmissionCompleted=157263633063, 
+11-20 01:26:52.691 W/ziparchive(  520): Unable to open '/data/app/~~VUOyLywMMSa2nvBxBC-ibA==/de.munichhenge-z2WNNAE1d_IiFp8ihiuXyQ==/base.dm': No such file or directory
+11-20 01:26:52.714 I/ActivityTaskManager(  520): Displayed de.munichhenge/.app.ui.MainActivity for user 0: +2s716ms
+11-20 01:26:52.719 D/CoreBackPreview(  520): Window{65bf175 u0 Splash Screen de.munichhenge EXITING}: Setting back callback null
+11-20 01:26:52.719 W/InputManager-JNI(  520): Input channel object '65bf175 Splash Screen de.munichhenge (client)' was disposed without first being removed with the input manager!
+11-20 01:26:52.805 I/Choreographer( 6367): Skipped 78 frames!  The application may be doing too much work on its main thread.
+11-20 01:26:52.850 D/AndroidRuntime( 6402): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:26:52.857 I/AndroidRuntime( 6402): Using default boot image
+11-20 01:26:52.857 I/AndroidRuntime( 6402): Leaving lock profiling enabled
+11-20 01:26:52.902 I/ImeTracker(  520): de.munichhenge:38453b1b: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-20 01:26:52.902 I/ImeTracker(  520): de.munichhenge:38453b1b: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:26:52.917 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
+11-20 01:26:52.970 I/OpenGLRenderer( 6367): Davey! duration=1421ms; Flags=0, FrameTimelineVsyncId=19275, IntendedVsync=156242689748, Vsync=157542689696, InputEventId=0, HandleInputStart=157554148865, AnimationStart=157554151930, PerformTraversalsStart=157592122727, DrawStart=157623125301, FrameDeadline=157442689700, FrameInterval=157553634404, FrameStartTime=16666666, SyncQueued=157626893097, SyncStart=157638392416, IssueDrawCommandsStart=157638438254, SwapBuffers=157661850874, FrameCompleted=157676187172, DequeueBufferDuration=2264, QueueBufferDuration=97665, GpuCompleted=157676187172, SwapBuffersCompleted=157667321521, DisplayPresentTime=0, CommandSubmissionCompleted=157661850874, 
+11-20 01:26:53.003 D/AndroidRuntime( 6402): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:26:54.111 D/EGL_emulation( 6367): app_time_stats: avg=197.95ms min=27.46ms max=412.76ms count=7
+11-20 01:26:54.243 D/AndroidRuntime( 6402): Shutting down VM
+11-20 01:26:56.975 D/ProfileInstaller( 6367): Installing profile for de.munichhenge
+11-20 01:27:00.889 D/EGL_emulation( 6367): app_time_stats: avg=6777.64ms min=6777.64ms max=6777.64ms count=1
+11-20 01:27:01.043 I/de.munichhenge( 6367): Compiler allocated 5094KB to compile kotlin.Unit de.munichhenge.app.ui.EventCardKt.EventCard$lambda$33(kotlin.jvm.functions.Function0, androidx.compose.runtime.MutableState, de.munichhenge.engine.HengeEvent, de.munichhenge.engine.Sightline, de.munichhenge.app.ui.AppViewModel, android.content.Context, boolean, java.time.Instant, java.lang.String, androidx.compose.foundation.layout.ColumnScope, androidx.compose.runtime.Composer, int)
+11-20 01:27:04.133 D/AndroidRuntime( 6449): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:27:04.136 I/AndroidRuntime( 6449): Using default boot image
+11-20 01:27:04.136 I/AndroidRuntime( 6449): Leaving lock profiling enabled
+11-20 01:27:04.204 D/AndroidRuntime( 6449): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:27:05.359 D/AndroidRuntime( 6449): Shutting down VM
+11-20 01:27:06.394 D/EGL_emulation( 6367): app_time_stats: avg=498.60ms min=27.43ms max=5014.55ms count=11
+11-20 01:27:10.514 D/EGL_emulation( 6367): app_time_stats: avg=822.42ms min=29.93ms max=3865.95ms count=5
+11-20 01:27:13.756 D/AndroidRuntime( 6505): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:27:13.759 I/AndroidRuntime( 6505): Using default boot image
+11-20 01:27:13.759 I/AndroidRuntime( 6505): Leaving lock profiling enabled
+11-20 01:27:13.827 D/AndroidRuntime( 6505): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:27:14.938 D/AndroidRuntime( 6505): Shutting down VM
+11-20 01:27:15.881 D/AndroidRuntime( 6544): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:27:15.885 I/AndroidRuntime( 6544): Using default boot image
+11-20 01:27:15.885 I/AndroidRuntime( 6544): Leaving lock profiling enabled
+11-20 01:27:15.938 D/EGL_emulation( 6367): app_time_stats: avg=449.50ms min=26.81ms max=4870.46ms count=12
+11-20 01:27:15.972 D/AndroidRuntime( 6544): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:27:17.141 D/AndroidRuntime( 6544): Shutting down VM
+11-20 01:27:18.054 W/WindowOnBackDispatcher( 6367): OnBackInvokedCallback is not enabled for the application.
+11-20 01:27:18.054 W/WindowOnBackDispatcher( 6367): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+11-20 01:27:18.077 D/AndroidRuntime( 6568): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:27:18.080 I/AndroidRuntime( 6568): Using default boot image
+11-20 01:27:18.080 I/AndroidRuntime( 6568): Leaving lock profiling enabled
+11-20 01:27:18.158 D/EGL_emulation( 6367): app_time_stats: avg=737.58ms min=27.51ms max=2075.52ms count=3
+11-20 01:27:18.164 D/AndroidRuntime( 6568): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:27:19.245 D/EGL_emulation( 6367): app_time_stats: avg=362.18ms min=57.67ms max=958.43ms count=3
+11-20 01:27:19.542 D/AndroidRuntime( 6568): Shutting down VM
+11-20 01:27:24.742 D/EGL_emulation( 6367): app_time_stats: avg=1832.34ms min=49.95ms max=5382.55ms count=3
+11-20 01:27:28.948 D/EGL_emulation( 6367): app_time_stats: avg=1051.43ms min=63.96ms max=3862.99ms count=4
+11-20 01:27:32.171 D/EGL_emulation( 6367): app_time_stats: avg=263.58ms min=26.48ms max=2726.38ms count=12
+11-20 01:27:35.359 D/EGL_emulation( 6367): app_time_stats: avg=314.01ms min=29.14ms max=2771.03ms count=10
+11-20 01:27:35.409 D/AndroidRuntime( 6634): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:27:35.412 I/AndroidRuntime( 6634): Using default boot image
+11-20 01:27:35.412 I/AndroidRuntime( 6634): Leaving lock profiling enabled
+11-20 01:27:35.489 D/AndroidRuntime( 6634): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:27:36.794 D/AndroidRuntime( 6634): Shutting down VM
+11-20 01:27:37.701 D/EGL_emulation( 6367): app_time_stats: avg=780.64ms min=110.92ms max=2074.66ms count=3
+11-20 01:27:40.899 D/EGL_emulation( 6367): app_time_stats: avg=242.82ms min=27.59ms max=2631.11ms count=13
+11-20 01:27:44.567 D/AndroidRuntime( 6682): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:27:44.570 I/AndroidRuntime( 6682): Using default boot image
+11-20 01:27:44.570 I/AndroidRuntime( 6682): Leaving lock profiling enabled
+11-20 01:27:44.637 D/AndroidRuntime( 6682): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:27:45.841 D/AndroidRuntime( 6682): Shutting down VM
+11-20 01:27:46.730 I/OsmDroid( 6367): Using tile source: Mapnik
+11-20 01:27:46.730 D/EGL_emulation( 6367): app_time_stats: avg=288.72ms min=29.06ms max=4898.35ms count=20
+11-20 01:27:46.732 I/OsmDroid( 6367): Tile cache increased from 0 to 9
+11-20 01:27:46.750 D/CompatibilityChangeReporter( 6367): Compat change id reported: 210923482; UID 10192; state: ENABLED
+11-20 01:27:47.674 I/OpenGLRenderer( 6367): Davey! duration=933ms; Flags=0, FrameTimelineVsyncId=25900, IntendedVsync=211476020872, Vsync=211892687522, InputEventId=0, HandleInputStart=211907843242, AnimationStart=211907846837, PerformTraversalsStart=211943875404, DrawStart=211945955953, FrameDeadline=211942687520, FrameInterval=211907666210, FrameStartTime=16666666, SyncQueued=211946949544, SyncStart=211947025842, IssueDrawCommandsStart=211947163416, SwapBuffers=212357596256, FrameCompleted=212409495767, DequeueBufferDuration=2513, QueueBufferDuration=159366, GpuCompleted=212409495767, SwapBuffersCompleted=212401405504, DisplayPresentTime=0, CommandSubmissionCompleted=212357596256, 
+11-20 01:27:48.479 I/AppsFilter(  520): interaction: PackageSetting{dc6ca0c de.munichhenge/10192} -> PackageSetting{7bdf55 com.google.android.contacts/10155} BLOCKED
+11-20 01:27:58.499 I/AppsFilter(  520): interaction: PackageSetting{dc6ca0c de.munichhenge/10192} -> PackageSetting{daa1552 com.google.android.contacts/10155} BLOCKED
+11-20 01:28:03.338 D/AndroidRuntime( 6823): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:28:03.341 I/AndroidRuntime( 6823): Using default boot image
+11-20 01:28:03.341 I/AndroidRuntime( 6823): Leaving lock profiling enabled
+11-20 01:28:03.409 D/AndroidRuntime( 6823): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:28:04.454 D/AndroidRuntime( 6823): Shutting down VM
+11-20 01:28:05.400 D/EGL_emulation( 6367): app_time_stats: avg=4667.27ms min=64.00ms max=17682.59ms count=4
+11-20 01:28:05.461 D/AndroidRuntime( 6846): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:28:05.464 I/AndroidRuntime( 6846): Using default boot image
+11-20 01:28:05.464 I/AndroidRuntime( 6846): Leaving lock profiling enabled
+11-20 01:28:05.538 D/AndroidRuntime( 6846): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:28:06.829 D/AndroidRuntime( 6846): Shutting down VM
+11-20 01:28:07.713 W/WindowOnBackDispatcher( 6367): OnBackInvokedCallback is not enabled for the application.
+11-20 01:28:07.713 W/WindowOnBackDispatcher( 6367): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+11-20 01:28:07.722 W/WindowOnBackDispatcher( 6367): OnBackInvokedCallback is not enabled for the application.
+11-20 01:28:07.722 W/WindowOnBackDispatcher( 6367): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+11-20 01:28:07.747 D/EGL_emulation( 6367): app_time_stats: avg=781.87ms min=45.88ms max=2056.83ms count=3
+11-20 01:28:07.785 D/CoreBackPreview(  520): Window{738e593 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@1cf5d85, mPriority=0, mIsAnimationCallback=false}
+11-20 01:28:08.148 I/ImeTracker(  520): de.munichhenge:58c21b12: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-20 01:28:08.149 I/ImeTracker(  520): de.munichhenge:58c21b12: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:28:08.231 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
+11-20 01:28:10.493 D/EGL_emulation( 6367): app_time_stats: avg=657.57ms min=30.07ms max=2270.63ms count=4
+11-20 01:28:10.504 W/WindowOnBackDispatcher( 6367): sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@b1090b5
+11-20 01:28:10.505 D/CoreBackPreview(  520): Window{738e593 u0 de.munichhenge/de.munichhenge.app.ui.MainActivity}: Setting back callback null
+11-20 01:28:10.543 W/InputManager-JNI(  520): Input channel object '738e593 de.munichhenge/de.munichhenge.app.ui.MainActivity (client)' was disposed without first being removed with the input manager!
+11-20 01:28:10.554 D/AndroidRuntime( 6882): >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-20 01:28:10.558 I/AndroidRuntime( 6882): Using default boot image
+11-20 01:28:10.558 I/AndroidRuntime( 6882): Leaving lock profiling enabled
+11-20 01:28:10.588 I/ImeTracker(  520): de.munichhenge:93c1b61c: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-20 01:28:10.588 I/ImeTracker(  520): de.munichhenge:93c1b61c: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-20 01:28:10.594 I/GoogleInputMethodService( 1566): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=de.munichhenge fieldId=0 fieldName=null extras=null}, false)
+11-20 01:28:10.662 D/AndroidRuntime( 6882): Calling main entry com.android.commands.uiautomator.Launcher
+11-20 01:28:11.765 D/AndroidRuntime( 6882): Shutting down VM
+11-20 01:28:12.661 W/WindowOnBackDispatcher( 6367): OnBackInvokedCallback is not enabled for the application.
+11-20 01:28:12.661 W/WindowOnBackDispatcher( 6367): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+11-20 01:28:12.681 D/EGL_emulation( 6367): app_time_stats: avg=986.12ms min=48.97ms max=4350.39ms count=5
+11-20 01:28:15.423 D/EGL_emulation( 6367): app_time_stats: avg=913.87ms min=35.69ms max=2626.68ms count=3
