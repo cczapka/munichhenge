@@ -38,17 +38,31 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Start emulator (Pixel 6, API 34)
+        timeout-minutes: 10
         run: |
+          set -x
+          ls -la /dev/kvm || true
+          ls "$ANDROID_HOME/system-images/android-34/google_apis/x86_64" | head -5
           AVDMANAGER=$(command -v avdmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager")
           echo no | "$AVDMANAGER" create avd -n shots -k "system-images;android-34;google_apis;x86_64" -d pixel_6 --force
+          "$ANDROID_HOME/emulator/emulator" -accel-check || true
           nohup "$ANDROID_HOME/emulator/emulator" -avd shots -no-window -no-audio -no-boot-anim -no-snapshot \
             -gpu swiftshader_indirect -camera-back none -camera-front none > "$RUNNER_TEMP/emulator.log" 2>&1 &
-          adb wait-for-device
-          for i in $(seq 1 150); do
-            [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] && break
+          EMU=$!
+          set +x
+          booted=0
+          for i in $(seq 1 180); do                # at most 6 minutes
+            if ! kill -0 "$EMU" 2>/dev/null; then echo "emulator process exited"; break; fi
+            if [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]; then booted=1; break; fi
             sleep 2
           done
-          adb shell getprop sys.boot_completed
+          adb devices
+          if [ "$booted" != "1" ]; then
+            echo "::error::emulator did not boot"
+            tail -n 80 "$RUNNER_TEMP/emulator.log"
+            exit 1
+          fi
+          echo "booted after $((i * 2)) s"
           adb shell input keyevent 82
           adb shell settings put system screen_off_timeout 1800000
           sleep 20   # let the launcher and system apps settle
@@ -70,6 +84,7 @@ jobs:
           PY
           cp "$RUNNER_TEMP/shots/run.log" docs/screenshots/ 2>/dev/null || true
           tail -n 400 "$RUNNER_TEMP/shots/logcat.txt" > docs/screenshots/logcat.txt 2>/dev/null || true
+          tail -n 200 "$RUNNER_TEMP/emulator.log" > docs/screenshots/emulator.log 2>/dev/null || true
           echo "Taken from ${GITHUB_SHA::7} on $(date -u +%FT%TZ) (Pixel 6 emulator, API 34)." > docs/screenshots/README.md
           ls -la docs/screenshots
       - uses: actions/upload-artifact@v4
