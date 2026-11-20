@@ -28,8 +28,12 @@ object GradeColors {
     val onNear = Color.White
 }
 
-/** Sunrise and sunset colours, the same as in res/drawable/ic_sunrise.xml and ic_sunset.xml. */
+/**
+ * Sunrise and sunset colours, the same as in res/drawable/ic_sunrise.xml and ic_sunset.xml.
+ * Blue and violet on purpose: yellow and red next to the green / amber / grey grade badges
+ * read as a traffic light (phone feedback).
+ */
 object ModeColors {
-    val sunrise = Color(0xFFE8A200)
-    val sunset = Color(0xFFD9480F)
+    val sunrise = Color(0xFF0288D1)
+    val sunset = Color(0xFF9C27B0)
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Navigation
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -136,6 +137,12 @@ fun EventCard(
                                 LinkLauncher.open(context, Links.walk(target.point))
                             })
                         }
+                        LocalShowOnMap.current?.let { show ->
+                            DropdownMenuItem(text = { Text("Show on map") }, onClick = {
+                                menu = false
+                                show(MapFocus(event.sightlineId, event))
+                            })
+                        }
                         DropdownMenuItem(text = { Text("Details") }, onClick = { menu = false; onOpen() })
                     }
                 }
@@ -155,7 +162,8 @@ fun EventCard(
                     cloud?.let { Text(it, style = MaterialTheme.typography.labelMedium) }
                 }
             }
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp, end = 14.dp)) {
+            val showOnMap = LocalShowOnMap.current
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp, end = 4.dp)) {
                 Icon(
                     Icons.Filled.Navigation,
                     contentDescription = null,
@@ -166,8 +174,13 @@ fun EventCard(
                     if (event.openHorizon) Presentation.lookLabel(event)
                     else "${Presentation.lookLabel(event)} · from the ${Presentation.standLabel(event)}",
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(start = 6.dp),
+                    modifier = Modifier.weight(1f).padding(start = 6.dp),
                 )
+                if (showOnMap != null) {
+                    IconButton(onClick = { showOnMap(MapFocus(event.sightlineId, event)) }, modifier = Modifier.size(40.dp)) {
+                        Icon(Icons.Outlined.Map, contentDescription = "Show on map", tint = MaterialTheme.colorScheme.primary)
+                    }
+                }
             }
             val badges = Presentation.badges(event, sightline)
             if (badges.isNotEmpty()) {

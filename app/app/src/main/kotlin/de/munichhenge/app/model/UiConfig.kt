@@ -35,9 +35,21 @@ object UiConfig {
     /** Map: zoom from which spots appear as dots. */
     const val MAP_SPOTS_MIN_ZOOM = 15.5
 
-    /** Map: event line width for quality 0 and 1, dp. Wider stands out more but hides the street. */
-    const val MAP_LINE_MIN_DP = 3f
-    const val MAP_LINE_MAX_DP = 8f
+    /** Map: event line width per grade, dp. Steps of 2.5 dp are what the eye tells apart on a
+     * phone; wider hides the street underneath. */
+    const val MAP_LINE_PERFECT_DP = 8f
+    const val MAP_LINE_GOOD_DP = 5.5f
+    const val MAP_LINE_NEAR_DP = 3f
+
+    /** Map: the quality ring around a marker never gets shorter than this, so a poor event
+     * still shows a stub of ring rather than none. */
+    const val MAP_RING_MIN_SWEEP_DEG = 30f
+
+    /** Map: zoom for "Show on map" and "My location": a street and both of its ends fit. */
+    const val MAP_FOCUS_ZOOM = 16.0
+
+    /** Map: quality steps for marker drawables (cached per mode x step). */
+    const val MAP_RING_STEPS = 10
 
     /** Where the day's sun line and the Upcoming cloud outlook are computed (Marienplatz). */
     val CITY_CENTRE = GeoPoint(48.1374, 11.5755)

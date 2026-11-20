@@ -12,7 +12,7 @@ import de.munichhenge.app.R
 import de.munichhenge.app.model.Presentation
 import de.munichhenge.engine.Mode
 
-/** Half sun on the horizon with an arrow up (sunrise, yellow) or down (sunset, red-orange). */
+/** Half sun on the horizon with an arrow up (sunrise, morning blue) or down (sunset, dusk violet). */
 @Composable
 fun ModeIcon(mode: Mode, size: Dp = 24.dp, modifier: Modifier = Modifier) {
     Icon(

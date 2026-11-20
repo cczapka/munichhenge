@@ -24,10 +24,22 @@ class MapModelTest {
     }
 
     @Test
-    fun `line width grows with quality`() {
-        assertEquals(UiConfig.MAP_LINE_MIN_DP, MapModel.lineWidthDp(0.0))
-        assertEquals(UiConfig.MAP_LINE_MAX_DP, MapModel.lineWidthDp(1.0))
-        assertTrue(MapModel.lineWidthDp(0.5) in UiConfig.MAP_LINE_MIN_DP..UiConfig.MAP_LINE_MAX_DP)
+    fun `line width follows the grade, visibly`() {
+        val p = MapModel.lineWidthDp(Grade.PERFECT)
+        val g = MapModel.lineWidthDp(Grade.GOOD)
+        val n = MapModel.lineWidthDp(Grade.NEAR)
+        assertTrue(p - g >= 2f && g - n >= 2f, "$p / $g / $n")
+    }
+
+    @Test
+    fun `quality ring sweeps with quality and never vanishes`() {
+        assertEquals(360f, MapModel.ringSweepDeg(1.0))
+        assertEquals(UiConfig.MAP_RING_MIN_SWEEP_DEG, MapModel.ringSweepDeg(0.0))
+        assertEquals(180f, MapModel.ringSweepDeg(0.5))
+        assertEquals(360f, MapModel.ringSweepDeg(1.7))
+        // markers are cached per step, so nearby qualities share one drawable
+        assertEquals(MapModel.ringStep(0.81), MapModel.ringStep(0.83))
+        assertTrue(MapModel.ringStep(0.5) < MapModel.ringStep(0.9))
     }
 
     @Test

@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -85,6 +86,12 @@ fun SightlineDetailScreen(vm: AppViewModel, id: String, from: Endpoint?, onOpenP
             return@Column
         }
         Facts(sl)
+        LocalShowOnMap.current?.let { show ->
+            TextButton(onClick = { show(MapFocus(sl.id, null)) }, modifier = Modifier.padding(start = 8.dp)) {
+                Icon(Icons.Outlined.Map, contentDescription = null, modifier = Modifier.padding(end = 6.dp))
+                Text("Show on map")
+            }
+        }
         SectionTitle("Where to stand")
         if (sl.openHorizon) {
             // look toward the next sunset; west until the engine has answered

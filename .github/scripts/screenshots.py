@@ -185,6 +185,11 @@ def tour(theme):
         find("Best in the next", exact=False)
     else:
         LOG.append("not found: best-of heading")
+    # "Show on map" on the first best-of card: the map centres on it and opens its card
+    if tap_label("Show on map"):
+        shot(p + "15-map-focus", settle=8)
+        tap_label("Upcoming", lowest=True)
+        find("Best in the next", exact=False)
     swipe_up()
     shot(p + "06-upcoming-scrolled")
     swipe_up()
@@ -195,6 +200,9 @@ def tour(theme):
     shot(p + "11-map", settle=12)               # tiles
     sh("input tap 540 1300")                    # whatever is in the middle
     shot(p + "12-map-tap", settle=3)
+    if tap_label("sunset"):                     # quick filter chip on the map: sunrise only
+        shot(p + "16-map-sunrise-only", settle=3)
+        tap_label("sunset")
 
     tap_label("Day", lowest=True)
     if tap_label("Filter"):

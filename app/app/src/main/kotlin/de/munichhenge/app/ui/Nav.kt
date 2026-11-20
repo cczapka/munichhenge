@@ -19,6 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,6 +39,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import de.munichhenge.engine.Endpoint
+
+/** "Show on map" from any card; null where the card already sits on the map. */
+val LocalShowOnMap = staticCompositionLocalOf<((MapFocus) -> Unit)?> { null }
 
 object Routes {
     const val DAY = "day"
@@ -106,6 +111,7 @@ fun AppRoot() {
             }
         },
     ) { padding ->
+      CompositionLocalProvider(LocalShowOnMap provides { f: MapFocus -> vm.showOnMap(f); navigateToTab(nav, Routes.MAP) }) {
         NavHost(nav, startDestination = Routes.DAY, modifier = Modifier.padding(padding)) {
             composable(Routes.DAY) {
                 DayScreen(vm, onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) })
@@ -134,6 +140,7 @@ fun AppRoot() {
                     onOpenSightline = { id, from -> nav.navigate(Routes.sightline(id, from)) }, onBack = { nav.popBackStack() })
             }
         }
+      }
     }
 
     if (showFilter) {

@@ -1,10 +1,16 @@
 package de.munichhenge.app.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.ColorMatrix
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.Color as AColor
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,12 +20,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.munichhenge.app.R
 import de.munichhenge.app.model.MapModel
 import de.munichhenge.app.model.Presentation
+import de.munichhenge.app.model.UiConfig
 import de.munichhenge.engine.Endpoint
 import de.munichhenge.engine.HengeData
 import de.munichhenge.engine.HengeEvent
@@ -55,6 +66,8 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 /**
  * Standard OSM tiles, muted on the phone so the coloured event lines stand out: washed out
@@ -83,8 +96,11 @@ private fun mutedTiles(dark: Boolean): ColorMatrixColorFilter {
 
 /**
  * The selected day on a map (PLAN-links-and-ui.md 2.9): each event as a line coloured by
- * sunrise or sunset (thicker = better) with a marker where you stand. All other streets and
- * the spots appear only when zoomed in. Tapping a line or marker shows its card.
+ * sunrise (blue) or sunset (violet), wider for a better grade, with a marker where you stand
+ * whose ring shows today's quality. Sunrise / sunset chips filter in place. All other streets
+ * and the spots appear only when zoomed in. Tapping a line or marker shows its card; "Show on
+ * map" elsewhere lands here centred on that sightline. "My location" asks for permission only
+ * when pressed; the position never leaves the phone.
  */
 @Composable
 fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, onOpenPoi: (String) -> Unit) {
@@ -97,6 +113,7 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, on
     val density = context.resources.displayMetrics.density
 
     val lines = remember(all, filter) { all?.let { MapModel.eventLines(it, filter, vm::sightline) } }
+    val focus by vm.mapFocus.collectAsStateWithLifecycle()
     var selected by remember { mutableStateOf<HengeEvent?>(null) }
     LaunchedEffect(date) { selected = null }
     var showBase by remember { mutableStateOf(false) }
@@ -124,12 +141,43 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, on
             })
         }
     }
+    val myLocation = remember(mapView) { MyLocationNewOverlay(GpsMyLocationProvider(context), mapView) }
+    var locating by remember { mutableStateOf(false) }
     DisposableEffect(mapView) {
         mapView.onResume()
         onDispose {
+            myLocation.disableMyLocation()
             mapView.onPause()
             mapView.onDetach()
         }
+    }
+
+    // "Show on map" from a card or a detail screen: centre on the sightline, open the event's card
+    LaunchedEffect(focus) {
+        val f = focus ?: return@LaunchedEffect
+        vm.sightline(f.sightlineId)?.let { sl ->
+            mapView.controller.setZoom(UiConfig.MAP_FOCUS_ZOOM)
+            mapView.controller.animateTo(GeoPoint((sl.a.lat + sl.b.lat) / 2, (sl.a.lon + sl.b.lon) / 2))
+        }
+        selected = f.event
+        vm.mapFocus.value = null
+    }
+
+    fun goToMyLocation() {
+        myLocation.enableMyLocation()
+        locating = true
+        myLocation.runOnFirstFix {
+            mapView.post {
+                myLocation.myLocation?.let {
+                    mapView.controller.setZoom(UiConfig.MAP_FOCUS_ZOOM)
+                    mapView.controller.animateTo(it)
+                }
+            }
+        }
+    }
+    val askLocation = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
+        if (granted.values.any { it }) goToMyLocation()
+        else Toast.makeText(context, "Without location access the map cannot show where you are", Toast.LENGTH_SHORT).show()
     }
 
     // layers: built once (streets) or when the day's lines change (events, spots)
@@ -154,6 +202,7 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, on
                 if (showBase) map.overlays.add(baseLayer)
                 map.overlays.add(eventLayer)
                 if (showSpots) map.overlays.add(spotLayer)
+                if (locating) map.overlays.add(myLocation)
                 map.overlays.add(copyright)
                 map.invalidate()
             },
@@ -173,17 +222,36 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, on
                     )
                     IconButton(onClick = { vm.shiftDate(1) }) { Icon(Icons.Filled.ChevronRight, contentDescription = "next day") }
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    ModeIcon(Mode.SUNRISE, size = 18.dp)
-                    Text(" sunrise   ", style = MaterialTheme.typography.labelMedium)
-                    ModeIcon(Mode.SUNSET, size = 18.dp)
-                    Text(" sunset   · thicker = better", style = MaterialTheme.typography.labelMedium)
+                // the chips are the legend and the quick filter at once
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp)) {
+                    for (m in listOf(Mode.SUNRISE, Mode.SUNSET)) {
+                        FilterChip(
+                            selected = m in filter.modes,
+                            onClick = { vm.updateFilter { it.toggleMode(m) } },
+                            label = { Text(Presentation.modeWord(m)) },
+                            leadingIcon = { ModeIcon(m, size = 18.dp) },
+                        )
+                    }
+                    Text("ring = quality", style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
+        SmallFloatingActionButton(
+            onClick = {
+                val granted = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    .any { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+                if (granted) goToMyLocation()
+                else askLocation.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+            },
+            modifier = Modifier.align(Alignment.BottomEnd).padding(end = 12.dp, bottom = if (selected != null) 230.dp else 28.dp),
+        ) { Icon(Icons.Filled.MyLocation, contentDescription = "My location") }
         selected?.let { e ->
             Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(bottom = 8.dp)) {
-                EventCard(vm, e, vm.sightline(e.sightlineId), now, onOpen = { onOpenSightline(e.sightlineId, e.viewFrom) })
+                CompositionLocalProvider(LocalShowOnMap provides null) {      // already on the map
+                    EventCard(vm, e, vm.sightline(e.sightlineId), now, onOpen = { onOpenSightline(e.sightlineId, e.viewFrom) })
+                }
             }
         }
     }
@@ -214,12 +282,10 @@ private fun baseLayer(map: MapView, data: HengeData, dark: Boolean, density: Flo
 /** The day's events: a white-cased line in the mode colour and a marker where you stand. */
 private fun eventLayer(map: MapView, data: HengeData, events: List<HengeEvent>, density: Float, onTap: (HengeEvent) -> Unit) =
     FolderOverlay().apply {
-        val rise = ContextCompat.getDrawable(map.context, R.drawable.ic_map_sunrise)
-        val set = ContextCompat.getDrawable(map.context, R.drawable.ic_map_sunset)
         for (e in events) {                       // lowest score first: the best ends on top
             val sl = data.sightline(e.sightlineId) ?: continue
             val pts = listOf(GeoPoint(sl.a.lat, sl.a.lon), GeoPoint(sl.b.lat, sl.b.lon))
-            val w = MapModel.lineWidthDp(e.quality) * density
+            val w = MapModel.lineWidthDp(e.grade) * density
             add(Polyline(map).apply { setPoints(pts); style(AColor.argb(230, 255, 255, 255), w + 3f * density) })
             add(Polyline(map).apply {
                 setPoints(pts)
@@ -229,7 +295,7 @@ private fun eventLayer(map: MapView, data: HengeData, events: List<HengeEvent>, 
             val stand = sl.standingPoint(e.viewFrom)
             add(Marker(map).apply {
                 position = GeoPoint(stand.lat, stand.lon)
-                icon = if (e.mode == Mode.SUNSET) set else rise
+                icon = QualityMarker.of(map.context, e.mode, e.quality)
                 setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
                 setOnMarkerClickListener { _, _ -> onTap(e); true }
             })

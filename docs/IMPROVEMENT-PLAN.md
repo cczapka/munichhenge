@@ -373,6 +373,18 @@ Day and Upcoming in light and dark.
 
     The layers are built once, or once per day, instead of on every redraw.
     `model/MapModel.kt` (tested) decides which lines are drawn.
+- **Phone feedback, round 2 (map):**
+  - Sunrise is now blue and sunset violet. Yellow and red next to the green, amber and grey
+    grade badges read as a traffic-light rating.
+  - Line width follows the grade (8, 5.5 and 3 dp). Width by quality made no visible
+    difference at good+.
+  - Each standing marker carries a ring whose arc length shows today's quality; a full
+    circle means perfect (`ui/QualityMarker.kt`, `MapModel.ringSweepDeg`).
+  - Sunrise and sunset chips on the map act as legend and quick filter.
+  - "Show on map" on every card and on the sightline detail switches to the map, centres it
+    and opens the card.
+  - "My location" asks for location permission only when pressed. The position stays on
+    the phone.
 - **Emulator tour:** the `screenshots` workflow runs `.github/scripts/screenshots.py`. It
   boots a Pixel 6 emulator (API 34), installs the debug APK and taps through Day, tomorrow,
   Upcoming, a sightline's detail, Map, the filter sheet and Settings, in light and dark mode.

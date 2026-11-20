@@ -33,6 +33,9 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 
+/** What the map should centre on: a sightline, and the event whose card to open (if any). */
+data class MapFocus(val sightlineId: String, val event: HengeEvent?)
+
 /** State shared by the screens: the selected date, the shared filter, the engine and its events. */
 class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val graph = (app as MunichHengeApp).graph
@@ -79,6 +82,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun sightline(id: String): Sightline? = data.sightline(id)
+
+    /** Set by "Show on map"; the map consumes it (centres, opens the card) and clears it. */
+    val mapFocus = MutableStateFlow<MapFocus?>(null)
+
+    fun showOnMap(f: MapFocus) {
+        f.event?.let { setDate(it.date) }
+        mapFocus.value = f
+    }
 
     fun setDate(d: LocalDate) { selectedDate.value = d }
     fun shiftDate(days: Long) { selectedDate.value = selectedDate.value.plusDays(days) }
