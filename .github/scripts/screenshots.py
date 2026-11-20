@@ -59,12 +59,13 @@ def dismiss_system_dialog(root):
     """Taps "Wait" on an "isn't responding" dialog (slow emulators show them at start)."""
     texts = [(t, d, b) for t, d, b in nodes(root)]
     if any("isn't responding" in t or "isn’t responding" in t for t, _, _ in texts):
-        for t, _, b in texts:
-            if t in ("Wait", "WAIT", "Close app"):
-                LOG.append("dismissed system dialog with " + t)
-                tap(b)
-                time.sleep(2)
-                return True
+        for choice in ("Wait", "WAIT", "Close app"):         # prefer waiting: it may be our app
+            for t, _, b in texts:
+                if t == choice:
+                    LOG.append("dismissed system dialog with " + t)
+                    tap(b)
+                    time.sleep(2)
+                    return True
     return False
 
 
