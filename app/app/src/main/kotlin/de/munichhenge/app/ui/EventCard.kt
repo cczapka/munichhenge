@@ -147,7 +147,7 @@ fun EventCard(
                     Text("${Presentation.windowLabel(event)} · ${Presentation.modeStyleLine(event)}",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(bottom = 3.dp)) {
+                Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(start = 8.dp, bottom = 3.dp)) {
                     Presentation.countdown(event, now)?.let {
                         Text(it, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.tertiary,
                             fontWeight = FontWeight.SemiBold)
