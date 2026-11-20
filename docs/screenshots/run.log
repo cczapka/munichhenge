@@ -1,4 +1,4 @@
-light: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 3349 | WaitTime: 3359 | Complete
+light: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 5290 | WaitTime: 5360 | Complete
 dismissed system dialog with Close app
 shot light-01-day
 shot light-02-day-scrolled
@@ -8,13 +8,15 @@ shot light-05-upcoming
 shot light-08-detail
 shot light-09-detail-scrolled
 shot light-10-detail-more
+shot light-15-map-focus
 shot light-06-upcoming-scrolled
 shot light-07-upcoming-more
 shot light-11-map
 shot light-12-map-tap
+shot light-16-map-sunrise-only
 shot light-13-filter-sheet
 shot light-14-settings
-dark: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 2716 | WaitTime: 2737 | Complete
+dark: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 3144 | WaitTime: 3192 | Complete
 shot dark-01-day
 shot dark-02-day-scrolled
 shot dark-03-day-tomorrow
@@ -23,9 +25,11 @@ shot dark-05-upcoming
 shot dark-08-detail
 shot dark-09-detail-scrolled
 shot dark-10-detail-more
+shot dark-15-map-focus
 shot dark-06-upcoming-scrolled
 shot dark-07-upcoming-more
 shot dark-11-map
 shot dark-12-map-tap
+shot dark-16-map-sunrise-only
 shot dark-13-filter-sheet
 shot dark-14-settings
