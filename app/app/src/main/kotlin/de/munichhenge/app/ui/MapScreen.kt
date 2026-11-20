@@ -1,5 +1,7 @@
 package de.munichhenge.app.ui
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.Color as AColor
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -44,7 +46,7 @@ import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
-import org.osmdroid.tileprovider.tilesource.XYTileSource
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
@@ -54,12 +56,30 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-/** Muted OSM basemaps (CARTO), so the coloured event lines stand out; dark variant in dark mode. */
-private fun cartoTiles(dark: Boolean) = XYTileSource(
-    if (dark) "CartoDarkMatter" else "CartoPositron", 0, 20, 256, ".png",
-    arrayOf("a", "b", "c", "d").map { "https://$it.basemaps.cartocdn.com/${if (dark) "dark_all" else "light_all"}/" }.toTypedArray(),
-    "© OpenStreetMap contributors © CARTO",
-)
+/**
+ * Standard OSM tiles, muted on the phone so the coloured event lines stand out: washed out
+ * and lightened in light mode, inverted and dimmed in dark mode. (CARTO's pale basemaps now
+ * need an API key: the emulator tour showed "API KEY REQUIRED" tiles.)
+ */
+private fun mutedTiles(dark: Boolean): ColorMatrixColorFilter {
+    val m = ColorMatrix().apply { setSaturation(0.2f) }
+    if (dark) {
+        m.postConcat(ColorMatrix(floatArrayOf(      // invert, then dim to a dark grey
+            -0.75f, 0f, 0f, 0f, 215f,
+            0f, -0.75f, 0f, 0f, 215f,
+            0f, 0f, -0.75f, 0f, 215f,
+            0f, 0f, 0f, 1f, 0f,
+        )))
+    } else {
+        m.postConcat(ColorMatrix(floatArrayOf(      // lighten toward white
+            0.7f, 0f, 0f, 0f, 75f,
+            0f, 0.7f, 0f, 0f, 75f,
+            0f, 0f, 0.7f, 0f, 75f,
+            0f, 0f, 0f, 1f, 0f,
+        )))
+    }
+    return ColorMatrixColorFilter(m)
+}
 
 /**
  * The selected day on a map (PLAN-links-and-ui.md 2.9): each event as a line coloured by
@@ -86,7 +106,8 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, on
 
     val mapView = remember {
         MapView(context).apply {
-            setTileSource(cartoTiles(dark))
+            setTileSource(TileSourceFactory.MAPNIK)
+            overlayManager.tilesOverlay.setColorFilter(mutedTiles(dark))
             setMultiTouchControls(true)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
             isTilesScaledToDpi = true
@@ -147,7 +168,7 @@ fun MapScreen(vm: AppViewModel, onOpenSightline: (String, Endpoint?) -> Unit, on
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { vm.shiftDate(-1) }) { Icon(Icons.Filled.ChevronLeft, contentDescription = "previous day") }
                     Text(
-                        Presentation.dateLabel(date) + (lines?.let { " · ${it.size}" } ?: " · …"),
+                        Presentation.dateLabel(date) + (lines?.let { " · ${if (it.size == 1) "1 event" else "${it.size} events"}" } ?: " · …"),
                         style = MaterialTheme.typography.labelLarge,
                     )
                     IconButton(onClick = { vm.shiftDate(1) }) { Icon(Icons.Filled.ChevronRight, contentDescription = "next day") }

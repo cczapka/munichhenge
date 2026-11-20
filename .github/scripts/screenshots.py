@@ -171,17 +171,9 @@ def tour(theme):
         tap_label("Today")
 
     tap_label("Upcoming", lowest=True)
-    find("Best in the next", exact=False, timeout=60)
+    head = find("Best in the next", exact=False, timeout=60)
     shot(p + "05-upcoming", settle=4)
-    swipe_up()
-    shot(p + "06-upcoming-scrolled")
-    swipe_up()
-    swipe_up()
-    shot(p + "07-upcoming-more")
-
-    # first card of the best-of block -> sightline detail
-    tap_label("Upcoming", lowest=True)
-    head = find("Best in the next", exact=False)
+    # first card of the best-of block -> sightline detail, before the list scrolls away
     if head:
         sh(f"input tap 540 {head[3] + 160}")
         shot(p + "08-detail", settle=4)
@@ -190,6 +182,14 @@ def tour(theme):
         swipe_up()
         shot(p + "10-detail-more")
         back()
+        find("Best in the next", exact=False)
+    else:
+        LOG.append("not found: best-of heading")
+    swipe_up()
+    shot(p + "06-upcoming-scrolled")
+    swipe_up()
+    swipe_up()
+    shot(p + "07-upcoming-more")
 
     tap_label("Map", lowest=True)
     shot(p + "11-map", settle=12)               # tiles

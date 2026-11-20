@@ -360,8 +360,9 @@ Day and Upcoming in light and dark.
   - When all of today's events are over, the Day screen says so and offers the next date.
     "Earlier today" shows three cards plus "Show all".
   - Map, part of M9 step 7 brought forward:
-    - muted CARTO basemaps, light and dark, credited "© OpenStreetMap contributors
-      © CARTO";
+    - standard OSM tiles, muted on the phone with a colour filter: washed out in light
+      mode, inverted and dimmed in dark mode. The first emulator tour showed that CARTO's
+      pale basemaps now need an API key ("API KEY REQUIRED" tiles), so they are not used;
     - event lines coloured by sunrise or sunset, with a white edge, thicker for better
       alignment;
     - a sunrise or sunset marker where you stand;
@@ -372,6 +373,11 @@ Day and Upcoming in light and dark.
 
     The layers are built once, or once per day, instead of on every redraw.
     `model/MapModel.kt` (tested) decides which lines are drawn.
+- **Emulator tour:** the `screenshots` workflow runs `.github/scripts/screenshots.py`. It
+  boots a Pixel 6 emulator (API 34), installs the debug APK and taps through Day, tomorrow,
+  Upcoming, a sightline's detail, Map, the filter sheet and Settings, in light and dark mode.
+  Small JPEGs, the run log and the app's logcat lines go to `docs/screenshots/`. The tour
+  fails if the app crashes. It runs by hand or when the tour itself changes.
 - **Not done:** the trees badge appears only once M8 provides `treesInWay`. Every card says
   "estimated" until M8 measures the skylines.
 
