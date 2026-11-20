@@ -1,21 +1,27 @@
-light: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 3262 | WaitTime: 3280 | Complete
+light: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 4200 | WaitTime: 4252 | Complete
 shot light-01-day
 shot light-02-day-scrolled
 shot light-03-day-tomorrow
 shot light-04-day-tomorrow-scrolled
 shot light-05-upcoming
+shot light-08-detail
+shot light-09-detail-scrolled
+shot light-10-detail-more
 shot light-06-upcoming-scrolled
 shot light-07-upcoming-more
 shot light-11-map
 shot light-12-map-tap
 shot light-13-filter-sheet
 shot light-14-settings
-dark: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 1899 | WaitTime: 1909 | Complete
+dark: Starting: Intent { cmp=de.munichhenge/.app.ui.MainActivity } | Status: ok | LaunchState: COLD | Activity: de.munichhenge/.app.ui.MainActivity | TotalTime: 1755 | WaitTime: 1760 | Complete
 shot dark-01-day
 shot dark-02-day-scrolled
 shot dark-03-day-tomorrow
 shot dark-04-day-tomorrow-scrolled
 shot dark-05-upcoming
+shot dark-08-detail
+shot dark-09-detail-scrolled
+shot dark-10-detail-more
 shot dark-06-upcoming-scrolled
 shot dark-07-upcoming-more
 shot dark-11-map
