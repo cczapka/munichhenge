@@ -89,7 +89,7 @@ jobs:
               im.save(os.path.join(dst, os.path.basename(f)[:-4] + ".jpg"), quality=82, optimize=True)
           PY
           cp "$RUNNER_TEMP/shots/run.log" docs/screenshots/ 2>/dev/null || true
-          tail -n 400 "$RUNNER_TEMP/shots/logcat.txt" > docs/screenshots/logcat.txt 2>/dev/null || true
+          cp "$RUNNER_TEMP/shots/logcat.txt" "$RUNNER_TEMP/shots/last_dump.xml" docs/screenshots/ 2>/dev/null || true
           tail -n 200 "$RUNNER_TEMP/emulator.log" > docs/screenshots/emulator.log 2>/dev/null || true
           echo "Taken from ${GITHUB_SHA::7} on $(date -u +%FT%TZ) (Pixel 6 emulator, API 34)." > docs/screenshots/README.md
           ls -la docs/screenshots

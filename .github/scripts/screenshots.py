@@ -17,10 +17,11 @@ import time
 import xml.etree.ElementTree as ET
 
 PKG = "de.munichhenge"
-ACTIVITY = f"{PKG}/.ui.MainActivity"
+ACTIVITY = f"{PKG}/de.munichhenge.app.ui.MainActivity"   # applicationId differs from the code namespace
 APK, OUT = sys.argv[1], sys.argv[2]
 RAW = os.path.join(OUT, "raw")
 LOG = []
+LAST_DUMP = [""]
 
 
 def adb(*args, binary=False, check=True):
@@ -43,9 +44,28 @@ def dump():
     for _ in range(5):
         out = adb("shell", "uiautomator dump /sdcard/ui.xml", check=False)
         if "dumped to" in out:
-            return ET.fromstring(adb("exec-out", "cat /sdcard/ui.xml", binary=True))
+            xml = adb("exec-out", "cat /sdcard/ui.xml", binary=True)
+            LAST_DUMP[0] = xml.decode(errors="replace")
+            root = ET.fromstring(xml)
+            if dismiss_system_dialog(root):
+                continue
+            return root
+        LOG.append("dump failed: " + out.strip()[:200])
         time.sleep(1)
     return None
+
+
+def dismiss_system_dialog(root):
+    """Taps "Wait" on an "isn't responding" dialog (slow emulators show them at start)."""
+    texts = [(t, d, b) for t, d, b in nodes(root)]
+    if any("isn't responding" in t or "isn’t responding" in t for t, _, _ in texts):
+        for t, _, b in texts:
+            if t in ("Wait", "WAIT", "Close app"):
+                LOG.append("dismissed system dialog with " + t)
+                tap(b)
+                time.sleep(2)
+                return True
+    return False
 
 
 def nodes(root):
@@ -101,9 +121,27 @@ def shot(name, settle=2.5):
     LOG.append(f"shot {name}")
 
 
+def app_logcat():
+    """Only what concerns the app: its own lines, crashes, ANRs and activity starts."""
+    pid = sh(f"pidof {PKG} || true").strip()
+    keep = re.compile(r"munichhenge|AndroidRuntime|FATAL|ANR in|ActivityTaskManager: (START|Displayed)" +
+                      (rf"|\(\s*{pid}\)" if pid else ""))
+    lines = adb("logcat", "-d", "-v", "time", check=False).splitlines()
+    return "\n".join(l for l in lines if keep.search(l))[-60000:] + "\n"
+
+
 def fail(msg):
+    try:
+        with open(os.path.join(RAW, "zz-failure.png"), "wb") as f:
+            f.write(adb("exec-out", "screencap -p", binary=True))
+        with open(os.path.join(OUT, "last_dump.xml"), "w") as f:
+            f.write(LAST_DUMP[0])
+        LOG.append("foreground: " + sh("dumpsys activity activities | grep -m1 -E 'mResumedActivity|topResumedActivity' || true").strip())
+        LOG.append("app alive: " + str(alive()))
+    except Exception as e:  # diagnostics must not hide the failure
+        LOG.append(f"diagnostics failed: {e}")
     with open(os.path.join(OUT, "logcat.txt"), "w") as f:
-        f.write(adb("logcat", "-d", "-v", "time", check=False))
+        f.write(app_logcat())
     LOG.append("FAILED: " + msg)
     write_log()
     sys.exit(msg)
@@ -117,7 +155,7 @@ def write_log():
 def tour(theme):
     sh(f"cmd uimode night {'yes' if theme == 'dark' else 'no'}")
     sh(f"am force-stop {PKG}")
-    sh(f"am start -W -n {ACTIVITY}")
+    LOG.append(f"{theme}: " + sh(f"am start -W -n {ACTIVITY}").strip().replace("\n", " | "))
     if find("Sunrise", exact=False, timeout=60) is None:   # sun line / chip: the Day screen is up
         fail(f"{theme}: Day screen did not appear")
     time.sleep(3)                                # engine + weather
@@ -179,7 +217,7 @@ def main():
     if not alive():
         fail("app died at the end of the tour")
     with open(os.path.join(OUT, "logcat.txt"), "w") as f:
-        f.write(adb("logcat", "-d", "-v", "time", "*:W", check=False))
+        f.write(app_logcat())
     write_log()
 
 
